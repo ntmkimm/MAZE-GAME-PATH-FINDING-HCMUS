@@ -2,18 +2,14 @@ import pygame as pg
 import random
 from color import *
 
-#global variables
-FPS = 60 #frames per second
-
-RES = WIDTH, HEIGHT = 1200, 800
-COL, ROW = 40, 40
-TILE = HEIGHT // COL  
+size_of_maze = 700
 
 class Cell:
     def __init__(self, x, y):
-        self.x, self.y = x, y # x - width, y - height
+        self.x, self.y = x, y # x - index of row, y - index of col
         self.bars = {'top': True, 'right': True, 'bottom': True, 'left': True}
-        
+        self.init_maze_x = 20
+        self.init_maze_y = 20
         # self.is_start = False
         # self.is_end = False
         # self.is_current = False
@@ -59,11 +55,11 @@ class Cell:
         # print(current.bars)
         # print(next.bars)
     
-    def draw_bars(self, window):
-        x, y = self.x * TILE, self.y * TILE
+    def draw_bars(self, window, TILE):
+        x, y = self.init_maze_x + self.x * TILE, self.init_maze_y + self.y * TILE
         
         if self.seen:
-            pg.draw.rect(window, gray, (x, y, TILE, TILE))
+            pg.draw.rect(window, white, (x, y, TILE, TILE))
         
         if self.bars['top']:
             pg.draw.line(window, self.bar_color, (x, y), (x + TILE, y), self.bar_thick)
@@ -74,15 +70,6 @@ class Cell:
         if self.bars['right']:
             pg.draw.line(window, self.bar_color, (x + TILE, y), (x + TILE, y + TILE), self.bar_thick)
 
-    def check_collide(self):
-        if self.bars['top']:
-            pass
-        if self.bars['bottom']:
-            pass
-        if self.bars['right']:
-            pass
-        if self.bars['left']:
-            pass
         
                 
         

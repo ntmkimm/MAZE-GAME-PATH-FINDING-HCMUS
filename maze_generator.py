@@ -2,10 +2,11 @@ from cell import *
 from grid import *
 
 class Maze_Generator:
-    def __init__(self, grid=Grid(ROW, COL)):
+    def __init__(self, grid):
         self.grid = grid #object from grid class
         self.rows = grid.rows
         self.cols = grid.cols
+        self.TILE = size_of_maze // self.rows
         self.completed = False
         self.create_maze()
         
@@ -29,5 +30,5 @@ class Maze_Generator:
     
     def draw(self, window):
         for i in range(self.rows * self.cols):
-            self.grid.grid_cells[i].draw_bars(window)
+            self.grid.grid_cells[i].draw_bars(window, self.TILE)
         # self.grid.display_maze(window)    

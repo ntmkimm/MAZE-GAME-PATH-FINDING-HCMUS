@@ -4,15 +4,14 @@ class Grid:
     def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
-        
         #init grid_cells
         self.grid_cells = [Cell(c, r) for r in range(rows) for c in range(cols)]
         self.find_neighbor()
         
     def index_cell(self, x, y):
-        if x < 0 or x > COL - 1 or y < 0 or y > ROW - 1:
+        if x < 0 or x > self.cols - 1 or y < 0 or y > self.rows - 1:
             return None
-        return self.grid_cells[x + y * COL]
+        return self.grid_cells[x + y * self.cols]
             
     
     def find_neighbor(self):

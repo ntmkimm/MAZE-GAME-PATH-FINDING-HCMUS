@@ -1,68 +1,161 @@
+import pygame as pg
+from color import *
+from button import *
+from ui import *
 from maze_generator import *
 from player import *
-from color import *
-import pygame as pg
+from game import *
 
-class Game():
+pg.init()
+window = pg.display.set_mode((1200, 800))
+# pg.display.set_caption("Menu")
+
+# background, bg_img = self.get_background("Gray")
+
+class Menu():
     def __init__(self, window):
-        self.window = window
-        # self.player = Player(start_pos.x, start_pos.y, TILE, TILE)
-        self.grid = Grid(ROW, COL)
-        self.maze = Maze_Generator(self.grid)
-        self.player = Player(self.grid.grid_cells, 0, TILE, TILE)
-        # self.block_size = 96
-        # self.blocks = [Block(0, HEIGHT - TILE, self.block_size)]
-    def main(self):
-        pg.init()  # Initialize pygame
-        clock = pg.time.Clock() 
-        pg.display.set_caption("Maze - Path Finding") 
-        # background, bg_img = self.get_background("Gray")
-        run = True
-        while run:
-            # this line ensure the frame is run 60fps, 
-            # set this down if ur computer get bad performance with this fps
-            # clock.tick(FPS)
+        self.rows = 0
+        self.cols = 0
+        self.short_bar = pg.image.load("short_bar.png")
+        self.long_bar = pg.image.load("long_bar.png")
+        
+    def create_new_map(self):
+        pg.display.set_caption("Choose size map")
+        self.mode = 0
+        while True:
+            window.fill(light_blue)
+            # mouse_pos
+            mouse_pos = pg.mouse.get_pos()
+            # title
+            title, title_rect, shader_title, shader_title_rect = shader_text("Create New Map", font(big_size), (600, 50), white, black)
+            window.blit(shader_title, shader_title_rect)
+            window.blit(title, title_rect)
+            
+            # type name of world
+            # box_type_name = pg.Rect(, 100, 1200, 500)
+            # pg.draw.rect(window, white, box_of_created_map)
+            # pg.draw.line(window, black, (0, box_of_created_map.top), (1200, box_of_created_map.top), 10)
+            # pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
+            
+            # button
+            cancel_button = Button(img=self.short_bar, pos_center=(900, 700), content='Cancel', font=font(small_size))
+            create_new_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
+            
+            easy_button = Button(img=self.long_bar, pos_center=(600, 450), content="Easy: 20x20", font=font(small_size))
+            normal_button = Button(img=self.long_bar, pos_center=(600, 450), content="Normal: 40x40", font=font(small_size))
+            hard_button = Button(img=self.long_bar, pos_center=(600, 450), content="Hard: 100x100", font=font(small_size))
+            
+            mode_button = [easy_button, normal_button, hard_button]
+            
             for event in pg.event.get():
-                if event.type == pg.QUIT: #the x red at right top of the window
-                    run = False
-                    break
-            self.loop()
-            
-        pg.quit() # quit pygame program
-        quit() # quit python program
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    # sys.exit()
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if cancel_button.is_pointed(mouse_pos):
+                        self.all_maps_of_user(window)
+                    if mode_button[self.mode].is_pointed(mouse_pos):
+                        self.mode = (self.mode + 1) % 3
+                    if create_new_button.is_pointed(mouse_pos):
+                        if self.mode == 0:
+                            self.size = 20
+                        elif self.mode == 1:
+                            self.size = 40
+                        elif self.mode == 2:
+                            self.size = 100
+                        game = Game(window, self.size)
+                        game.run_game(window)
+                        
+            for button in [cancel_button, create_new_button, mode_button[self.mode]]:
+                button.update_color_line(mouse_pos)
+                button.update(window)
+                        
+            pg.display.update()
 
-    def loop(self):
+    def all_maps_of_user(self, window):
+        pg.display.set_caption("Play")
+        while True:
+            # theme
+            window.fill(light_blue)
+            # mouse_pos
+            mouse_pos = pg.mouse.get_pos()
+            # title
+            title, title_rect, shader_title, shader_title_rect = shader_text("Select Map", font(big_size), (600, 50), white, black)
+            window.blit(shader_title, shader_title_rect)
+            window.blit(title, title_rect)
+            # created_map
+            box_of_created_map = pg.Rect(0, 100, 1200, 500)
+            pg.draw.rect(window, white, box_of_created_map)
+            pg.draw.line(window, black, (0, box_of_created_map.top), (1200, box_of_created_map.top), 10)
+            pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
+            # button
+            back_button = Button(img=self.short_bar, pos_center=(900, 700), content='Back', font=font(small_size))
+            new_map_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
             
-        self.maze.draw(self.window)
-        self.player.update_player()
-        self.player.handle_move()
-        self.player.draw(self.window)
+            for button in [back_button, new_map_button]:
+                button.update_color_line(mouse_pos)
+                button.update(window)
+            
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    # sys.exit()
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if back_button.is_pointed(mouse_pos):
+                        self.main_menu()
+                    if new_map_button.is_pointed(mouse_pos):
+                        self.create_new_map()
+                        
+            pg.display.update()
+                    
         
-        # for obj in self.blocks:
-        #     obj.draw(window)
-        pg.display.update()
-    
-    # generate background
-    # def get_background(colorBG):
-    #     #load image
-    #     img = pg.image.load((os.path.join("assets", "Background", colorBG + ".png")))
-    #     _, _, width, height = img.get_rect() #_, _ mean: x, y
-    #     background = []
-        
-    #     for i in range(WIDTH // width + 1):
-    #         for j in range(HEIGHT // height + 1):
-    #             #denote the position of the top left corner of each tile
-    #             pos = (i * width, j * height) # tuple
-    #             background.append(pos)
+    def options(self):
+        pass
+
+    def level_menu(self):
+        pg.display.set_caption("Level")
+        short_bar = pg.image.load("short_bar.png")
+        long_bar = pg.image.load("long_bar.png")
+
+
+    def main_menu(self):
+        pg.display.set_caption("Menu")
+        short_bar = pg.image.load("short_bar.png")
+        long_bar = pg.image.load("long_bar.png")
+        # window.fill()
+        while True:
+            window.fill(light_blue)
+            mouse_pos = pg.mouse.get_pos()
+            menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZESOLVE", font(100), pos_center=(600, 100), color=white, color_shader=black)
+            PLAY_BUTTON = Button(img=self.long_bar, pos_center=(600, 300), content="PLAY", font=font(normal_size))
+            BOT_BUTTON = Button(img=self.long_bar, pos_center=(600, 450), content="BOT", font=font(normal_size))
+            OPTIONS_BUTTON = Button(img=self.short_bar, pos_center=(450, 600), content="OPTIONS", font=font(small_size))
+            QUIT_BUTTON = Button(img=self.short_bar, pos_center=(750, 600), content="QUIT", font=font(small_size))
+            
+            window.blit(shader_menu, shader_menu_rect)
+            window.blit(menu, menu_rect)
+            
+            for button in [PLAY_BUTTON, BOT_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+                button.update_color_line(mouse_pos)
+                button.update(window)
                 
-    #     return background, img
-    
-    #handle the move with keys pressed from keyboard 
-
-
-
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if PLAY_BUTTON.is_pointed(mouse_pos):
+                        self.all_maps_of_user(window)
+                    if BOT_BUTTON.is_pointed(mouse_pos):
+                        pass
+                    if OPTIONS_BUTTON.is_pointed(mouse_pos):
+                        self.options()
+                    if QUIT_BUTTON.is_pointed(mouse_pos):
+                        pg.quit()
+            pg.display.update()
+        
+        
 if __name__ == "__main__":
-    window = pg.display.set_mode(RES)  # Set up window
-    game = Game(window)
-    game.main()
-    
+    menu = Menu(window)
+    menu.main_menu()
+            
