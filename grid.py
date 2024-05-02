@@ -6,29 +6,9 @@ class Grid:
         self.cols = cols
         #init grid_cells Cell(x, y)
         self.grid_cells = [[Cell(r, c) for c in range(cols)] for r in range(rows)]
-        self.find_neighbor()
-        
-    def index_cell(self, x, y): # x - col; y - row
-        if x < 0 or x > self.cols - 1 or y < 0 or y > self.rows - 1:
-            return None
-        return self.grid_cells[x + y * self.rows]
-            
+        self.find_neighbor()          
     
     def find_neighbor(self):
-        # for i, cell in enumerate(self.grid_cells):
-        #     top = self.index_cell(cell.x, cell.y - 1)
-        #     bottom = self.index_cell(cell.x, cell.y + 1)
-        #     left = self.index_cell(cell.x - 1, cell.y)
-        #     right = self.index_cell(cell.x + 1, cell.y)
-            
-        #     if top:
-        #         self.grid_cells[i].neighbors.append(top)
-        #     if right:
-        #         self.grid_cells[i].neighbors.append(right)
-        #     if bottom:
-        #         self.grid_cells[i].neighbors.append(bottom)
-        #     if left:
-        #         self.grid_cells[i].neighbors.append(left)
             
         for i in range(self.rows):
             for j in range(self.cols):

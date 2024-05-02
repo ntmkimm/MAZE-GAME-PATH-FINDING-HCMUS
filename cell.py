@@ -14,18 +14,7 @@ class Cell:
         
         self.is_start = False
         self.is_goal = False
-        # self.is_start = False
-        # self.is_end = False
-        # self.is_current = False
-        
-        # self.is_path = False
-        # self.display_path = False
-        
-        # self.highlight = white
-        # self.display_highlight = False
-        # self.is_player = False
         self.neighbors = []
-        # self.is_avail = True
         
         self.seen = False
         self.bar_color = black
