@@ -4,12 +4,13 @@ from color import *
 import pygame as pg
 
 
+
 class Game():
     def __init__(self, window, size):
         self.window = window
         self.rows = size
         self.cols = size
-        self.TILE = 700 // size
+        self.TILE = size_of_maze // size
         self.grid = Grid(self.rows, self.cols)
         self.maze = Maze_Generator(self.grid)
         self.player = Player(self.grid.grid_cells, 0, self.TILE, self.TILE)

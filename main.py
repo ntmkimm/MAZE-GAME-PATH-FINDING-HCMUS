@@ -112,12 +112,6 @@ class Menu():
     def options(self):
         pass
 
-    def level_menu(self):
-        pg.display.set_caption("Level")
-        short_bar = pg.image.load("short_bar.png")
-        long_bar = pg.image.load("long_bar.png")
-
-
     def main_menu(self):
         pg.display.set_caption("Menu")
         short_bar = pg.image.load("short_bar.png")

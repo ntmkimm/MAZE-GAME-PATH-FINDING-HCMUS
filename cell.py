@@ -2,7 +2,7 @@ import pygame as pg
 import random
 from color import *
 
-size_of_maze = 700
+size_of_maze = 760
 
 class Cell:
     def __init__(self, x, y):
