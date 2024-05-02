@@ -17,17 +17,18 @@ class Player(pg.sprite.Sprite): # sprite make it easy to fit pixel perfect
     ANIMATION_DELAY = 3
     # define our initialization area
     
-    def __init__(self, grid_cells, i, width, height):
+    def __init__(self, grid_cells, init_pos, width, height):
         # position of the player
         self.grid_cells = grid_cells
-        self.rows = int(len(self.grid_cells) ** 0.5)
+        # self.rows = int(len(self.grid_cells) ** 0.5)
+        self.rows = len(self.grid_cells)
         self.cols = self.rows
         self.TILE = size_of_maze // self.rows
-        self.cell = grid_cells[i]
+        self.cell = grid_cells[init_pos[0]][init_pos[1]]
         self.x = self.cell.x
         self.y = self.cell.y
-        self.init_maze_x = self.grid_cells[0].init_maze_x
-        self.init_maze_y = self.grid_cells[0].init_maze_y
+        self.init_maze_x = self.grid_cells[0][0].init_maze_x
+        self.init_maze_y = self.grid_cells[0][0].init_maze_y
         self.rect = pg.Rect(self.init_maze_y + self.y * self.TILE, self.init_maze_x + self.x * self.TILE, width, height) 
         self.x_step = 0
         self.y_step = 0
@@ -66,7 +67,7 @@ class Player(pg.sprite.Sprite): # sprite make it easy to fit pixel perfect
     
     def update_player(self):
         #update cell of player
-        self.cell = self.grid_cells[self.x + self.y * self.cols]
+        self.cell = self.grid_cells[self.y][self.x]
         #make player look dynamic
         self.get_dynamic()
     

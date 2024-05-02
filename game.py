@@ -2,6 +2,7 @@ from maze_generator import *
 from player import *
 from color import *
 import pygame as pg
+import random
 
 
 
@@ -13,9 +14,14 @@ class Game():
         self.TILE = size_of_maze // size
         self.grid = Grid(self.rows, self.cols)
         self.maze = Maze_Generator(self.grid)
-        self.player = Player(self.grid.grid_cells, 0, self.TILE, self.TILE)
+        self.player = Player(self.grid.grid_cells, (0, 0), self.TILE, self.TILE)
         self.mode = 0
         # self.name_game = name_game
+        
+    # def init_random(self):
+    #     start_x = random.randint(0, self.cols)
+    #     start_y = random.randint(0, self.rows)
+    #     end_x = 
         
     def run_game(self, window):
         pg.init() 

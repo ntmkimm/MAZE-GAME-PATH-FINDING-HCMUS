@@ -5,11 +5,15 @@ from color import *
 size_of_maze = 760
 
 class Cell:
-    def __init__(self, x, y):
-        self.x, self.y = x, y # x - index of row, y - index of col
+    def __init__(self, y, x):
+        self.x, self.y = x, y # x - index of col, y - index of row
         self.bars = {'top': True, 'right': True, 'bottom': True, 'left': True}
+        
         self.init_maze_x = 20
         self.init_maze_y = 20
+        
+        self.is_start = False
+        self.is_goal = False
         # self.is_start = False
         # self.is_end = False
         # self.is_current = False

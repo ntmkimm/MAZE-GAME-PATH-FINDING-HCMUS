@@ -11,7 +11,7 @@ class Maze_Generator:
         self.create_maze()
         
     def create_maze(self):
-        init_cell = self.grid.grid_cells[0]
+        init_cell = self.grid.grid_cells[0][0]
         stack = []
         stack.append(init_cell)
         while stack != []:
@@ -29,6 +29,9 @@ class Maze_Generator:
                 stack.append(current_cell)
     
     def draw(self, window):
-        for i in range(self.rows * self.cols):
-            self.grid.grid_cells[i].draw_bars(window, self.TILE)
+        # for i in range(self.rows * self.cols):
+        #     self.grid.grid_cells[i].draw_bars(window, self.TILE)
         # self.grid.display_maze(window)    
+        for i in range(self.rows):
+            for j in range(self.cols):
+                self.grid.grid_cells[i][j].draw_bars(window, self.TILE)
