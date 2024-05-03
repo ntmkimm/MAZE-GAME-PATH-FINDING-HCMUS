@@ -17,14 +17,19 @@ class Cell:
         self.neighbors = []
         
         self.seen = False
+        self.visited = False
+        
         self.bar_color = black
         self.bar_thick = 1
         
-    # def draw_current_cell(self, window):
-    #     x, y = self.x * TILE, self.y * TILE
-    #     pg.draw.rect(window, red, (x + self.bar_thick, y + self.bar_thick, TILE - self.bar_thick, TILE - self.bar_thick))
+        self.goal_color = red
         
-        # return random.choice(self.neighbors) if self.neighbors else None
+    def draw_current_cell(self, window, color, TILE):
+        x, y = self.init_maze_x + self.x * TILE, self.init_maze_y + self.y * TILE
+        if self.visited == True:
+            pg.draw.rect(window, gray, (x + 2 * self.bar_thick, y + 2 * self.bar_thick, TILE - 4 * self.bar_thick, TILE - 4 * self.bar_thick))
+    
+        pg.draw.rect(window, color, (x + 2 * self.bar_thick, y + 2 * self.bar_thick, TILE - 4 * self.bar_thick, TILE - 4 * self.bar_thick))
     
     def check_bars(current, next):
         dx = next.x - current.x
@@ -51,7 +56,9 @@ class Cell:
     def draw_bars(self, window, TILE):
         x, y = self.init_maze_x + self.x * TILE, self.init_maze_y + self.y * TILE
         
-        if self.seen:
+        if self.is_goal:
+            pg.draw.rect(window, self.goal_color, (x + 2, y + 2, TILE - 4, TILE - 4))
+        elif self.seen:
             pg.draw.rect(window, white, (x, y, TILE, TILE))
         
         if self.bars['top']:
@@ -62,7 +69,10 @@ class Cell:
             pg.draw.line(window, self.bar_color, (x, y), (x, y + TILE), self.bar_thick)
         if self.bars['right']:
             pg.draw.line(window, self.bar_color, (x + TILE, y), (x + TILE, y + TILE), self.bar_thick)
+            
 
+        
+        
         
                 
         

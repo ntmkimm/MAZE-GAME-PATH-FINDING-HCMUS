@@ -4,7 +4,7 @@ class Grid:
     def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
-        #init grid_cells Cell(x, y)
+        #init Cell(y, x)
         self.grid_cells = [[Cell(r, c) for c in range(cols)] for r in range(rows)]
         self.find_neighbor()          
     

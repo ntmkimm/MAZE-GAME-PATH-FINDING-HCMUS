@@ -7,12 +7,12 @@ from player import *
 from game import *
 
 pg.init()
-window = pg.display.set_mode((1200, 800))
 
 class Menu():
     def __init__(self, window):
         self.short_bar = pg.image.load("short_bar.png")
         self.long_bar = pg.image.load("long_bar.png")
+        self.game_type = 'player'
         
     def create_new_map(self):
         pg.display.set_caption("Choose size map")
@@ -54,8 +54,10 @@ class Menu():
                     # sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if cancel_button.is_pointed(mouse_pos):
-                        self.all_maps_of_user(window)
-                        
+                        if self.game_type == 'player':
+                            self.all_maps_of_user(window)
+                        elif self.game_type == 'bot':
+                            self.main_menu()
                     if mode_button[self.size_mode].is_pointed(mouse_pos):
                         self.size_mode = (self.size_mode + 1) % 3
                         
@@ -70,7 +72,7 @@ class Menu():
                         if self.init_mode == 0:      self.init = 'random'
                         elif self.init_mode == 1:    self.init = 'choose'
 
-                        game = Game(window, self.size, self.init)
+                        game = Game(self.size, self.init, self.game_type)
                         game.run_game(window)
                     
                         
@@ -126,6 +128,11 @@ class Menu():
         long_bar = pg.image.load("long_bar.png")
         # window.fill()
         while True:
+            for event in pg.event.get():
+                    if event.type == pg.QUIT: 
+                        pg.quit()
+                        break
+            
             window.fill(light_blue)
             mouse_pos = pg.mouse.get_pos()
             menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZESOLVE", font(100), pos_center=(600, 100), color=white, color_shader=black)
@@ -147,9 +154,11 @@ class Menu():
                 
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if PLAY_BUTTON.is_pointed(mouse_pos):
+                        self.game_type = 'player'
                         self.all_maps_of_user(window)
                     if BOT_BUTTON.is_pointed(mouse_pos):
-                        pass
+                        self.game_type = 'bot'
+                        self.create_new_map()
                     if OPTIONS_BUTTON.is_pointed(mouse_pos):
                         self.options()
                     if QUIT_BUTTON.is_pointed(mouse_pos):

@@ -33,15 +33,6 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
         self.step_count = 0
         self.animation_count = 0
         
-        # GOAL
-        self.goal_cell = self.grid_cells[goal_pos[0]][goal_pos[1]]
-        self.goal_cell.is_goal = True
-        self.goal_rect = pg.Rect(
-            self.init_maze_x + goal_pos[1] * self.TILE + 2, 
-            self.init_maze_y + goal_pos[0] * self.TILE + 2, self.TILE - 4, self.TILE - 4
-            )
-        self.goal_color = red
-        
     def move(self, dx=0, dy=0):
         if dx < 0:
             self.x_direction = "left"
@@ -64,8 +55,9 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
     
     def update_player(self):
         #update cell of player
+        self.cell.is_start = False
         self.cell = self.grid_cells[self.y][self.x]
-        #make player look dynamic
+        self.cell.is_start = True
         self.get_dynamic()
     
     def handle_move(self):
@@ -100,7 +92,6 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
     
     # draw character everytime we update the position of the character
     def draw(self, window):
-        pg.draw.rect(window, self.goal_color, self.goal_rect)
         window.blit(self.sprite, (self.rect.x, self.rect.y))
         
     def flip(self, sprites):
@@ -115,7 +106,6 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
         if self.rows == 100: size = (8, 8)
         elif self.rows == 40: size = (16, 16)
         elif self.rows == 20: size = (32, 32)
-        
         
         for f in lst_img:
             sprite_sheet = pg.image.load(os.path.join(path, f)).convert_alpha()

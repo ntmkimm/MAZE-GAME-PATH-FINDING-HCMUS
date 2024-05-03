@@ -1,25 +1,36 @@
 from maze_generator import *
 from player import *
 from color import *
+
+from recursive import *
+
 import pygame as pg
 import random
 
+window = pg.display.set_mode((1200, 800))
 
 class Game():
-    def __init__(self, window, size, init):
-        self.window = window
+    def __init__(self, size, init_type, game_type):
         self.rows = size
         self.cols = size
         self.TILE = size_of_maze // size
         self.grid = Grid(self.rows, self.cols)
-        self.maze = Maze_Generator(self.grid)
-        if init == 'random':
+        self.maze = Maze_Generator(self.grid) 
+        self.game_type = game_type
+        self.trace = []
+        
+        if init_type == 'random':
             self.start_pos, self.goal_pos = self.init_random()
-        # elif init == 'choose':
-        #     self.start_pos, self.goal_pos = self
+        elif init_type == 'choose':
+            self.start_pos, self.goal_pos = (0, 0), (self.rows - 1, self.cols - 1) # step of the player is undone 
+        
+        self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_start = True
+        self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True
         
         self.player = Player(self.grid.grid_cells, self.start_pos, self.goal_pos, self.TILE)
         # self.name_game = name_game
+        
+        self.recursive = Recursive(self.grid.grid_cells, self.start_pos)
         
     def init_random(self):
         start, goal = (0, 0), (0, 0)
@@ -34,19 +45,27 @@ class Game():
         # clock = pg.time.Clock() 
         window.fill(light_blue)
         pg.display.set_caption("Maze - Path Finding") 
-        run = True
-        while run:
+        while (self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_goal == False):
             for event in pg.event.get():
                 if event.type == pg.QUIT: 
                     pg.quit()
                     break
-            self.loop()
+            if self.game_type == 'player':
+                self.loop()
+            elif self.game_type == 'bot':
+                self.loop_bot()
              # quit pygame program
         quit() # quit python program
 
     def loop(self):
-        self.maze.draw(self.window)
+        self.maze.draw(window)
         self.player.update_player()
         self.player.handle_move()
-        self.player.draw(self.window)
+        self.player.draw(window)
+        pg.display.update()
+        
+    def loop_bot(self):
+        self.maze.draw(window)
+        self.recursive.find_way(window, dark_blue, self.TILE, self.trace)
+        print(self.trace)
         pg.display.update()

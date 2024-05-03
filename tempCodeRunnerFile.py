@@ -1,1 +1,1 @@
-self.grid.grid_cells[0]
+# pg.draw.rect(window, white, box_of_created_map)
