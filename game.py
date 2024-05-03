@@ -24,8 +24,8 @@ class Game():
     def init_random(self):
         start, goal = (0, 0), (0, 0)
         while start == goal:
-            start = (random.randint(0, self.rows), random.randint(0, self.cols))
-            goal = (random.randint(0, self.rows), random.randint(0, self.cols))
+            start = (random.randrange(self.rows), random.randrange(self.cols))
+            goal = (random.randrange(self.rows), random.randrange(self.cols))
         return start, goal
         
         
