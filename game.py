@@ -3,7 +3,7 @@ from player import *
 from color import *
 
 from recursive import *
-
+import time
 import pygame as pg
 import random
 
@@ -35,8 +35,8 @@ class Game():
     def init_random(self):
         start, goal = (0, 0), (0, 0)
         while start == goal:
-            start = (random.randrange(self.rows), random.randrange(self.cols))
-            goal = (random.randrange(self.rows), random.randrange(self.cols))
+            start = [random.randrange(self.rows), random.randrange(self.cols)]
+            goal = [random.randrange(self.rows), random.randrange(self.cols)]
         return start, goal
         
         
@@ -45,6 +45,7 @@ class Game():
         # clock = pg.time.Clock() 
         window.fill(light_blue)
         pg.display.set_caption("Maze - Path Finding") 
+        
         while (self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_goal == False):
             for event in pg.event.get():
                 if event.type == pg.QUIT: 
@@ -54,7 +55,9 @@ class Game():
                 self.loop()
             elif self.game_type == 'bot':
                 self.loop_bot()
+            time.sleep(1)
              # quit pygame program
+        print("is done")
         quit() # quit python program
 
     def loop(self):
@@ -66,6 +69,7 @@ class Game():
         
     def loop_bot(self):
         self.maze.draw(window)
-        self.recursive.find_way(window, dark_blue, self.TILE, self.trace)
+        self.recursive.find_way(window, dark_blue, self.TILE, self.trace, self.start_pos)
         print(self.trace)
+        print(self.start_pos, self.goal_pos)
         pg.display.update()

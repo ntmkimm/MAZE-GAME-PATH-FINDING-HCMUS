@@ -20,7 +20,7 @@ class Cell:
         self.visited = False
         
         self.bar_color = black
-        self.bar_thick = 1
+        self.bar_thick = 5
         
         self.goal_color = red
         
@@ -57,7 +57,7 @@ class Cell:
         x, y = self.init_maze_x + self.x * TILE, self.init_maze_y + self.y * TILE
         
         if self.is_goal:
-            pg.draw.rect(window, self.goal_color, (x + 2, y + 2, TILE - 4, TILE - 4))
+            pg.draw.rect(window, self.goal_color, (x + 10, y + 10, TILE - 20, TILE - 20))
         elif self.seen:
             pg.draw.rect(window, white, (x, y, TILE, TILE))
         

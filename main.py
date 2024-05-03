@@ -65,7 +65,7 @@ class Menu():
                         self.init_mode = (self.init_mode + 1) % 2
                         
                     if create_new_button.is_pointed(mouse_pos):
-                        if self.size_mode == 0:     self.size = 20
+                        if self.size_mode == 0:     self.size = 5
                         elif self.size_mode == 1:   self.size = 40
                         elif self.size_mode == 2:   self.size = 100
                         

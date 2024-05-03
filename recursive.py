@@ -7,10 +7,9 @@ class Recursive:
         self.y = start_pos[0]
         self.x = start_pos[1]
         
-    def find_way(self, window, color, tile, trace):
+    def find_way(self, window, color, tile, trace, start_pos):
         
         trace.append((self.y, self.x))
-        
         self.grid_cells[self.y][self.x].draw_current_cell(window, color, tile)
         self.grid_cells[self.y][self.x].visited = True
         self.grid_cells[self.y][self.x].is_start = False
@@ -28,11 +27,16 @@ class Recursive:
             and self.grid_cells[self.y][self.x - 1].visited == False):
             self.x -= 1
         else:
-            trace.pop()
+            trace.pop(-1)
             self.y = trace[-1][0]
             self.x = trace[-1][1]
-            
+            trace.pop(-1)
+        
+        start_pos[0] = self.y
+        start_pos[1] = self.x
         self.grid_cells[self.y][self.x].is_start = True
+        
+        return start_pos
 
             
             
