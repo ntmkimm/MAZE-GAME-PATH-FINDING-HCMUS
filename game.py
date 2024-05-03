@@ -55,7 +55,7 @@ class Game():
                 self.loop()
             elif self.game_type == 'bot':
                 self.loop_bot()
-            time.sleep(1)
+                # time.sleep(0.2)
              # quit pygame program
         print("is done")
         quit() # quit python program

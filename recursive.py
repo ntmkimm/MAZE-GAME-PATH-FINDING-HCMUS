@@ -35,8 +35,6 @@ class Recursive:
         start_pos[0] = self.y
         start_pos[1] = self.x
         self.grid_cells[self.y][self.x].is_start = True
-        
-        return start_pos
 
             
             

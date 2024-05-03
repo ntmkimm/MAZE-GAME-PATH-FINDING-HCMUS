@@ -104,7 +104,7 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
         all_sprites = {}
         
         if self.rows == 100: size = (8, 8)
-        if self.rows == 5: size = (8, 8)
+        # if self.rows == 5: size = (8, 8)
         elif self.rows == 40: size = (16, 16)
         elif self.rows == 20: size = (32, 32)
         
