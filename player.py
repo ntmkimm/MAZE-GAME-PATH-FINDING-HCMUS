@@ -4,46 +4,43 @@ import math
 import pygame as pg
 from cell import *
 from color import *
-
-PLAYER_VEL = 1 #player velocity
-# create a block for player, create animations 
-# inherit from the pygame sprite class
-# so we could using a method: if the sprites are colliding with each other
-# window = pg.display.set_mode(RES)
             
-class Player(pg.sprite.Sprite): # sprite make it easy to fit pixel perfect
+class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
 
-    COLOR = red
     ANIMATION_DELAY = 3
     # define our initialization area
     
-    def __init__(self, grid_cells, init_pos, width, height):
+    def __init__(self, grid_cells, init_pos, goal_pos, tile):
         # position of the player
         self.grid_cells = grid_cells
-        # self.rows = int(len(self.grid_cells) ** 0.5)
         self.rows = len(self.grid_cells)
         self.cols = self.rows
-        self.TILE = size_of_maze // self.rows
-        self.cell = grid_cells[init_pos[0]][init_pos[1]]
-        self.x = self.cell.x
-        self.y = self.cell.y
+        self.TILE = tile
+        self.cell = self.grid_cells[init_pos[0]][init_pos[1]]
+        self.x = self.cell.x # col
+        self.y = self.cell.y # row
         self.init_maze_x = self.grid_cells[0][0].init_maze_x
         self.init_maze_y = self.grid_cells[0][0].init_maze_y
-        self.rect = pg.Rect(self.init_maze_y + self.y * self.TILE, self.init_maze_x + self.x * self.TILE, width, height) 
+        self.rect = pg.Rect(self.init_maze_x + self.x * self.TILE, self.init_maze_y + self.y * self.TILE, self.TILE, self.TILE)
         self.x_step = 0
         self.y_step = 0
         self.sliding = False
         self.SPRITES = self.load_sprite_sheeets("MainCharacters", "MaskDude", 32, 32)
-        
-        # denote how fast we move our player
-        self.mask = None # ?
+    
+        self.mask = None
         self.x_direction = 'right'
         self.y_direction = ''
-        # using times frames re-generate to calc how long have been ?
-        #when we start sliding through Ox axis
         self.step_count = 0
-        #when we start sliding through Oy axis
         self.animation_count = 0
+        
+        # GOAL
+        self.goal_cell = self.grid_cells[goal_pos[0]][goal_pos[1]]
+        self.goal_cell.is_goal = True
+        self.goal_rect = pg.Rect(
+            self.init_maze_x + goal_pos[1] * self.TILE + 2, 
+            self.init_maze_y + goal_pos[0] * self.TILE + 2, self.TILE - 4, self.TILE - 4
+            )
+        self.goal_color = red
         
     def move(self, dx=0, dy=0):
         if dx < 0:
@@ -103,9 +100,8 @@ class Player(pg.sprite.Sprite): # sprite make it easy to fit pixel perfect
     
     # draw character everytime we update the position of the character
     def draw(self, window):
+        pg.draw.rect(window, self.goal_color, self.goal_rect)
         window.blit(self.sprite, (self.rect.x, self.rect.y))
-        # pg.draw.rect(window, self.COLOR, self.rect)
-        
         
     def flip(self, sprites):
         return [pg.transform.flip(sprite, True, False) for sprite in sprites]
@@ -138,26 +134,4 @@ class Player(pg.sprite.Sprite): # sprite make it easy to fit pixel perfect
             all_sprites[f.replace(".png", "") + "_left"] = self.flip(sprites)
 
         return all_sprites
-            
-    # def handle_vertical_bar(self, objects, dy):
-    #     collided_onj = []
-    #     for obj in objects:
-    #         if pg.sprite.collide_mask(player, obj)
-            
-# class Object(pg.sprite.Sprite):
-#     def __init__(self, x, y, width, height, name=None):
-#         self.rect = pg.Rect(x, y, width, height)
-#         self.img = pg.Surface((width, height), pg.SRCALPHA)
-#         self.width = width
-#         self.height = height
-#         self.name = name
-    
-#     def draw(self, window):
-#         window.blit(self.img, (self.rect.x, self.rect.y))
-
-# class Block(Object):
-#     def __init__(self, x, y, size):
-#         block = get_block(size)
-#         self.img.blit(block, (0, 0))
-#         self.mask = pg.mask.from_surface(self.img)
         

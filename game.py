@@ -5,23 +5,29 @@ import pygame as pg
 import random
 
 
-
 class Game():
-    def __init__(self, window, size):
+    def __init__(self, window, size, init):
         self.window = window
         self.rows = size
         self.cols = size
         self.TILE = size_of_maze // size
         self.grid = Grid(self.rows, self.cols)
         self.maze = Maze_Generator(self.grid)
-        self.player = Player(self.grid.grid_cells, (0, 0), self.TILE, self.TILE)
-        self.mode = 0
+        if init == 'random':
+            self.start_pos, self.goal_pos = self.init_random()
+        # elif init == 'choose':
+        #     self.start_pos, self.goal_pos = self
+        
+        self.player = Player(self.grid.grid_cells, self.start_pos, self.goal_pos, self.TILE)
         # self.name_game = name_game
         
-    # def init_random(self):
-    #     start_x = random.randint(0, self.cols)
-    #     start_y = random.randint(0, self.rows)
-    #     end_x = 
+    def init_random(self):
+        start, goal = (0, 0), (0, 0)
+        while start == goal:
+            start = (random.randint(0, self.rows), random.randint(0, self.cols))
+            goal = (random.randint(0, self.rows), random.randint(0, self.cols))
+        return start, goal
+        
         
     def run_game(self, window):
         pg.init() 
