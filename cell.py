@@ -2,15 +2,15 @@ import pygame as pg
 import random
 from color import *
 
-size_of_maze = 760
+size_of_maze = 800
 
 class Cell:
     def __init__(self, y, x):
         self.x, self.y = x, y # x - index of col, y - index of row
         self.bars = {'top': True, 'right': True, 'bottom': True, 'left': True}
         
-        self.init_maze_x = 20
-        self.init_maze_y = 20
+        self.init_maze_x = 10
+        self.init_maze_y = 10
         
         self.is_start = False
         self.is_goal = False

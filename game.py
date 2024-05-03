@@ -7,7 +7,7 @@ import time
 import pygame as pg
 import random
 
-window = pg.display.set_mode((1200, 800))
+window = pg.display.set_mode((1200, 820))
 
 class Game():
     def __init__(self, size, init_type, game_type):
