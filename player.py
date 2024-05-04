@@ -61,18 +61,19 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
         self.get_dynamic()
     
     def handle_move(self):
-        self.x_step = 0
-        self.y_step = 0
-        key = pg.key.get_pressed()
-        # set to 0 cause we just want the player move when we pressed the key
-        if (key[pg.K_LEFT] or key[pg.K_a]) and self.cell.bars['left'] == False:
-            self.move(dx = -1)
-        elif (key[pg.K_RIGHT] or key[pg.K_d]) and self.cell.bars['right'] == False:
-            self.move(dx = 1)
-        elif (key[pg.K_UP] or key[pg.K_w]) and self.cell.bars['top'] == False:
-            self.move(dy = -1)
-        elif (key[pg.K_DOWN] or key[pg.K_s]) and self.cell.bars['bottom'] == False:
-            self.move(dy = 1)
+        for event in pg.event.get():
+            if event.type == pg.QUIT: 
+                pg.quit()
+        # No need to break here unless you want to exit the loop immediately
+            elif event.type == pg.KEYDOWN:  # Use pygame.KEYDOWN to detect key presses
+                if event.key in [pg.K_LEFT, pg.K_a] and not self.cell.bars['left']:
+                    self.move(dx=-1)
+                elif event.key in [pg.K_RIGHT, pg.K_d] and not self.cell.bars['right']:
+                    self.move(dx=1)
+                elif event.key in [pg.K_UP, pg.K_w] and not self.cell.bars['top']:
+                    self.move(dy=-1)
+                elif event.key in [pg.K_DOWN, pg.K_s] and not self.cell.bars['bottom']:
+                    self.move(dy=1)
     
     def get_dynamic(self):
         #MAKING PLAYER LOOK DYNAMIC

@@ -23,6 +23,7 @@ class Game():
             self.start_pos, self.goal_pos = self.init_random()
         elif init_type == 'choose':
             self.start_pos, self.goal_pos = (0, 0), (self.rows - 1, self.cols - 1) # step of the player is undone 
+        self.cur_pos = self.start_pos
         
         self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_start = True
         self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True
@@ -46,19 +47,20 @@ class Game():
         window.fill(light_blue)
         pg.display.set_caption("Maze - Path Finding") 
         
-        while (self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_goal == False):
-            for event in pg.event.get():
-                if event.type == pg.QUIT: 
-                    pg.quit()
-                    break
+        while True:
             if self.game_type == 'player':
                 self.loop()
             elif self.game_type == 'bot':
+                if (self.grid.grid_cells[self.cur_pos[0]][self.cur_pos[1]].is_goal == True):
+                    self.draw_last_trace()
+                    time.sleep(10000)
+                    break
                 self.loop_bot()
+                
                 # time.sleep(0.2)
              # quit pygame program
         print("is done")
-        quit() # quit python program
+        # quit() # quit python program
 
     def loop(self):
         self.maze.draw(window)
@@ -66,10 +68,18 @@ class Game():
         self.player.handle_move()
         self.player.draw(window)
         pg.display.update()
+    
+    def draw_last_trace(self):
+        # self.maze.draw(window)
+        for i in range(len(self.trace)):
+            self.grid.grid_cells[self.trace[i][0]][self.trace[i][1]].trace = True
+        
+        self.maze.draw(window)
+        pg.display.update()
         
     def loop_bot(self):
         self.maze.draw(window)
-        self.recursive.find_way(window, dark_blue, self.TILE, self.trace, self.start_pos)
+        self.recursive.find_way(window, dark_blue, self.TILE, self.trace, self.cur_pos)
         print(self.trace)
-        print(self.start_pos, self.goal_pos)
+        # print(self.start_pos, self.goal_pos)
         pg.display.update()

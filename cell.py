@@ -13,8 +13,12 @@ class Cell:
         self.init_maze_y = 10
         
         self.is_start = False
+        self.is_current = False
         self.is_goal = False
         self.neighbors = []
+        self.trace = False
+        
+        self.intersect = False
         
         self.seen = False
         self.visited = False
@@ -53,7 +57,9 @@ class Cell:
     def draw_bars(self, window, TILE):
         x, y = self.init_maze_x + self.x * TILE, self.init_maze_y + self.y * TILE
         
-        if self.visited == True:
+        if self.trace == True:
+            pg.draw.rect(window, green, (x, y, TILE, TILE))
+        elif self.visited == True:
             pg.draw.rect(window, gray, (x, y, TILE, TILE))
         elif self.seen:
             pg.draw.rect(window, white, (x, y, TILE, TILE))
