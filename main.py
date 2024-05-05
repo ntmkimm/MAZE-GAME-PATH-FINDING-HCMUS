@@ -8,11 +8,75 @@ from game import *
 
 pg.init()
 
-class Menu():
-    def __init__(self, window):
+class Menu(Game):
+    def __init__(self):
         self.short_bar = pg.image.load("short_bar.png")
         self.long_bar = pg.image.load("long_bar.png")
         self.game_type = 'player'
+        
+    def esc_menu(self, window):
+        
+        while True:
+            # mouse_pos
+            mouse_pos = pg.mouse.get_pos()
+            # title
+            title, title_rect, shader_title, shader_title_rect = shader_text("Create New Map", font(big_size), (600, 50), white, black)
+            window.blit(shader_title, shader_title_rect)
+            window.blit(title, title_rect)
+
+            # type name of world
+            # box_type_name = pg.Rect(, 100, 1200, 500)
+            # pg.draw.rect(window, white, box_of_created_map)
+            # pg.draw.line(window, black, (0, box_of_created_map.top), (1200, box_of_created_map.top), 10)
+            # pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
+            
+            # button
+            cancel_button = Button(img=self.short_bar, pos_center=(900, 700), content='Cancel', font=font(small_size))
+            create_new_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
+            
+            easy_button = Button(img=self.long_bar, pos_center=(600, 500), content="Easy: 20x20", font=font(small_size))
+            normal_button = Button(img=self.long_bar, pos_center=(600, 500), content="Normal: 40x40", font=font(small_size))
+            hard_button = Button(img=self.long_bar, pos_center=(600, 500), content="Hard: 100x100", font=font(small_size))
+            
+            random_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Random", font=font(small_size))
+            choose_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Choose", font=font(small_size))
+                        
+            mode_button = [easy_button, normal_button, hard_button]
+            init_button = [random_button, choose_button]
+            
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    # sys.exit()
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if cancel_button.is_pointed(mouse_pos):
+                        if self.game_type == 'player':
+                            self.all_maps_of_user(window)
+                        elif self.game_type == 'bot':
+                            self.main_menu()
+                    if mode_button[self.size_mode].is_pointed(mouse_pos):
+                        self.size_mode = (self.size_mode + 1) % 3
+                        
+                    if init_button[self.init_mode].is_pointed(mouse_pos):
+                        self.init_mode = (self.init_mode + 1) % 2
+                        
+                    if create_new_button.is_pointed(mouse_pos):
+                        if self.size_mode == 0:     self.size = 20
+                        elif self.size_mode == 1:   self.size = 40
+                        elif self.size_mode == 2:   self.size = 100
+                        
+                        if self.init_mode == 0:      self.init = 'random'
+                        elif self.init_mode == 1:    self.init = 'choose'
+
+                        self.game = Game(self.size, self.init, self.game_type)
+                        self.game.run_game(window)
+                    
+                        
+            for button in [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode]]:
+                button.update_color_line(mouse_pos)
+                button.update(window)
+                        
+            pg.display.update()
         
     def create_new_map(self):
         pg.display.set_caption("Choose size map")
@@ -72,8 +136,8 @@ class Menu():
                         if self.init_mode == 0:      self.init = 'random'
                         elif self.init_mode == 1:    self.init = 'choose'
 
-                        game = Game(self.size, self.init, self.game_type)
-                        game.run_game(window)
+                        Game.__init__(self, self.size, self.init, self.game_type)
+                        self.run_game(window)
                     
                         
             for button in [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode]]:
@@ -116,8 +180,7 @@ class Menu():
                     if new_map_button.is_pointed(mouse_pos):
                         self.create_new_map()
                 
-            pg.display.update()
-                    
+            pg.display.update()                 
         
     def options(self):
         pass
@@ -167,6 +230,6 @@ class Menu():
         
         
 if __name__ == "__main__":
-    menu = Menu(window)
+    menu = Menu()
     menu.main_menu()
             

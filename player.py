@@ -5,7 +5,7 @@ import pygame as pg
 from cell import *
 from color import *
             
-class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
+class Player(): # sprite make it easy to fit pixel perfect
 
     ANIMATION_DELAY = 3
     # define our initialization area
@@ -16,9 +16,9 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
         self.rows = len(self.grid_cells)
         self.cols = self.rows
         self.TILE = tile
-        self.cell = self.grid_cells[init_pos[0]][init_pos[1]]
-        self.x = self.cell.x # col
-        self.y = self.cell.y # row
+        # self.cell = self.grid_cells[init_pos[0]][init_pos[1]]
+        self.x = init_pos[1] # col
+        self.y = init_pos[0] # row
         self.init_maze_x = self.grid_cells[0][0].init_maze_x
         self.init_maze_y = self.grid_cells[0][0].init_maze_y
         self.rect = pg.Rect(self.init_maze_x + self.x * self.TILE, self.init_maze_y + self.y * self.TILE, self.TILE, self.TILE)
@@ -34,6 +34,7 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
         self.animation_count = 0
         
     def move(self, dx=0, dy=0):
+        self.grid_cells[self.y][self.x].is_current == False
         if dx < 0:
             self.x_direction = "left"
             self.x_step = -self.TILE
@@ -55,26 +56,8 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
     
     def update_player(self):
         #update cell of player
-        self.cell.is_current = False
-        self.cell = self.grid_cells[self.y][self.x]
-        self.cell.is_current = True
+        self.grid_cells[self.y][self.x].is_current == True
         self.get_dynamic()
-    
-    def handle_move(self):
-        for event in pg.event.get():
-            self.x_step = 0
-            self.y_step = 0
-            if event.type == pg.QUIT: 
-                pg.quit()
-            elif event.type == pg.KEYDOWN:  # Use pygame.KEYDOWN to detect key press
-                if event.key in [pg.K_LEFT, pg.K_a] and not self.cell.bars['left']:
-                    self.move(dx=-1)
-                elif event.key in [pg.K_RIGHT, pg.K_d] and not self.cell.bars['right']:
-                    self.move(dx=1)
-                elif event.key in [pg.K_UP, pg.K_w] and not self.cell.bars['top']:
-                    self.move(dy=-1)
-                elif event.key in [pg.K_DOWN, pg.K_s] and not self.cell.bars['bottom']:
-                    self.move(dy=1)
     
     def get_dynamic(self):
         #MAKING PLAYER LOOK DYNAMIC

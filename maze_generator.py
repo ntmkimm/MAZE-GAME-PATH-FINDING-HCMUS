@@ -17,7 +17,6 @@ class Maze_Generator:
         while stack != []:
             current_cell = stack[-1]
             next_cells = [cell for cell in current_cell.neighbors if not cell.seen]
-            # current_cell.draw_current_cell(window)
             if next_cells == []:
                 # quay lai diem current cell 
                 # vi khong con neighbors nao cho 'next_cell'

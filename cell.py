@@ -59,7 +59,7 @@ class Cell:
         elif self.seen:
             pg.draw.rect(window, white, (x, y, TILE, TILE))
             
-        # if self.is_current and self.is_bot:
+        # if self.is_current:
         #     pg.draw.rect(window, green, (x, y, TILE, TILE))
         if self.is_start:
             pg.draw.rect(window, dark_blue, (x, y, TILE, TILE))
