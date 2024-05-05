@@ -10,7 +10,7 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
     ANIMATION_DELAY = 3
     # define our initialization area
     
-    def __init__(self, grid_cells, init_pos, goal_pos, tile):
+    def __init__(self, grid_cells, init_pos, tile):
         # position of the player
         self.grid_cells = grid_cells
         self.rows = len(self.grid_cells)
@@ -24,7 +24,7 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
         self.rect = pg.Rect(self.init_maze_x + self.x * self.TILE, self.init_maze_y + self.y * self.TILE, self.TILE, self.TILE)
         self.x_step = 0
         self.y_step = 0
-        self.sliding = False
+
         self.SPRITES = self.load_sprite_sheeets("MainCharacters", "MaskDude", 32, 32)
     
         self.mask = None
@@ -55,17 +55,18 @@ class Player(pg.sprite.Sprite, Cell): # sprite make it easy to fit pixel perfect
     
     def update_player(self):
         #update cell of player
-        self.cell.is_start = False
+        self.cell.is_current = False
         self.cell = self.grid_cells[self.y][self.x]
-        self.cell.is_start = True
+        self.cell.is_current = True
         self.get_dynamic()
     
     def handle_move(self):
         for event in pg.event.get():
+            self.x_step = 0
+            self.y_step = 0
             if event.type == pg.QUIT: 
                 pg.quit()
-        # No need to break here unless you want to exit the loop immediately
-            elif event.type == pg.KEYDOWN:  # Use pygame.KEYDOWN to detect key presses
+            elif event.type == pg.KEYDOWN:  # Use pygame.KEYDOWN to detect key press
                 if event.key in [pg.K_LEFT, pg.K_a] and not self.cell.bars['left']:
                     self.move(dx=-1)
                 elif event.key in [pg.K_RIGHT, pg.K_d] and not self.cell.bars['right']:

@@ -28,7 +28,7 @@ class Game():
         self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_start = True
         self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True
         
-        self.player = Player(self.grid.grid_cells, self.start_pos, self.goal_pos, self.TILE)
+        self.player = Player(self.grid.grid_cells, self.start_pos, self.TILE)
         # self.name_game = name_game
         
         self.recursive = Recursive(self.grid.grid_cells, self.start_pos)
@@ -77,5 +77,5 @@ class Game():
         
     def loop_bot(self):
         self.maze.draw(window)
-        self.recursive.find_way(window, self.TILE, self.trace, self.cur_pos)
+        self.recursive.find_way(self.trace, self.cur_pos)
         pg.display.update()
