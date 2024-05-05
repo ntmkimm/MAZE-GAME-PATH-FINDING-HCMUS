@@ -31,4 +31,4 @@ class Maze_Generator:
     def draw(self, window): 
         for i in range(self.rows):
             for j in range(self.cols):
-                self.grid.grid_cells[i][j].draw_bars(window, self.TILE)
+                self.grid.grid_cells[i][j].draw(window, self.TILE)

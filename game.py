@@ -53,14 +53,13 @@ class Game():
             elif self.game_type == 'bot':
                 if (self.grid.grid_cells[self.cur_pos[0]][self.cur_pos[1]].is_goal == True):
                     self.draw_last_trace()
-                    time.sleep(10000)
+                    time.sleep(5)
                     break
                 self.loop_bot()
                 
                 # time.sleep(0.2)
              # quit pygame program
         print("is done")
-        # quit() # quit python program
 
     def loop(self):
         self.maze.draw(window)
@@ -70,7 +69,6 @@ class Game():
         pg.display.update()
     
     def draw_last_trace(self):
-        # self.maze.draw(window)
         for i in range(len(self.trace)):
             self.grid.grid_cells[self.trace[i][0]][self.trace[i][1]].trace = True
         
@@ -79,7 +77,5 @@ class Game():
         
     def loop_bot(self):
         self.maze.draw(window)
-        self.recursive.find_way(window, dark_blue, self.TILE, self.trace, self.cur_pos)
-        print(self.trace)
-        # print(self.start_pos, self.goal_pos)
+        self.recursive.find_way(window, self.TILE, self.trace, self.cur_pos)
         pg.display.update()

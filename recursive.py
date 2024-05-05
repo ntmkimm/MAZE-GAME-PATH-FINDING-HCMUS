@@ -22,15 +22,15 @@ class Recursive:
         self.y = cur_pos[0]
         self.x = cur_pos[1]
         
-    def find_way(self, window, color, tile, trace, cur_pos):
+    def find_way(self, window, tile, trace, cur_pos):
         
         trace.append((self.y, self.x))
         
         self.grid_cells[self.y][self.x].intersect = is_intersect(self.grid_cells[self.y][self.x])
         
-        self.grid_cells[self.y][self.x].draw_current_cell(window, color, tile)
+        self.grid_cells[self.y][self.x].draw_current_cell(window, tile)
         self.grid_cells[self.y][self.x].visited = True
-        self.grid_cells[self.y][self.x].is_start = False
+        self.grid_cells[self.y][self.x].is_current = False
         
         if (self.grid_cells[self.y][self.x].bars['top'] == False
             and self.grid_cells[self.y - 1][self.x].visited == False):
