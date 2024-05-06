@@ -8,7 +8,6 @@ class Button:
         self.rect = self.img.get_rect(center=(pos_center[0], pos_center[1]))
         self.line_thick = 10
         self.font = font
-        self.was_pressed = False
         self.text_color = white
         self.shader_color = black
         self.text, self.text_rect, self.shader_text, self.shader_text_rect = shader_text(content, self.font, (pos_center[0], pos_center[1] - 7), white, black)
@@ -35,7 +34,7 @@ class Button:
         return False
    
     def update_color_line(self, position):
-        if self.is_pointed(position) or self.was_pressed == True:
+        if self.is_pointed(position):
             self.line_color = black
         else:
             self.line_color = gray

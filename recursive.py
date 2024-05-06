@@ -53,8 +53,6 @@ class Recursive:
                 self.x = trace[-1][1]
             trace.pop(-1)
         
-        cur_pos[0] = self.y
-        cur_pos[1] = self.x
         self.grid_cells[self.y][self.x].is_current = True
 
             
