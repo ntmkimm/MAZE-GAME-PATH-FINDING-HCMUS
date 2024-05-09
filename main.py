@@ -15,9 +15,15 @@ class Menu(Game):
         self.game_type = 'player'
         
     def esc_menu(self):
-        back_to_game_button = Button(img=self.long_bar, pos_center=(600, 350), content='Back to Game', font=font(small_size))
-        options_button = Button(img=self.short_bar, pos_center=(450, 500), content='Options', font=font(small_size))
-        quit_button = Button(img=self.short_bar, pos_center=(750, 500), content="Quit", font=font(small_size))
+        back_to_game_button = Button(img=self.long_bar, pos_center=(600, 250), content='Back to Game', font=font(small_size))
+        options_button = Button(img=self.short_bar, pos_center=(450, 550), content='Options', font=font(small_size))
+        quit_button = Button(img=self.short_bar, pos_center=(750, 550), content="Quit", font=font(small_size))
+
+        if self.game_type == 'player':
+            algo_button = Button(img=self.long_bar, pos_center=(600, 400), content='Hint to Goal', font=font(small_size))
+        elif self.game_type == 'bot':
+            algo_button = Button(img=self.long_bar, pos_center=(600, 400), content='Other Algorithm', font=font(small_size))
+        
         
         while self.pause:
             # mouse_pos     
@@ -36,11 +42,19 @@ class Menu(Game):
                         self.options()
                     elif back_to_game_button.is_pointed(mouse_pos):
                         self.pause = False
+
+                    elif algo_button.is_pointed(mouse_pos):
+                        if self.game_type == 'player':
+                            self.pause = False
+                            return 'get hint'
+                        elif self.game_type == 'bot':
+                            return 'switch algo'
+                        
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         self.pause = False        
-
-            for button in [back_to_game_button, options_button, quit_button]:
+        
+            for button in [back_to_game_button, options_button, quit_button, algo_button]:
                 button.update_color_line(mouse_pos)
                 button.update(window)
                         
