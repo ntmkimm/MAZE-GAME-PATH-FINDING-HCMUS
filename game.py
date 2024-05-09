@@ -20,6 +20,7 @@ class Game():
         self.maze = Maze_Generator(self.grid) 
         self.game_type = game_type
         self.trace = []
+        self.command = None
         
         self.pause = False
         
@@ -50,32 +51,24 @@ class Game():
         
         while True:
             window.fill(light_blue)
+            self.maze.draw(window)
+            self.handle_move()
             if self.game_type == 'player':
                 if (self.grid.grid_cells[self.player.y][self.player.x].is_goal == True):
                     time.sleep(1)
                     break
-                self.loop()
-            elif self.game_type == 'bot':
+                self.player.update_player()
+                self.player.draw(window)
+                
+            if self.game_type == 'bot':
                 if (self.grid.grid_cells[self.recursive.y][self.recursive.x].is_goal == True):
                     self.draw_last_trace()
                     time.sleep(1)
                     break
-                self.loop_bot(self.start_pos)
-
+                self.recursive.find_way(self.trace)
+            pg.display.update()
         print("is done")
-
-    def loop(self):
-        self.maze.draw(window)
-        self.handle_move()
-        self.player.update_player()
-        self.player.draw(window)
-        pg.display.update()
-        
-    def loop_bot(self, cur_pos):
-        self.maze.draw(window)
-        self.recursive.find_way(self.trace, cur_pos)
-        self.handle_move()
-        pg.display.update()
+        self.command = None
         
     def handle_move(self):
         for event in pg.event.get():
@@ -99,19 +92,29 @@ class Game():
                         self.player.move(dy=1)
                 if event.key in [pg.K_ESCAPE]:
                     self.pause = True
-                    command = self.esc_menu() # call from child class
-                    if command == 'get hint':
-                        self.recursive = Recursive(self.grid.grid_cells, (self.player.y, self.player.x))
-                        self.loop_bot((self.player.y, self.player.x))
-                    elif command == 'switch algo':
+                    self.command = self.esc_menu() # call from child class
+                    if self.command == 'get hint':
+                        self.get_hint()
+                    elif self.command == 'switch algo':
                         self.switch_algo()
     
     def switch_algo(self):
         pass
     
     def draw_last_trace(self):
-        for i in range(len(self.trace)):
+        for i in range(self.rows):
+            for j in range(self.cols):
+                self.grid.grid_cells[i][j].visited = False
+    
+        for i in range(1, len(self.trace)): # no draw to first cell of path
             self.grid.grid_cells[self.trace[i][0]][self.trace[i][1]].trace = True
         
         self.maze.draw(window)
         pg.display.update()
+    
+    def get_hint(self):
+        self.trace = []
+        hint = Recursive(self.grid.grid_cells, (self.player.y, self.player.x))
+        while self.grid.grid_cells[hint.y][hint.x].is_goal == False:
+            hint.find_way(self.trace)
+        self.draw_last_trace()

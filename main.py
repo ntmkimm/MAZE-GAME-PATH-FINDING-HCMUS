@@ -48,6 +48,7 @@ class Menu(Game):
                             self.pause = False
                             return 'get hint'
                         elif self.game_type == 'bot':
+                            self.pause = False
                             return 'switch algo'
                         
                 if event.type == pg.KEYDOWN:
@@ -215,8 +216,6 @@ class Menu(Game):
                         pg.quit()
             pg.display.update()
         
-        
 if __name__ == "__main__":
     menu = Menu()
     menu.main_menu()
-            
