@@ -2,15 +2,7 @@ import pygame as pg
 from maze_generator import *
 
 def is_intersect(cell):
-    count = 0
-    if cell.bars['top'] == False:
-        count += 1
-    if cell.bars['right'] == False:
-        count += 1
-    if cell.bars['bottom'] == False:
-        count += 1
-    if cell.bars['left'] == False:
-        count += 1
+    count = len(cell.bars)
     if count > 2:
         return True
     if count <= 2:

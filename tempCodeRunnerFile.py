@@ -1,1 +1,1 @@
-# pg.draw.rect(window, white, box_of_created_map)
+        self.maze.draw(window)

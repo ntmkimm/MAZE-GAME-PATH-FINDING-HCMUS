@@ -54,11 +54,10 @@ class Game():
             self.maze.draw(window)
             self.handle_move()
             if self.game_type == 'player':
+                self.player.draw(window)
                 if (self.grid.grid_cells[self.player.y][self.player.x].is_goal == True):
                     time.sleep(1)
                     break
-                self.player.update_player()
-                self.player.draw(window)
                 
             if self.game_type == 'bot':
                 if (self.grid.grid_cells[self.recursive.y][self.recursive.x].is_goal == True):
