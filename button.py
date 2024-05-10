@@ -10,7 +10,8 @@ class Button:
         self.font = font
         self.text_color = white
         self.shader_color = black
-        self.text, self.text_rect, self.shader_text, self.shader_text_rect = shader_text(content, self.font, (pos_center[0], pos_center[1] - 7), white, black)
+        self.text, self.text_rect, self.shader_text, self.shader_text_rect \
+            = shader_text(content, self.font, (pos_center[0], pos_center[1] - 7), white, black)
         self.line_color = gray
         self.content = content
         
@@ -28,8 +29,7 @@ class Button:
         window.blit(self.text, self.text_rect)
     
     def is_pointed(self, position):
-        if (position[0] in range(self.rect.left + self.line_thick, self.rect.right + self.line_thick)
-            and position[1] in range(self.rect.top + self.line_thick, self.rect.bottom + self.line_thick)):
+        if self.rect.collidepoint(position):
             return True 
         return False
    

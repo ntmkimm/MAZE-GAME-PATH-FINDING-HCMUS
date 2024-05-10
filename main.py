@@ -216,6 +216,6 @@ class Menu(Game):
                         pg.quit()
             pg.display.update()
         
-# if __name__ == "__main__":
-#     menu = Menu()
-#     menu.main_menu()
+if __name__ == "__main__":
+    menu = Menu()
+    menu.main_menu()
