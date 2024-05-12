@@ -64,7 +64,7 @@ class Input_Button(Button):
         Button.__init__(self, img, pos_center, content, font, line_base_color)
         self.active = False
         self.hide = hide
-        self.line_thick = 3
+        self.line_thick = 10
         self.input = ''
         
         self.cursor_visible = True

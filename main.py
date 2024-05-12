@@ -72,41 +72,50 @@ class Menu(Game):
         cancel_button = Button(img=self.short_bar, pos_center=(900, 700), content='Cancel', font=font(small_size))
         create_new_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
         
+        input_name_button = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
+        
         easy_button = Button(img=self.long_bar, pos_center=(600, 500), content="Easy: 20x20", font=font(small_size))
         normal_button = Button(img=self.long_bar, pos_center=(600, 500), content="Normal: 40x40", font=font(small_size))
         hard_button = Button(img=self.long_bar, pos_center=(600, 500), content="Hard: 100x100", font=font(small_size))
         
         random_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Random", font=font(small_size))
         choose_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Choose", font=font(small_size))
-                    
+        
         mode_button = [easy_button, normal_button, hard_button]
         init_button = [random_button, choose_button]
+        
+        type_name, type_name_rect = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 130), color=black)
         
         while True:
             window.fill(light_blue)
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
+            
+            for button in [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode], input_name_button]:
+                button.update_color_line(mouse_pos)
+                button.update(window)
+            
             # title
             title, title_rect, shader_title, shader_title_rect = shader_text("Create New Map", font(big_size), (600, 50), white, black)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
-
-            # type name of world
-            # box_type_name = pg.Rect(, 100, 1200, 500)
-            # pg.draw.rect(window, white, box_of_created_map)
-            # pg.draw.line(window, black, (0, box_of_created_map.top), (1200, box_of_created_map.top), 10)
-            # pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
+            window.blit(type_name, type_name_rect)
+            
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
                     # sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
+                    if input_name_button.is_pointed(mouse_pos):
+                        input_name_button.active = True
+                        
                     if cancel_button.is_pointed(mouse_pos):
                         if self.game_type == 'player':
                             self.all_maps_of_user()
                         elif self.game_type == 'bot':
                             self.main_menu()
+                    
                     if mode_button[self.size_mode].is_pointed(mouse_pos):
                         self.size_mode = (self.size_mode + 1) % 3
                         
@@ -123,12 +132,16 @@ class Menu(Game):
 
                         Game.__init__(self, self.size, self.init, self.game_type)
                         self.run_game()
-                    
                         
-            for button in [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode]]:
-                button.update_color_line(mouse_pos)
-                button.update(window)
-                        
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_BACKSPACE:
+                        if input_name_button.active:
+                            input_name_button.input = input_name_button.input[:-1]
+                    else:
+                        if input_name_button.active and len(input_name_button.input) <= 36:
+                            input_name_button.input += event.unicode
+            
+            input_name_button.draw()
             pg.display.update()
 
     def all_maps_of_user(self):
@@ -245,9 +258,9 @@ class Menu(Game):
             
             for event in pg.event.get():
                 if sign_in_rect.collidepoint(mouse_pos):
-                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(760, 750), color=black)
+                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(760, 750), color=dark_blue)
                 else:
-                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(760, 750), color=purple)
+                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(760, 750), color=red)
                     
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -323,7 +336,7 @@ class Menu(Game):
                 
             for event in pg.event.get():
                     if sign_up_rect.collidepoint(mouse_pos):
-                        sign_up, sign_up_rect = get_text('Sign up', font=font(tiny_size), pos_center=(760, 680), color=purple)
+                        sign_up, sign_up_rect = get_text('Sign up', font=font(tiny_size), pos_center=(760, 680), color=dark_blue)
                     else:
                         sign_up, sign_up_rect = get_text('Sign up', font=font(tiny_size), pos_center=(760, 680), color=red)
                     if event.type == pg.QUIT:
