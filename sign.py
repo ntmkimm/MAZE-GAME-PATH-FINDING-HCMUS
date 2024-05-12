@@ -55,15 +55,6 @@ def sign_in(name, password):
         return 2
     else:
         return 3
-    
-current_time = pg.time.get_ticks()
-cursor_timer = pg.time.get_ticks()
-cursor_blink = True
-
-if current_time - cursor_timer > 50:  # Thời gian nháy là 500ms
-    cursor_blink = not cursor_blink
-    cursor_timer = current_time
-
 class Input_Button(Button):
     def __init__(self, img, pos_center, content, font, line_base_color=dark_blue, hide=False):
         Button.__init__(self, img, pos_center, content, font, line_base_color)
@@ -71,7 +62,8 @@ class Input_Button(Button):
         self.hide = hide
         self.line_thick = 3
         self.input = ''
-        
+        self.cursor_visible = True
+        self.last_toggle = time.time()
     def draw(self):
         if self.hide:
             text = self.font.render('*' * len(self.input), True, black)
@@ -79,3 +71,15 @@ class Input_Button(Button):
             text = self.font.render(self.input, True, black)
             
         window.blit(text, (self.rect.x + 10, self.rect.y + 20))
+        if self.active:
+            if time.time() - self.last_toggle > 0.5:
+                self.cursor_visible = not self.cursor_visible
+                self.last_toggle = time.time()
+            if self.cursor_visible:
+                text_width, text_height = self.font.size(self.input)
+                cursor_x = self.rect.x + 10 + text_width
+                cursor_y = self.rect.y + 15
+                cursor_width = 4
+                cursor_height = text_height + 10
+                cursor_rect = pg.Rect(cursor_x, cursor_y, cursor_width, cursor_height)
+                pg.draw.rect(window, pg.Color('black'), cursor_rect)
