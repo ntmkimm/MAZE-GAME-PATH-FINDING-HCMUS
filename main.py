@@ -307,6 +307,7 @@ class Menu(Game):
             pg.display.update()
             
             if text_return == 'registered successfully':
+                time.sleep(1)
                 self.sign_in_menu()
 
     def sign_in_menu(self):
