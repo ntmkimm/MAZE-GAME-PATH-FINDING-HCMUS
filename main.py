@@ -68,10 +68,12 @@ class Menu(Game):
         self.size_mode = 0
         self.init_mode = 0
         
+        title, title_rect, shader_title, shader_title_rect = shader_text("Create New Map", font(big_size), (600, 70), white, black)
+        
         # button
         cancel_button = Button(img=self.short_bar, pos_center=(900, 700), content='Cancel', font=font(small_size))
         create_new_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
-        input_name_button = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(small_size))
+        input_name_button = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
         easy_button = Button(img=self.long_bar, pos_center=(600, 500), content="Easy: 20x20", font=font(small_size))
         normal_button = Button(img=self.long_bar, pos_center=(600, 500), content="Normal: 40x40", font=font(small_size))
         hard_button = Button(img=self.long_bar, pos_center=(600, 500), content="Hard: 100x100", font=font(small_size))
@@ -82,7 +84,7 @@ class Menu(Game):
         mode_button = [easy_button, normal_button, hard_button]
         init_button = [random_button, choose_button]
         
-        type_name = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 160), color=black)
+        type_name, type_name_rect = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 150), color=black)
         
         while True:
             window.fill(light_blue)
@@ -94,10 +96,9 @@ class Menu(Game):
                 button.update(window)
             
             # title
-            title, title_rect, shader_title, shader_title_rect = shader_text("Create New Map", font(big_size), (600, 50), white, black)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
-            window.blit
+            window.blit(type_name, type_name_rect)
             
             
             for event in pg.event.get():
