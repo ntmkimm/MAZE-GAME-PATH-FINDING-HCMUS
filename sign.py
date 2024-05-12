@@ -48,13 +48,16 @@ def sign_in(name, password):
     users, passwords = read_data()
     
     user_password_pairs = list(zip(users, passwords))
-    
+    if name == '':
+        return 'username is empty'
+    elif password == '':
+        return 'password is empty'
     if (name, password) in user_password_pairs:
-        return 1
+        return 'login successfull'
     elif name in users:
-        return 2
+        return 'wrong password. type again'
     else:
-        return 3
+        return 'unregister'
 
 class Input_Button(Button):
     def __init__(self, img, pos_center, content, font, line_base_color=dark_blue, hide=False):
