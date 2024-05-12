@@ -71,9 +71,7 @@ class Menu(Game):
         # button
         cancel_button = Button(img=self.short_bar, pos_center=(900, 700), content='Cancel', font=font(small_size))
         create_new_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
-        
-        input_name_button = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
-        
+        input_name_button = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(small_size))
         easy_button = Button(img=self.long_bar, pos_center=(600, 500), content="Easy: 20x20", font=font(small_size))
         normal_button = Button(img=self.long_bar, pos_center=(600, 500), content="Normal: 40x40", font=font(small_size))
         hard_button = Button(img=self.long_bar, pos_center=(600, 500), content="Hard: 100x100", font=font(small_size))
@@ -84,7 +82,7 @@ class Menu(Game):
         mode_button = [easy_button, normal_button, hard_button]
         init_button = [random_button, choose_button]
         
-        type_name, type_name_rect = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 130), color=black)
+        type_name = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 160), color=black)
         
         while True:
             window.fill(light_blue)
@@ -99,7 +97,7 @@ class Menu(Game):
             title, title_rect, shader_title, shader_title_rect = shader_text("Create New Map", font(big_size), (600, 50), white, black)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
-            window.blit(type_name, type_name_rect)
+            window.blit
             
             
             for event in pg.event.get():
@@ -231,8 +229,8 @@ class Menu(Game):
         password = Input_Button(img=self.input_img, pos_center=(600, 350), content='', font=font(tiny_size), hide=True)
         re_password = Input_Button(img=self.input_img, pos_center=(600, 500), content='', font=font(tiny_size), hide=True)
         
-        note, note_rect = get_text("Already have an account. ", font=font(tiny_size), pos_center=(530, 750), color=black)
-        sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(760, 750), color=red)
+        note, note_rect = get_text("Already have an account. ", font=font(tiny_size), pos_center=(540, 750), color=black)
+        sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(780, 750), color=red)
         
         sign_up_button = Button(img=self.short_bar, pos_center=(600, 650), content='SIGN UP', font=font(small_size))
 
@@ -258,9 +256,9 @@ class Menu(Game):
             
             for event in pg.event.get():
                 if sign_in_rect.collidepoint(mouse_pos):
-                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(760, 750), color=dark_blue)
+                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(780, 750), color=dark_blue)
                 else:
-                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(760, 750), color=red)
+                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(780, 750), color=red)
                     
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -307,7 +305,6 @@ class Menu(Game):
             pg.display.update()
             
             if text_return == 'registered successfully':
-                time.sleep(1)
                 self.sign_in_menu()
 
     def sign_in_menu(self):
