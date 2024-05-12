@@ -5,6 +5,7 @@ from ui import *
 from maze_generator import *
 from player import *
 from game import *
+from sign import *
 
 pg.init()
 
@@ -13,7 +14,8 @@ class Menu(Game):
         self.short_bar = pg.image.load("short_bar.png")
         self.long_bar = pg.image.load("long_bar.png")
         self.game_type = 'player'
-        
+        self.input_img = pg.image.load("sign.png")
+    
     def esc_menu(self):
         back_to_game_button = Button(img=self.long_bar, pos_center=(600, 250), content='Back to Game', font=font(small_size))
         options_button = Button(img=self.short_bar, pos_center=(450, 550), content='Options', font=font(small_size))
@@ -179,10 +181,6 @@ class Menu(Game):
         quit_button = Button(img=self.short_bar, pos_center=(750, 600), content="QUIT", font=font(small_size))
         
         while True:
-            for event in pg.event.get():
-                    if event.type == pg.QUIT: 
-                        pg.quit()
-                        break
             
             window.fill(light_blue)
             # mouse_pos
@@ -214,6 +212,75 @@ class Menu(Game):
                         pg.quit()
             pg.display.update()
         
+    def sign_up_menu(self):
+        font_sign = font(32)
+        
+        name = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
+        password = Input_Button(img=self.input_img, pos_center=(600, 350), content='', font=font(tiny_size), hide=True)
+        re_password = Input_Button(img=self.input_img, pos_center=(600, 500), content='', font=font(tiny_size), hide=True)
+        
+        sign_up_button = Button(img=self.short_bar, pos_center=(600, 650), content='SIGN UP', font=font(small_size))
+
+        name_text, name_rect = get_text('Username', font=font(32), pos_center=(600, 130), color=black)
+        pass_text, pass_rect = get_text('Password', font=font(32), pos_center=(600, 280), color=black)
+        re_pass_text, re_pass_rect = get_text('Re_password', font=font(32), pos_center=(600, 430), color=black)
+        text_return = ''
+        
+        while True:
+            
+            window.fill(sky_blue)
+            window.blit(name_text, name_rect)
+            window.blit(pass_text, pass_rect)
+            window.blit(re_pass_text, re_pass_rect)
+            
+            mouse_pos = pg.mouse.get_pos()
+            
+            for button in [name, password, re_password, sign_up_button]:
+                button.update_color_line(mouse_pos)
+                button.update(window)
+            
+            for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pg.quit()
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        if name.is_pointed(mouse_pos):
+                            name.active = True
+                            password.active = False
+                            re_password.active = False
+                        if password.is_pointed(mouse_pos):
+                            name.active = False
+                            password.active = True
+                            re_password.active = False
+                        if re_password.is_pointed(mouse_pos):
+                            name.active = False
+                            password.active = False
+                            re_password.active = True
+                        if sign_up_button.is_pointed(mouse_pos):
+                            text_return = sign_up(name.input, password.input, re_password.input)
+                    
+                    if event.type == pg.KEYDOWN:
+                        if event.key == pg.K_BACKSPACE:
+                            if name.active:
+                                name.input = name.input[:-1]
+                            if password.active:
+                                password.input = password.input[:-1]
+                            if re_password.active:
+                                re_password.input = re_password.input[:-1]
+                        else:
+                            if name.active and len(name.input) <= 36:
+                                name.input += event.unicode
+                            if password.active and len(password.input) <= 36:
+                                password.input += event.unicode
+                            if re_password.active and len(re_password.input) <= 36:
+                                re_password.input += event.unicode
+            
+            text_surface, text_surface_rect = get_text(content=text_return, font=font(tiny_size), pos_center=(600, 560), color=black)
+            window.blit(text_surface, text_surface_rect)
+            
+            name.draw()
+            password.draw()
+            re_password.draw()
+            pg.display.update()
 if __name__ == "__main__":
     menu = Menu()
-    menu.main_menu()
+    menu.sign_up_menu()

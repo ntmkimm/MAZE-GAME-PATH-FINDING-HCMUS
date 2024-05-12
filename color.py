@@ -1,7 +1,7 @@
 import pygame as pg
 
 
-color_active = pg.Color('lightskyblue3')
+sky_blue = pg.Color('lightskyblue3')
 color_passive = pg.Color('chartreuse4')
 
 light_blue = (56, 182, 255)

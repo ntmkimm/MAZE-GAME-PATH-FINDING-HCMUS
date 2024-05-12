@@ -3,7 +3,7 @@ from ui import *
 
 class Button:
     #auto set text at the center of the box
-    def __init__(self, img, pos_center, content, font):
+    def __init__(self, img, pos_center, content, font, line_base_color=gray):
         self.img = img
         self.rect = self.img.get_rect(center=(pos_center[0], pos_center[1]))
         self.line_thick = 10
@@ -14,6 +14,8 @@ class Button:
             = shader_text(content, self.font, (pos_center[0], pos_center[1] - 7), white, black)
         self.line_color = gray
         self.content = content
+        self.line_base_color = line_base_color
+        self.line_color = line_base_color
         
     def update(self, window):
         # right
@@ -37,4 +39,4 @@ class Button:
         if self.is_pointed(position):
             self.line_color = black
         else:
-            self.line_color = gray
+            self.line_color = self.line_base_color
