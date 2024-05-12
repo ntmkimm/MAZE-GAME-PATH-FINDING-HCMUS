@@ -172,8 +172,6 @@ class Menu(Game):
 
     def main_menu(self):
         pg.display.set_caption("Menu")
-        short_bar = pg.image.load("short_bar.png")
-        long_bar = pg.image.load("long_bar.png")
         
         play_button = Button(img=self.long_bar, pos_center=(600, 300), content="PLAY", font=font(normal_size))
         bot_button = Button(img=self.long_bar, pos_center=(600, 450), content="BOT", font=font(normal_size))
