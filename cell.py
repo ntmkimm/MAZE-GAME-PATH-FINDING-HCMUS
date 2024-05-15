@@ -16,12 +16,13 @@ class Cell:
         self.is_current = False
         self.is_goal = False
         self.neighbors = []
-        self.trace = False
         
         self.intersect = False
+        self.cost = 0
         
         self.seen = False
         self.visited = False
+        self.trace = False
         
         self.bar_color = black
         self.bar_thick = 2
@@ -39,9 +40,11 @@ class Cell:
         if dx == 1: # current|next
             current.bars['right'] = False
             next.bars['left'] = False
+            
         elif dx == -1: # next|current
             next.bars['right'] = False
             current.bars['left'] = False
+            
         if dy == 1: #current/next (current is above next)
             next.bars['top'] = False
             current.bars['bottom'] = False

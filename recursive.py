@@ -1,5 +1,6 @@
 import pygame as pg 
 from maze_generator import *
+from collections import deque
 
 def is_intersect(cell):
     count = 0
@@ -21,9 +22,10 @@ class Recursive:
         self.grid_cells = grid_cells
         self.y = cur_pos[0]
         self.x = cur_pos[1]
+        self.trace = deque()
         
-    def find_way(self, trace):
-        trace.append((self.y, self.x))
+    def find_way(self):
+        self.trace.append((self.y, self.x))
         
         self.grid_cells[self.y][self.x].intersect = is_intersect(self.grid_cells[self.y][self.x])
         
@@ -43,16 +45,19 @@ class Recursive:
             and self.grid_cells[self.y][self.x - 1].visited == False):
             self.x -= 1
         else:
-            trace.pop(-1)
-            self.y = trace[-1][0]
-            self.x = trace[-1][1]
-            while self.grid_cells[self.y][self.x].intersect == False and len(trace) > 1:
-                trace.pop(-1)
-                self.y = trace[-1][0]
-                self.x = trace[-1][1]
-            trace.pop(-1)
+            self.trace.pop()
+            self.y = self.trace[-1][0]
+            self.x = self.trace[-1][1]
+            while self.grid_cells[self.y][self.x].intersect == False and len(self.trace) > 1:
+                self.trace.pop()
+                self.y = self.trace[-1][0]
+                self.x = self.trace[-1][1]
+            self.trace.pop()
         
         # self.grid_cells[self.y][self.x].is_current = True
+    
+    def trace_back(self, goal):
+        pass
 
             
             

@@ -6,7 +6,10 @@ class Grid:
         self.cols = cols
         #init Cell(y, x)
         self.grid_cells = [[Cell(r, c) for c in range(cols)] for r in range(rows)]
-        self.find_neighbor()          
+        self.find_neighbor()   
+        
+    def random_destroy_bars():
+        pass       
     
     def find_neighbor(self):
             

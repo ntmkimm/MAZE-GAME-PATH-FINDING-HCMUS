@@ -3,6 +3,7 @@ from player import *
 from color import *
 
 from recursive import *
+from bfs import *
 # from main import *
 import time
 import pygame as pg
@@ -12,14 +13,14 @@ RES = WIDTH, HEIGHT = 1200, 820
 window = pg.display.set_mode(RES)
 
 class Game():
-    def __init__(self, size, init_type, game_type):
+    def __init__(self, size, init_type, game_type, algo):
         self.rows = size
         self.cols = size
         self.TILE = size_of_maze // size
         self.grid = Grid(self.rows, self.cols)
         self.maze = Maze_Generator(self.grid) 
         self.game_type = game_type
-        self.trace = []
+        self.algo = algo
         self.command = None
         
         self.pause = False
@@ -35,7 +36,12 @@ class Game():
         if self.game_type == 'player':
             self.player = Player(self.grid.grid_cells, self.start_pos, self.TILE)
         elif self.game_type == 'bot':
-            self.recursive = Recursive(self.grid.grid_cells, self.start_pos) 
+            if self.algo == 'dfs':
+                self.algorithm = Recursive(self.grid.grid_cells, self.start_pos) 
+            elif self.algo == 'bfs':
+                self.algorithm = BFS(self.grid.grid_cells, self.start_pos)
+                
+        
         
     def init_random(self):
         start, goal = (0, 0), (0, 0)
@@ -60,11 +66,11 @@ class Game():
                     break
                 
             if self.game_type == 'bot':
-                if (self.grid.grid_cells[self.recursive.y][self.recursive.x].is_goal == True):
+                if (self.grid.grid_cells[self.algorithm.y][self.algorithm.x].is_goal == True):
                     self.draw_last_trace()
                     time.sleep(1)
                     break
-                self.recursive.find_way(self.trace)
+                self.algorithm.find_way()
             pg.display.update()
         print("is done")
         self.command = None
@@ -101,19 +107,21 @@ class Game():
         pass
     
     def draw_last_trace(self):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                self.grid.grid_cells[i][j].visited = False
-    
-        for i in range(1, len(self.trace)): # no draw to first cell of path
-            self.grid.grid_cells[self.trace[i][0]][self.trace[i][1]].trace = True
+        if self.game_type == 'player':
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    self.grid.grid_cells[i][j].trace = False
+                    self.grid.grid_cells[i][j].visited = False
+        self.algorithm.trace_back(self.goal_pos)
+        for i in range(1, len(self.algorithm.trace)): # no draw to first cell of path
+            self.grid.grid_cells[self.algorithm.trace[i][0]][self.algorithm.trace[i][1]].trace = True
         
         self.maze.draw(window)
         pg.display.update()
     
     def get_hint(self):
-        self.trace = []
-        hint = Recursive(self.grid.grid_cells, (self.player.y, self.player.x))
-        while self.grid.grid_cells[hint.y][hint.x].is_goal == False:
-            hint.find_way(self.trace)
+                    
+        self.algorithm = Recursive(self.grid.grid_cells, (self.player.y, self.player.x))
+        while self.grid.grid_cells[self.algorithm.y][self.algorithm.x].is_goal == False:
+            self.algorithm.find_way()
         self.draw_last_trace()

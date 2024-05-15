@@ -67,6 +67,7 @@ class Menu(Game):
         pg.display.set_caption("Choose size map")
         self.size_mode = 0
         self.init_mode = 0
+        self.algo_mode = 0
         
         title, title_rect, shader_title, shader_title_rect = shader_text("Create New Map", font(big_size), (600, 70), white, black)
         
@@ -74,65 +75,80 @@ class Menu(Game):
         cancel_button = Button(img=self.short_bar, pos_center=(900, 700), content='Cancel', font=font(small_size))
         create_new_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
         input_name_button = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
+        
         easy_button = Button(img=self.long_bar, pos_center=(600, 500), content="Easy: 20x20", font=font(small_size))
         normal_button = Button(img=self.long_bar, pos_center=(600, 500), content="Normal: 40x40", font=font(small_size))
         hard_button = Button(img=self.long_bar, pos_center=(600, 500), content="Hard: 100x100", font=font(small_size))
+        
+        DFS_button = Button(img=self.long_bar, pos_center=(600, 200), content="Algo: DFS", font=font(small_size))
+        BFS_button = Button(img=self.long_bar, pos_center=(600, 200), content="Algo: BFS", font=font(small_size))
         
         random_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Random", font=font(small_size))
         choose_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Choose", font=font(small_size))
         
         mode_button = [easy_button, normal_button, hard_button]
         init_button = [random_button, choose_button]
+        algo_button = [DFS_button, BFS_button]
         
         type_name, type_name_rect = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 150), color=black)
-        
+            
         while True:
             window.fill(light_blue)
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             
-            for button in [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode], input_name_button]:
+            if self.game_type == 'player':
+                buttons = [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode], input_name_button]
+            elif self.game_type == 'bot':
+                buttons = [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode], algo_button[self.algo_mode]] 
+            
+            for button in buttons:
                 button.update_color_line(mouse_pos)
                 button.update(window)
             
             # title
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
-            window.blit(type_name, type_name_rect)
-            
+            if self.game_type == 'player':
+                window.blit(type_name, type_name_rect)
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
-                    # sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    if input_name_button.is_pointed(mouse_pos):
+                    if input_name_button.is_pointed(mouse_pos) and self.game_type == 'player':
                         input_name_button.active = True
                         
-                    if cancel_button.is_pointed(mouse_pos):
+                    elif cancel_button.is_pointed(mouse_pos):
                         if self.game_type == 'player':
                             self.all_maps_of_user()
                         elif self.game_type == 'bot':
                             self.main_menu()
                     
-                    if mode_button[self.size_mode].is_pointed(mouse_pos):
+                    elif mode_button[self.size_mode].is_pointed(mouse_pos):
                         self.size_mode = (self.size_mode + 1) % 3
-                        
-                    if init_button[self.init_mode].is_pointed(mouse_pos):
+                        pg.display.update()
+                    elif algo_button[self.algo_mode].is_pointed(mouse_pos) and self.game_type == 'bot':
+                        self.algo_mode = (self.algo_mode + 1) % 2
+                        pg.display.update()
+                    elif init_button[self.init_mode].is_pointed(mouse_pos):
                         self.init_mode = (self.init_mode + 1) % 2
-                        
-                    if create_new_button.is_pointed(mouse_pos):
+                        pg.display.update()
+                    elif create_new_button.is_pointed(mouse_pos):
                         if self.size_mode == 0:     self.size = 20
                         elif self.size_mode == 1:   self.size = 40
                         elif self.size_mode == 2:   self.size = 100
                         
                         if self.init_mode == 0:      self.init = 'random'
                         elif self.init_mode == 1:    self.init = 'choose'
+                        
+                        if self.algo_mode == 0:      self.algo = 'dfs'
+                        elif self.algo_mode == 1:    self.algo = 'bfs'
 
-                        Game.__init__(self, self.size, self.init, self.game_type)
+                        Game.__init__(self, self.size, self.init, self.game_type, self.algo)
                         self.run_game()
                         
-                if event.type == pg.KEYDOWN:
+                if event.type == pg.KEYDOWN and self.game_type == 'player':
                     if event.key == pg.K_BACKSPACE:
                         if input_name_button.active:
                             input_name_button.input = input_name_button.input[:-1]
@@ -140,7 +156,9 @@ class Menu(Game):
                         if input_name_button.active and len(input_name_button.input) <= 36:
                             input_name_button.input += event.unicode
             
-            input_name_button.draw()
+            if self.game_type == 'player':
+                input_name_button.draw()
+            
             pg.display.update()
 
     def all_maps_of_user(self):
@@ -376,4 +394,4 @@ class Menu(Game):
             
 if __name__ == "__main__":
     menu = Menu()
-    menu.sign_in_menu()
+    menu.main_menu()
