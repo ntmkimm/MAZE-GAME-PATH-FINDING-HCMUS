@@ -54,10 +54,10 @@ class Recursive:
                 self.x = self.trace[-1][1]
             self.trace.pop()
         
-        # self.grid_cells[self.y][self.x].is_current = True
     
-    def trace_back(self, goal):
-        pass
+    def trace_back(self):
+        for pair in self.trace:
+            self.grid_cells[pair[0]][pair[1]].trace = True
 
             
             

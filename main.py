@@ -390,8 +390,10 @@ class Menu(Game):
             pg.display.update()
             
             if text_return == 'login successfull':
+                pg.display.update()
+                time.sleep(2)
                 self.main_menu()
             
 if __name__ == "__main__":
     menu = Menu()
-    menu.main_menu()
+    menu.sign_in_menu()

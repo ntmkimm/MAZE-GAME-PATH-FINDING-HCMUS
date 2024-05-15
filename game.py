@@ -51,8 +51,7 @@ class Game():
         return start, goal
         
     def run_game(self):
-        pg.init() 
-        # clock = pg.time.Clock() 
+        pg.init()  
         pg.display.set_caption("Maze - Path Finding") 
         
         while True:
@@ -104,24 +103,25 @@ class Game():
                         self.switch_algo()
     
     def switch_algo(self):
-        pass
+        for i in range(self.rows):
+            for j in range(self.cols):
+                self.grid.grid_cells[i][j].visited = False
+        
     
     def draw_last_trace(self):
-        if self.game_type == 'player':
-            for i in range(self.rows):
-                for j in range(self.cols):
-                    self.grid.grid_cells[i][j].trace = False
-                    self.grid.grid_cells[i][j].visited = False
-        self.algorithm.trace_back(self.goal_pos)
-        for i in range(1, len(self.algorithm.trace)): # no draw to first cell of path
-            self.grid.grid_cells[self.algorithm.trace[i][0]][self.algorithm.trace[i][1]].trace = True
-        
+        self.algorithm.trace_back()
         self.maze.draw(window)
         pg.display.update()
     
     def get_hint(self):
-                    
         self.algorithm = Recursive(self.grid.grid_cells, (self.player.y, self.player.x))
+        
         while self.grid.grid_cells[self.algorithm.y][self.algorithm.x].is_goal == False:
             self.algorithm.find_way()
+        
+        for i in range(self.rows):
+            for j in range(self.cols):
+                self.grid.grid_cells[i][j].trace = False
+                self.grid.grid_cells[i][j].visited = False
+                
         self.draw_last_trace()
