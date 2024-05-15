@@ -396,4 +396,4 @@ class Menu(Game):
             
 if __name__ == "__main__":
     menu = Menu()
-    menu.main_menu()
+    menu.create_new_map()

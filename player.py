@@ -30,7 +30,6 @@ class Player(): # sprite make it easy to fit pixel perfect
         self.animation_count = 0
         
     def move(self, dx=0, dy=0):
-        self.grid_cells[self.y][self.x].is_current == False
         if dx < 0:
             self.x_direction = "left"
             self.x_step = -self.TILE
@@ -70,6 +69,10 @@ class Player(): # sprite make it easy to fit pixel perfect
     def draw(self, window):
         self.get_dynamic()
         window.blit(self.sprite, (self.rect.x, self.rect.y))
+        pg.display.update()
+    
+    def draw_goal(self, window):
+        pg.draw.rect(window, red, self.rect)
         pg.display.update()
         
     def flip(self, sprites):
