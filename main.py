@@ -396,4 +396,4 @@ class Menu(Game):
             
 if __name__ == "__main__":
     menu = Menu()
-    menu.sign_in_menu()
+    menu.main_menu()

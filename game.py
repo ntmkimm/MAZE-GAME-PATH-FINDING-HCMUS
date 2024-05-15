@@ -33,9 +33,8 @@ class Game():
         self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_start = True
         self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True
         
-        if self.game_type == 'player':
-            self.player = Player(self.grid.grid_cells, self.start_pos, self.TILE)
-        elif self.game_type == 'bot':
+        self.player = Player(self.grid.grid_cells, self.start_pos, self.TILE)
+        if self.game_type == 'bot':
             if self.algo == 'dfs':
                 self.algorithm = Recursive(self.grid.grid_cells, self.start_pos) 
             elif self.algo == 'bfs':
@@ -57,9 +56,9 @@ class Game():
         while True:
             window.fill(light_blue)
             self.maze.draw(window)
+            self.player.draw(window)
             self.handle_move()
             if self.game_type == 'player':
-                self.player.draw(window)
                 if (self.grid.grid_cells[self.player.y][self.player.x].is_goal == True):
                     time.sleep(1)
                     break
