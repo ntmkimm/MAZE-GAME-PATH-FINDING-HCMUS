@@ -5,7 +5,7 @@ from color import *
 size_of_maze = 800
 
 class Cell:
-    def __init__(self, y, x):
+    def __init__(self, y, x, background):
         self.x, self.y = x, y # x - index of col, y - index of row
         self.bars = {'top': True, 'right': True, 'bottom': True, 'left': True}
         
@@ -16,19 +16,20 @@ class Cell:
         self.is_current = False
         self.is_goal = False
         self.neighbors = []
+        self.trace = False
         
         self.intersect = False
-        self.cost = 0
         
         self.seen = False
         self.visited = False
-        self.trace = False
+        self.background = background
         
         self.bar_color = black
-        self.bar_thick = 2
+        self.bar_thick = 3
         
         self.start_color = dark_blue
         self.goal_color = red
+
     
     def check_bars(current, next):
         dx = next.x - current.x
@@ -40,11 +41,9 @@ class Cell:
         if dx == 1: # current|next
             current.bars['right'] = False
             next.bars['left'] = False
-            
         elif dx == -1: # next|current
             next.bars['right'] = False
             current.bars['left'] = False
-            
         if dy == 1: #current/next (current is above next)
             next.bars['top'] = False
             current.bars['bottom'] = False
@@ -60,7 +59,9 @@ class Cell:
         elif self.visited == True:
             pg.draw.rect(window, gray, (x, y, TILE, TILE))
         elif self.seen:
-            pg.draw.rect(window, white, (x, y, TILE, TILE))
+            # pg.draw.rect(window, gray, (x, y, TILE, TILE))
+            # pg.transform.scale(self.background, (TILE, TILE))
+            window.blit(pg.transform.scale(self.background, (TILE, TILE)), (x, y))
             
         # if self.is_current:
         #     pg.draw.rect(window, green, (x, y, TILE, TILE))

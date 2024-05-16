@@ -10,26 +10,35 @@ class Player(): # sprite make it easy to fit pixel perfect
     ANIMATION_DELAY = 3
     # define our initialization area
     
-    def __init__(self, grid_cells, init_pos, tile):
-        # inherit Cell class
-        Cell.__init__(self, init_pos[0], init_pos[1])
+    def __init__(self, grid_cells, init_pos, tile, character):
+        # position of the player
         self.grid_cells = grid_cells
         self.rows = len(self.grid_cells)
         self.cols = self.rows
         self.TILE = tile
+        self.character = character
+        # self.cell = self.grid_cells[init_pos[0]][init_pos[1]]
+        self.x = init_pos[1] # col
+        self.y = init_pos[0] # row
+        self.init_maze_x = self.grid_cells[0][0].init_maze_x
+        self.init_maze_y = self.grid_cells[0][0].init_maze_y
         self.rect = pg.Rect(self.init_maze_x + self.x * self.TILE, self.init_maze_y + self.y * self.TILE, self.TILE, self.TILE)
         self.x_step = 0
         self.y_step = 0
 
-        self.SPRITES = self.load_sprite_sheeets("MainCharacters", "MaskDude", 32, 32)
-    
+        self.SPRITES = self.load_sprite_sheeets("MainCharacters", self.character, 32, 32)
+
         self.mask = None
         self.x_direction = 'right'
         self.y_direction = ''
         self.step_count = 0
         self.animation_count = 0
+        self.steps = 0
+        self.start = 0
+        self.time = 0
         
     def move(self, dx=0, dy=0):
+        self.grid_cells[self.y][self.x].is_current == False
         if dx < 0:
             self.x_direction = "left"
             self.x_step = -self.TILE
@@ -49,6 +58,11 @@ class Player(): # sprite make it easy to fit pixel perfect
         self.rect.x += self.x_step
         self.rect.y += self.y_step
     
+    def update_player(self):
+        #update cell of player
+        self.grid_cells[self.y][self.x].is_current == True
+        self.get_dynamic()
+    
     def get_dynamic(self):
         #MAKING PLAYER LOOK DYNAMIC
         sprite_sheet = 'idle'
@@ -67,12 +81,7 @@ class Player(): # sprite make it easy to fit pixel perfect
     
     # draw character everytime we update the position of the character
     def draw(self, window):
-        self.get_dynamic()
         window.blit(self.sprite, (self.rect.x, self.rect.y))
-    
-    def draw_goal(self, window):
-        rect = self.init_maze_x + self.x * self.TILE + 2, self.init_maze_y + self.y * self.TILE + 2, self.TILE - 3, self.TILE - 3
-        pg.draw.rect(window, red, rect)
         
     def flip(self, sprites):
         return [pg.transform.flip(sprite, True, False) for sprite in sprites]

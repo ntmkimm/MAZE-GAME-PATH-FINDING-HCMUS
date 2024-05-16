@@ -1,15 +1,12 @@
 from cell import *
 
 class Grid:
-    def __init__(self, rows, cols):
+    def __init__(self, rows, cols, background):
         self.rows = rows
         self.cols = cols
         #init Cell(y, x)
-        self.grid_cells = [[Cell(r, c) for c in range(cols)] for r in range(rows)]
-        self.find_neighbor()   
-        
-    def random_destroy_bars():
-        pass       
+        self.grid_cells = [[Cell(r, c, background) for c in range(cols)] for r in range(rows)]
+        self.find_neighbor()          
     
     def find_neighbor(self):
             

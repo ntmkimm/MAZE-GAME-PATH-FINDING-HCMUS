@@ -1,2 +1,1 @@
-
-from button import *
+# pg.draw.rect(window, white, box_of_created_map)
