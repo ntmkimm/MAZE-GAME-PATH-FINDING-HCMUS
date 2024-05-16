@@ -69,11 +69,10 @@ class Player(): # sprite make it easy to fit pixel perfect
     def draw(self, window):
         self.get_dynamic()
         window.blit(self.sprite, (self.rect.x, self.rect.y))
-        pg.display.update()
     
     def draw_goal(self, window):
-        pg.draw.rect(window, red, self.rect)
-        pg.display.update()
+        rect = self.init_maze_x + self.x * self.TILE + 2, self.init_maze_y + self.y * self.TILE + 2, self.TILE - 3, self.TILE - 3
+        pg.draw.rect(window, red, rect)
         
     def flip(self, sprites):
         return [pg.transform.flip(sprite, True, False) for sprite in sprites]
