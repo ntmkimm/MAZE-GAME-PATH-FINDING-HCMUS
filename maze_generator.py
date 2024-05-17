@@ -26,6 +26,9 @@ class Maze_Generator:
                 Cell.check_bars(current_cell, next_cell)
                 current_cell = next_cell
                 stack.append(current_cell)
+                
+        for i in range(10):
+            pos = (random.randrange(self.rows), random.randrange(self.cols))
     
     def draw(self, window): 
         for i in range(self.rows):

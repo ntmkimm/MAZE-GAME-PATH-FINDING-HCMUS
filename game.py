@@ -23,8 +23,10 @@ class Game():
         self.game_type = game_type
         self.algo = algo
         self.command = None
+        self.settings_button = Button(img=self.set, pos_center=(900, 530), content='', font=font(small_size))
         
         self.pause = False
+        self.option = False
         
         if init_type == 'random': self.init_random()
         elif init_type == 'choose': self.init_choose()
@@ -104,6 +106,17 @@ class Game():
             self.player.draw(window)
             self.handle_move()
             if self.game_type == 'player':
+                """ Bảo """
+                window.blit(pg.transform.scale(self.result, (340, 400)), (830, 70))
+                self.sound.time = (pg.time.get_ticks() - self.sound.start)/1000
+                title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.sound.time:.1f}s", font(min_size),(1055, 230), white, black)
+                title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.sound.steps), font(min_size), (1050, 330),white, black)
+                window.blit(shader_title, shader_title_rect)
+                window.blit(title, title_rect)
+                window.blit(shader_title2, shader_title_rect2)
+                window.blit(title2, title_rect2)
+                mouse_pos = pg.mouse.get_pos()
+                """"""
                 if (self.grid.grid_cells[self.player.y][self.player.x].is_goal == True):
                     time.sleep(1)
                     break
@@ -119,7 +132,66 @@ class Game():
         print("is done")
         self.command = None
         
+    def victory(self):
+        pg.display.set_caption("Victory")
+        continue_button = Button(img=self.long_bar, pos_center=(600, 700), content="Continue", font=font(small_size))
+        run = True
+        start = pg.time.get_ticks()
+        tim = (int)((pg.time.get_ticks() - start) / 1000)
+        pg.mixer.music.pause()
+        while tim != 2:
+            tim = (int)((pg.time.get_ticks() - start) / 1000)
+            window.fill(light_blue)
+            window.blit(self.bg_vic, (180, 0))
+            title, title_rect, shader_title, shader_title_rect = shader_text("YOU WIN", font(title_size),(580, 230), white, black)
+            window.blit(shader_title, shader_title_rect)
+            window.blit(title, title_rect)
+            mouse_pos = pg.mouse.get_pos()
+
+            if self.s % 2 == 0:
+                window.blit(self.vic, (120, 300))
+                self.s += 1
+            else:
+                window.blit(self.vic1, (120, 300))
+                self.s += 1
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+
+            pg.time.delay(200)
+            pg.display.update()
+
+        pg.display.update()
+        self.sound.sound_effect(3)
+        pg.time.delay(2300)
+        run = True
+        window.fill(light_blue)
+        while run:
+            window.blit(self.result1, (350, 0))
+            title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.sound.time:.1f}s", font(small_size), (690, 240), white, black)
+            title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.sound.steps),font(small_size), (650, 390), white,black)
+            window.blit(shader_title, shader_title_rect)
+            window.blit(title, title_rect)
+            window.blit(shader_title2, shader_title_rect2)
+            window.blit(title2, title_rect2)
+            mouse_pos = pg.mouse.get_pos()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    self.sound.sound_select([continue_button])
+                    if continue_button.is_pointed(mouse_pos):
+                        run = False
+            continue_button.update(window)
+            continue_button.update_color_line(mouse_pos)
+            pg.display.update()
+        pg.mixer.music.unpause()
+        pg.display.update()
+        
     def handle_move(self):
+        mouse_pos = pg.mouse.get_pos()
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 pg.quit()
@@ -129,16 +201,25 @@ class Game():
                     self.player.y_step = 0
                     if event.key in [pg.K_LEFT, pg.K_a] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['left']:
+                        self.sound.sound_effect(1)
                         self.player.move(dx=-1)
+                        self.sound.steps += 1
                     elif event.key in [pg.K_RIGHT, pg.K_d] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['right']:
+                        self.sound.sound_effect(1)
                         self.player.move(dx=1)
+                        self.sound.steps += 1
                     elif event.key in [pg.K_UP, pg.K_w] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['top']:
+                        self.sound.sound_effect(1)
                         self.player.move(dy=-1)
+                        self.sound.steps += 1
                     elif event.key in [pg.K_DOWN, pg.K_s] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['bottom']:
+                        self.sound.sound_effect(1)
                         self.player.move(dy=1)
+                        self.sound.steps += 1
+                        
                 if event.key in [pg.K_ESCAPE]:
                     self.pause = True
                     self.command = self.esc_menu() # call from child class
@@ -146,6 +227,8 @@ class Game():
                         self.get_hint()
                     elif self.command == 'switch algo':
                         self.switch_algo()
+        self.settings_button.update(window)
+        self.settings_button.update_color_line(mouse_pos)
     
     def switch_algo(self):
         for i in range(self.rows):

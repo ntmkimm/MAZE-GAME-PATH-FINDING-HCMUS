@@ -2,6 +2,7 @@ from color import *
 import pygame as pg
 
 tiny_size = 15
+min_size = 25
 small_size = 30
 normal_size = 35
 big_size = 45
