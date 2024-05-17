@@ -27,7 +27,7 @@ class Game():
         self.algo = algo
         self.command = None
         self.sound = sound
-        self.settings_button = Button(img=self.set, pos_center=(900, 530), content='', font=font(small_size))
+        self.settings_button = Button(img=self.set, pos_center=(1000, 570), content='', font=font(small_size))
         
         self.pause = False
         self.option = False
@@ -109,18 +109,18 @@ class Game():
             self.maze.draw(window)
             self.player.draw(window)
             self.handle_move()
+            """ Bảo """
+            window.blit(pg.transform.scale(self.result, (340, 400)), (830, 70))
+            self.sound.time = (pg.time.get_ticks() - self.sound.start)/1000
+            title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.sound.time:.1f}s", font(min_size),(1055, 230), white, black)
+            title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.sound.steps), font(min_size), (1050, 330),white, black)
+            window.blit(shader_title, shader_title_rect)
+            window.blit(title, title_rect)
+            window.blit(shader_title2, shader_title_rect2)
+            window.blit(title2, title_rect2)
+            # mouse_pos = pg.mouse.get_pos()
+            """"""
             if self.game_type == 'player':
-                """ Bảo """
-                window.blit(pg.transform.scale(self.result, (340, 400)), (830, 70))
-                self.sound.time = (pg.time.get_ticks() - self.sound.start)/1000
-                title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.sound.time:.1f}s", font(min_size),(1055, 230), white, black)
-                title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.sound.steps), font(min_size), (1050, 330),white, black)
-                window.blit(shader_title, shader_title_rect)
-                window.blit(title, title_rect)
-                window.blit(shader_title2, shader_title_rect2)
-                window.blit(title2, title_rect2)
-                mouse_pos = pg.mouse.get_pos()
-                """"""
                 if (self.grid.grid_cells[self.player.y][self.player.x].is_goal == True):
                     time.sleep(1)
                     break
@@ -134,7 +134,10 @@ class Game():
                 self.algorithm.find_way()
             pg.display.update()
         print("is done")
+        if self.game_type == 'player':
+            self.victory()
         self.command = None
+        
         
     def victory(self):
         pg.display.set_caption("Victory")
@@ -199,6 +202,11 @@ class Game():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 pg.quit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                self.sound.sound_select([self.settings_button])
+                if self.settings_button.is_pointed(mouse_pos):
+                    self.pause = True
+                    self.esc_menu()
             if event.type == pg.KEYDOWN:  # Use pygame.KEYDOWN to detect key press
                 if self.game_type == 'player':
                     self.player.x_step = 0

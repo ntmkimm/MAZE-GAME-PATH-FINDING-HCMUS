@@ -145,6 +145,8 @@ class Menu(Game):
         
         while True:
             window.fill(theme_color)
+            self.back_ground()
+            self.bg += 1
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             
@@ -206,7 +208,6 @@ class Menu(Game):
                         
                         Game.__init__(self, self.size, self.init, self.game_type, self.algo, self.sound, self.character, self.background)
                         self.run_game()
-                        self.victory()
                         
                 if event.type == pg.KEYDOWN and self.game_type == 'player':
                     if event.key == pg.K_BACKSPACE:
@@ -223,6 +224,7 @@ class Menu(Game):
             
     def skin(self):
         pg.display.set_caption("Skin")
+        
         top_button1 = Button(img=self.top, pos_center=(270, 90), content="", font=font(small_size), corner_radius=10)
         bot_button1 = Button(img=self.bot, pos_center=(270, 580), content="", font=font(small_size), corner_radius=10)
         top_button2 = Button(img=self.top, pos_center=(930, 90), content="", font=font(small_size), corner_radius=10)
@@ -241,6 +243,8 @@ class Menu(Game):
         name_cha_lis = ["MaskDude", "NinjaFrog", "PinkMan", "VirtualGuy"]
         while run:
             window.fill(theme_color)
+            self.back_ground()
+            self.bg += 1
             window.blit(self.frame, (120, 170))
             window.blit(self.frame, (780, 170))
             mouse_pos = pg.mouse.get_pos()
@@ -293,9 +297,6 @@ class Menu(Game):
         window.blit(self.star_fall, (1000 - temp * 1.5, -300 + temp * 1.5))
         window.blit(self.star_fall, (800 - temp * 1.5, -1000 + temp * 1.5))
         window.blit(self.star_fall, (1700 - temp * 1.5, -600 + temp * 1.5))
-        title3, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZESOLVE", font(100), pos_center=(600, 100),color=white, color_shader=black)
-        window.blit(shader_menu, shader_menu_rect)
-        window.blit(title3, menu_rect)
 
     def all_maps_of_user(self):
         pg.display.set_caption("Play")
@@ -308,6 +309,8 @@ class Menu(Game):
         while True:
             # theme
             window.fill(theme_color)
+            self.back_ground()
+            self.bg += 1
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             # title
@@ -428,17 +431,19 @@ class Menu(Game):
         bot_button = Button(img=self.long_bar, pos_center=(600, 450), content="BOT", font=font(normal_size))
         options_button = Button(img=self.short_bar, pos_center=(450, 600), content="OPTIONS", font=font(small_size), corner_radius=10)
         quit_button = Button(img=self.short_bar, pos_center=(750, 600), content="QUIT", font=font(small_size), corner_radius=10)
-        
+        lis = [play_button, bot_button, options_button, quit_button]
         while True:
             
             window.fill(theme_color)
-            # mouse_pos
-            mouse_pos = pg.mouse.get_pos()
-            # button
+            self.back_ground()
+            self.bg += 1
             menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZE SOLVE", font(title_size, "super_pixel.otf"), pos_center=(600, 100), color=white, color_shader=purple)
             
             window.blit(shader_menu, shader_menu_rect)
             window.blit(menu, menu_rect)
+            # mouse_pos
+            mouse_pos = pg.mouse.get_pos()
+            # button
             
             for button in [play_button, bot_button, options_button, quit_button]:
                 button.update_color_line(mouse_pos)
@@ -449,6 +454,7 @@ class Menu(Game):
                     pg.quit()
                 
                 if event.type == pg.MOUSEBUTTONDOWN:
+                    self.sound.sound_select(lis)
                     if play_button.is_pointed(mouse_pos):
                         self.game_type = 'player'
                         self.all_maps_of_user()
@@ -480,7 +486,9 @@ class Menu(Game):
         
         while True:
             
-            window.fill(white)
+            window.fill(theme_color)
+            self.back_ground()
+            self.bg += 1
             window.blit(name_text, name_rect)
             window.blit(pass_text, pass_rect)
             window.blit(re_pass_text, re_pass_rect)
@@ -559,7 +567,9 @@ class Menu(Game):
         text_return = ''
         
         while True:
-            window.fill(white)
+            window.fill(theme_color)
+            self.back_ground()
+            self.bg += 1
             window.blit(name_text, name_rect)
             window.blit(pass_text, pass_rect)
             window.blit(sign_up, sign_up_rect)
