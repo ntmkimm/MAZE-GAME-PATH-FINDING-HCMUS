@@ -3,10 +3,10 @@ from ui import *
 
 class Button:
     #auto set text at the center of the box
-    def __init__(self, img, pos_center, content, font, line_base_color=gray, corner_radius=20):
+    def __init__(self, img, pos_center, content, font, line_base_color=gray, corner_radius=5):
         self.img = img
         self.rect = self.img.get_rect(center=(pos_center[0], pos_center[1]))
-        self.line_thick = 10
+        self.line_thick = 2
         self.font = font
         self.text_color = white
         self.shader_color = black
@@ -22,13 +22,18 @@ class Button:
         
     def update(self, window):
         # right
-        pg.draw.line(window, self.line_color, (self.rect.right, self.rect.top), (self.rect.right, self.rect.bottom), self.line_thick)
+        pg.draw.line(window, self.line_color, (self.rect.right, self.rect.top + self.corner_radius), (self.rect.right, self.rect.bottom - self.corner_radius), self.line_thick)
         # left
-        pg.draw.line(window, self.line_color, (self.rect.left, self.rect.top), (self.rect.left, self.rect.bottom), self.line_thick)
+        pg.draw.line(window, self.line_color, (self.rect.left, self.rect.top + self.corner_radius), (self.rect.left, self.rect.bottom - self.corner_radius), self.line_thick)
         # top
-        pg.draw.line(window, self.line_color, (self.rect.left, self.rect.top), (self.rect.right, self.rect.top), self.line_thick)
+        pg.draw.line(window, self.line_color, (self.rect.left + self.corner_radius, self.rect.top), (self.rect.right - self.corner_radius, self.rect.top), self.line_thick)
         # bottom
-        pg.draw.line(window, self.line_color, (self.rect.left, self.rect.bottom), (self.rect.right, self.rect.bottom), self.line_thick)
+        pg.draw.line(window, self.line_color, (self.rect.left + self.corner_radius, self.rect.bottom), (self.rect.right - self.corner_radius, self.rect.bottom), self.line_thick)
+        # dia
+        pg.draw.line(window, self.line_color, (self.rect.left + self.corner_radius + self.de, self.rect.top - 4),(self.rect.left, self.rect.top + self.corner_radius), self.line_thick)
+        pg.draw.line(window, self.line_color, (self.rect.right - self.corner_radius - self.de, self.rect.top - 4),(self.rect.right, self.rect.top + self.corner_radius), self.line_thick)
+        pg.draw.line(window, self.line_color, (self.rect.left, self.rect.bottom - self.corner_radius),(self.rect.left + self.corner_radius + self.de, self.rect.bottom + 4), self.line_thick)
+        pg.draw.line(window, self.line_color, (self.rect.right, self.rect.bottom - self.corner_radius),(self.rect.right - self.corner_radius - self.de, self.rect.bottom + 4), self.line_thick)
         window.blit(self.img, self.rect)
         window.blit(self.shader_text, self.shader_text_rect)
         window.blit(self.text, self.text_rect)

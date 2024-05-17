@@ -7,6 +7,7 @@ from player import *
 from sound import *
 import os
 from game import *
+from sign import *
 
 pg.init()
 
@@ -14,8 +15,10 @@ pg.init()
 
 class Menu(Game):
     def __init__(self):
-        self.short_bar = pg.image.load("short_bar.png")
-        self.long_bar = pg.image.load("long_bar.png")
+        self.table = pg.image.load(os.path.join("pic", "Table.png"))
+        self.back = pg.image.load(os.path.join("pic", "Back.png"))
+        self.short_bar = pg.image.load(os.path.join("pic", "short_bar.png"))
+        self.long_bar = pg.image.load(os.path.join("pic", "long_bar.png"))
         self.Background_Sound_X = pg.image.load(os.path.join("pic", "Background_Sound_X.png"))
         self.Background_Sound = pg.image.load(os.path.join("pic", "Background_Sound.png"))
         self.Sound_Effect = pg.image.load(os.path.join("pic", "Sound_Effect.png"))
@@ -85,6 +88,7 @@ class Menu(Game):
                         self.main_menu()
                     elif options_button.is_pointed(mouse_pos):
                         self.pause = False
+                        self.option = True
                         self.options()
                     elif back_to_game_button.is_pointed(mouse_pos):
                         self.pause = False
@@ -92,6 +96,7 @@ class Menu(Game):
                     elif algo_button.is_pointed(mouse_pos):
                         if self.game_type == 'player':
                             self.pause = False
+                            
                             return 'get hint'
                         elif self.game_type == 'bot':
                             self.pause = False
@@ -199,7 +204,7 @@ class Menu(Game):
 
                         self.skin()
                         
-                        Game.__init__(self, self.size, self.init, self.game_type, self.algo)
+                        Game.__init__(self, self.size, self.init, self.game_type, self.algo, self.sound, self.character, self.background)
                         self.run_game()
                         self.victory()
                         
@@ -334,13 +339,13 @@ class Menu(Game):
             pg.display.update()                 
         
     def options(self):
-        sound_effect_button = Button(img=self.Sound_Effect, pos_center=(360, 200), content='',font=font(small_size), corner_radius=2)
-        background_sound_button = Button(img=self.Background_Sound, pos_center=(360, 400), content='', font=font(small_size), corner_radius=2)
-        sound_effect_button_x = Button(img=self.Sound_Effect_X, pos_center=(360, 200), content='', font=font(small_size), corner_radius=2)
-        background_sound_button_x = Button(img=self.Background_Sound_X, pos_center=(360, 400), content='',font=font(small_size), corner_radius=2)
-        back_to_game_button = Button(img=self.back, pos_center=(930, 70), content='', font=font(small_size), corner_radius=2)
-        but1_button = Button(img=self.but, pos_center=(self.sound.pos1 + 22, 290), content='', font=font(small_size), corner_radius=2)
-        but2_button = Button(img=self.but, pos_center=(self.sound.pos2 + 22, 490), content='', font=font(small_size), corner_radius=2)
+        sound_effect_button = Button(img=self.Sound_Effect, pos_center=(360, 200), content='',font=font(small_size), corner_radius=5)
+        background_sound_button = Button(img=self.Background_Sound, pos_center=(360, 400), content='', font=font(small_size), corner_radius=5)
+        sound_effect_button_x = Button(img=self.Sound_Effect_X, pos_center=(360, 200), content='', font=font(small_size), corner_radius=5)
+        background_sound_button_x = Button(img=self.Background_Sound_X, pos_center=(360, 400), content='',font=font(small_size), corner_radius=5)
+        back_to_game_button = Button(img=self.back, pos_center=(930, 70), content='', font=font(small_size), corner_radius=5)
+        but1_button = Button(img=self.but, pos_center=(self.sound.pos1 + 22, 290), content='', font=font(small_size), corner_radius=5)
+        but2_button = Button(img=self.but, pos_center=(self.sound.pos2 + 22, 490), content='', font=font(small_size), corner_radius=5)
 
 
         lis = [sound_effect_button, background_sound_button, sound_effect_button_x, background_sound_button_x, back_to_game_button,but1_button, but2_button]
@@ -451,6 +456,7 @@ class Menu(Game):
                         self.game_type = 'bot'
                         self.create_new_map()
                     if options_button.is_pointed(mouse_pos):
+                        self.option = True
                         self.options()
                     if quit_button.is_pointed(mouse_pos):
                         pg.quit()

@@ -14,15 +14,19 @@ RES = WIDTH, HEIGHT = 1200, 820
 window = pg.display.set_mode(RES)
 
 class Game():
-    def __init__(self, size, init_type, game_type, algo):
+    def __init__(self, size, init_type, game_type, algo, sound, character, background):
         self.rows = size
         self.cols = size
         self.TILE = size_of_maze // size
-        self.grid = Grid(self.rows, self.cols)
+        self.grid = Grid(self.rows, self.cols, background)
         self.maze = Maze_Generator(self.grid) 
         self.game_type = game_type
+        self.character = character
+        self.result = pg.image.load(os.path.join("pic", "result.png"))
+        self.set = pg.image.load(os.path.join("pic", "set.png"))
         self.algo = algo
         self.command = None
+        self.sound = sound
         self.settings_button = Button(img=self.set, pos_center=(900, 530), content='', font=font(small_size))
         
         self.pause = False
@@ -40,8 +44,8 @@ class Game():
     def init_choose(self):
         start_done = False
         goal_done = False
-        self.player = Player(self.grid.grid_cells, (0, 0), self.TILE)
-        goal_point = Player(self.grid.grid_cells, (self.rows - 1, self.cols - 1), self.TILE)
+        self.player = Player(self.grid.grid_cells, (0, 0), self.TILE, self.character)
+        goal_point = Player(self.grid.grid_cells, (self.rows - 1, self.cols - 1), self.TILE, "End")
         while True:
             window.fill(light_blue)
             self.maze.draw(window)
@@ -94,7 +98,7 @@ class Game():
         self.start_pos, self.goal_pos = start, goal
         self.grid.grid_cells[start[0]][start[1]].is_start = True
         self.grid.grid_cells[goal[0]][goal[1]].is_goal = True
-        self.player = Player(self.grid.grid_cells, self.start_pos, self.TILE)
+        self.player = Player(self.grid.grid_cells, self.start_pos, self.TILE, self.character)
         
     def run_game(self):
         pg.init()  

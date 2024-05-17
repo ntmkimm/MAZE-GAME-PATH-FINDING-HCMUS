@@ -5,7 +5,7 @@ from color import *
 size_of_maze = 800
 
 class Cell:
-    def __init__(self, y, x):
+    def __init__(self, y, x, background):
         self.x, self.y = x, y # x - index of col, y - index of row
         self.bars = {'top': True, 'right': True, 'bottom': True, 'left': True}
         
@@ -23,6 +23,7 @@ class Cell:
         self.seen = False
         self.visited = False
         self.trace = False
+        self.background = background
         
         self.bar_color = black
         self.bar_thick = 2
@@ -59,8 +60,9 @@ class Cell:
             pg.draw.rect(window, green, (x, y, TILE, TILE))
         elif self.visited == True:
             pg.draw.rect(window, gray, (x, y, TILE, TILE))
-        elif self.seen:
-            pg.draw.rect(window, white, (x, y, TILE, TILE))
+        elif self.seen and self.background != None:
+            # pg.draw.rect(window, white, (x, y, TILE, TILE))
+            window.blit(pg.transform.scale(self.background, (TILE, TILE)), (x, y))
             
         # if self.is_current:
         #     pg.draw.rect(window, green, (x, y, TILE, TILE))
