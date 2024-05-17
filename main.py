@@ -144,7 +144,7 @@ class Menu(Game):
         lis = [cancel_button, create_new_button, easy_button, normal_button, hard_button, random_button, choose_button, DFS_button, BFS_button]
         
         while True:
-            window.fill(light_blue)
+            window.fill(theme_color)
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             
@@ -240,7 +240,7 @@ class Menu(Game):
         bg_lis = [self.yellow, self.gray, self.green, self.blue, self.pink, self.purple, self.brown]
         name_cha_lis = ["MaskDude", "NinjaFrog", "PinkMan", "VirtualGuy"]
         while run:
-            window.fill(light_blue)
+            window.fill(theme_color)
             window.blit(self.frame, (120, 170))
             window.blit(self.frame, (780, 170))
             mouse_pos = pg.mouse.get_pos()
@@ -307,7 +307,7 @@ class Menu(Game):
         
         while True:
             # theme
-            window.fill(light_blue)
+            window.fill(theme_color)
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             # title
@@ -350,7 +350,7 @@ class Menu(Game):
 
         lis = [sound_effect_button, background_sound_button, sound_effect_button_x, background_sound_button_x, back_to_game_button,but1_button, but2_button]
 
-        window.fill(light_blue)
+        window.fill(theme_color)
         window.blit(self.table, (230, 20))
         window.blit(self.Bar, (365, 268))
         window.blit(self.Bar, (365, 468))
@@ -431,11 +431,11 @@ class Menu(Game):
         
         while True:
             
-            window.fill(light_blue)
+            window.fill(theme_color)
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             # button
-            menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZESOLVE", font(100), pos_center=(600, 100), color=white, color_shader=black)
+            menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZE SOLVE", font(title_size, "super_pixel.otf"), pos_center=(600, 100), color=white, color_shader=purple)
             
             window.blit(shader_menu, shader_menu_rect)
             window.blit(menu, menu_rect)

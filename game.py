@@ -47,7 +47,7 @@ class Game():
         self.player = Player(self.grid.grid_cells, (0, 0), self.TILE, self.character)
         goal_point = Player(self.grid.grid_cells, (self.rows - 1, self.cols - 1), self.TILE, "End")
         while True:
-            window.fill(light_blue)
+            window.fill(theme_color)
             self.maze.draw(window)
             self.player.draw(window)
             goal_point.draw_goal(window)
@@ -105,7 +105,7 @@ class Game():
         pg.display.set_caption("Maze - Path Finding") 
         
         while True:
-            window.fill(light_blue)
+            window.fill(theme_color)
             self.maze.draw(window)
             self.player.draw(window)
             self.handle_move()
@@ -145,7 +145,7 @@ class Game():
         pg.mixer.music.pause()
         while tim != 2:
             tim = (int)((pg.time.get_ticks() - start) / 1000)
-            window.fill(light_blue)
+            window.fill(theme_color)
             window.blit(self.bg_vic, (180, 0))
             title, title_rect, shader_title, shader_title_rect = shader_text("YOU WIN", font(title_size),(580, 230), white, black)
             window.blit(shader_title, shader_title_rect)
@@ -170,7 +170,7 @@ class Game():
         self.sound.sound_effect(3)
         pg.time.delay(2300)
         run = True
-        window.fill(light_blue)
+        window.fill(theme_color)
         while run:
             window.blit(self.result1, (350, 0))
             title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.sound.time:.1f}s", font(small_size), (690, 240), white, black)

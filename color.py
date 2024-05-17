@@ -4,6 +4,7 @@ import pygame as pg
 sky_blue = pg.Color('lightskyblue3')
 color_passive = pg.Color('chartreuse4')
 
+theme_color = (255, 192, 207)
 light_blue = (56, 182, 255)
 dark_blue = (0, 74, 173)
 
