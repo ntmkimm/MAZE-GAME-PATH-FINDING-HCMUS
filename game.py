@@ -246,13 +246,14 @@ class Game():
                         
                 if event.key in [pg.K_ESCAPE]:
                     self.pause = True
-                    self.command = self.esc_menu() # call from child class
+                    self.esc_menu() # call from child class
                     self.sound.pause += pg.time.get_ticks() - self.sound.start1
                     self.sound.start1 = 0
-                    if self.command == 'get hint':
-                        self.get_hint()
-                    elif self.command == 'switch algo':
-                        self.switch_algo()
+                    # if self.command == 'get hint':
+                    #     self.get_hint()
+                    # elif self.command == 'switch algo':
+                    #     self.switch_algo_bool = True
+                    #     self.switch_algo()
         self.settings_button.update(window)
         self.settings_button.update_color_line(mouse_pos)
     
@@ -263,8 +264,11 @@ class Game():
                 
         DFS_button = Button(img=self.long_bar, pos_center=(600, 300), content="Algo: DFS", font=font(small_size))
         BFS_button = Button(img=self.long_bar, pos_center=(600, 450), content="Algo: BFS", font=font(small_size))
-        run = True
-        while run:
+        while self.switch_algo_bool:
+            
+            self.maze.draw(window, self.background)
+            self.player.draw(window)
+            self.goal.draw(window)
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             
@@ -279,13 +283,12 @@ class Game():
                     if DFS_button.is_pointed(mouse_pos):
                         self.algo = 'dfs'
                         self.algorithm = Recursive(self.grid.grid_cells, self.start_pos)
-                        run = False
-                        break
+                        self.switch_algo_bool = False
+                        
                     elif BFS_button.is_pointed(mouse_pos):
                         self.algo = 'bfs'
                         self.algorithm = BFS(self.grid.grid_cells, self.start_pos)
-                        run = False
-                        break
+                        self.switch_algo_bool = False
             
             pg.display.update()
     
