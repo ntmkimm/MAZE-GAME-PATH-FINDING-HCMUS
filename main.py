@@ -136,6 +136,8 @@ class Menu(Game):
         DFS_button = Button(img=self.long_bar, pos_center=(600, 200), content="Algo: DFS", font=font(small_size))
         BFS_button = Button(img=self.long_bar, pos_center=(600, 200), content="Algo: BFS", font=font(small_size))
         
+        skin_button = Button(img=self.short_bar, pos_center=(900, 500), content='Skin', font=font(small_size))
+        
         random_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Random", font=font(small_size))
         choose_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Choose", font=font(small_size))
         
@@ -145,7 +147,7 @@ class Menu(Game):
         
         type_name, type_name_rect = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 150), color=white)
         
-        lis = [cancel_button, create_new_button, easy_button, normal_button, hard_button, random_button, choose_button, DFS_button, BFS_button]
+        lis = [cancel_button, create_new_button, easy_button, normal_button, hard_button, random_button, choose_button, DFS_button, BFS_button, skin_button]
         
         while True:
             # window.fill(theme_color)
@@ -155,9 +157,9 @@ class Menu(Game):
             mouse_pos = pg.mouse.get_pos()
             
             if self.game_type == 'player':
-                buttons = [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode], input_name_button]
+                buttons = [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode], input_name_button, skin_button]
             elif self.game_type == 'bot':
-                buttons = [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode], algo_button[self.algo_mode]] 
+                buttons = [cancel_button, create_new_button, mode_button[self.size_mode], init_button[self.init_mode], algo_button[self.algo_mode], skin_button] 
             
             for button in buttons:
                 button.update_color_line(mouse_pos)
@@ -184,7 +186,8 @@ class Menu(Game):
                             self.all_maps_of_user()
                         elif self.game_type == 'bot':
                             self.main_menu()
-                    
+                    elif skin_button.is_pointed(mouse_pos):
+                        self.skin()
                     elif mode_button[self.size_mode].is_pointed(mouse_pos):
                         self.size_mode = (self.size_mode + 1) % 3
                         pg.display.update()
@@ -245,8 +248,8 @@ class Menu(Game):
         name_cha_lis = ["MaskDude", "NinjaFrog", "PinkMan", "VirtualGuy"]
         while run:
             # window.fill(theme_color)
-            # self.back_ground()
-            # self.bg += 1
+            self.back_ground()
+            self.bg += 1
             window.blit(self.frame, (120, 170))
             window.blit(self.frame, (780, 170))
             mouse_pos = pg.mouse.get_pos()
