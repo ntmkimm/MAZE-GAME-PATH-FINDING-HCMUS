@@ -126,7 +126,8 @@ class Menu(Game):
         
         # button
         cancel_button = Button(img=self.short_bar, pos_center=(900, 700), content='Cancel', font=font(small_size))
-        create_new_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
+        create_new_button = Button(img=self.short_bar, pos_center=(300, 700), content="Create", font=font(small_size))
+        skin_button = Button(img=self.short_bar, pos_center=(600, 700), content='Skin', font=font(small_size))
         input_name_button = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
         
         easy_button = Button(img=self.long_bar, pos_center=(600, 500), content="Easy: 20x20", font=font(small_size))
@@ -135,8 +136,6 @@ class Menu(Game):
         
         DFS_button = Button(img=self.long_bar, pos_center=(600, 200), content="Algo: DFS", font=font(small_size))
         BFS_button = Button(img=self.long_bar, pos_center=(600, 200), content="Algo: BFS", font=font(small_size))
-        
-        skin_button = Button(img=self.short_bar, pos_center=(900, 500), content='Skin', font=font(small_size))
         
         random_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Random", font=font(small_size))
         choose_button = Button(img=self.long_bar, pos_center=(600, 350), content="Init: Choose", font=font(small_size))
@@ -307,10 +306,11 @@ class Menu(Game):
     def all_maps_of_user(self):
         pg.display.set_caption("Play")
         
-        back_button = Button(img=self.short_bar, pos_center=(900, 700), content='Back', font=font(small_size))
+        back_button = Button(img=self.short_bar, pos_center=(900, 750), content='Back', font=font(small_size))
+        delete_button = Button(img=self.short_bar, pos_center=(900, 650), content='Delete', font=font(small_size))
         new_map_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
         
-        lis = [back_button, new_map_button]
+        lis = [back_button, new_map_button, delete_button]
         
         while True:
             # theme
@@ -320,7 +320,7 @@ class Menu(Game):
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             # title
-            title, title_rect, shader_title, shader_title_rect = shader_text("Select Map", font(big_size), (600, 50), white, black)
+            title, title_rect, shader_title, shader_title_rect = shader_text("Select Map", font(normal_size), (600, 50), white, black)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
             # created_map
@@ -330,7 +330,7 @@ class Menu(Game):
             pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
             # button
             
-            for button in [back_button, new_map_button]:
+            for button in lis:
                 button.update_color_line(mouse_pos)
                 button.update(window)
             
@@ -497,8 +497,8 @@ class Menu(Game):
                         self.game_type = 'bot'
                         self.create_new_map()
                     if options_button.is_pointed(mouse_pos):
-                        self.option = True
-                        self.options()
+                        self.option_sound = True
+                        self.sound_menu()
                     if quit_button.is_pointed(mouse_pos):
                         pg.quit()
             pg.display.update()
