@@ -17,6 +17,7 @@ class Menu(Game):
     def __init__(self):
         self.table = pg.image.load(os.path.join("pic", "Table.png"))
         self.back = pg.image.load(os.path.join("pic", "Back.png"))
+        self.back = pg.transform.scale(self.back, (64, 64))
         self.short_bar = pg.image.load(os.path.join("pic", "short_bar.png"))
         self.long_bar = pg.image.load(os.path.join("pic", "long_bar.png"))
         self.Background_Sound_X = pg.image.load(os.path.join("pic", "Background_Sound_X.png"))
@@ -58,6 +59,9 @@ class Menu(Game):
         self.bg = 0
         self.background = self.yellow
         self.sound.background_sound(0)
+        
+        self.character = "MaskDude"
+        self.background = self.purple
 
     def esc_menu(self):
         back_to_game_button = Button(img=self.long_bar, pos_center=(600, 250), content='Back to Game', font=font(small_size))
@@ -139,7 +143,7 @@ class Menu(Game):
         init_button = [random_button, choose_button]
         algo_button = [DFS_button, BFS_button]
         
-        type_name, type_name_rect = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 150), color=black)
+        type_name, type_name_rect = get_text(content='Type name of word', font=font(tiny_size), pos_center=(600, 150), color=white)
         
         lis = [cancel_button, create_new_button, easy_button, normal_button, hard_button, random_button, choose_button, DFS_button, BFS_button]
         
@@ -203,8 +207,6 @@ class Menu(Game):
                         
                         if self.algo_mode == 0:      self.algo = 'dfs'
                         elif self.algo_mode == 1:    self.algo = 'bfs'
-
-                        self.skin()
                         
                         Game.__init__(self, self.size, self.init, self.game_type, self.algo, self.sound, self.character, self.background)
                         self.run_game()
@@ -229,22 +231,22 @@ class Menu(Game):
         bot_button1 = Button(img=self.bot, pos_center=(270, 580), content="", font=font(small_size), corner_radius=10)
         top_button2 = Button(img=self.top, pos_center=(930, 90), content="", font=font(small_size), corner_radius=10)
         bot_button2 = Button(img=self.bot, pos_center=(930, 580), content="", font=font(small_size), corner_radius=10)
-        play_button = Button(img=self.short_bar, pos_center=(600, 700), content="Play", font=font(small_size), corner_radius=10)
+        done_button = Button(img=self.short_bar, pos_center=(600, 700), content="Done", font=font(small_size), corner_radius=10)
         random_button = Button(img=self.short_bar, pos_center=(600, 400), content="Random", font=font(small_size),corner_radius=10)
         back_button = Button(img=self.short_bar, pos_center=(600, 200), content="Back", font=font(small_size), corner_radius=10)
-        lis = [top_button1, bot_button1, play_button, top_button2, bot_button2, back_button, random_button]
+        lis = [top_button1, bot_button1, done_button, top_button2, bot_button2, back_button, random_button]
 
         run = True
         option1 = 0
         option2 = 0
         temp = 0
         cha_lis = [self.cha0_1, self.cha0_2, self.cha1_1, self.cha1_2, self.cha2_1, self.cha2_2, self.cha3_1, self.cha3_2]
-        bg_lis = [self.yellow, self.gray, self.green, self.blue, self.pink, self.purple, self.brown]
+        bg_lis = [self.purple, self.gray, self.green, self.blue, self.pink, self.yellow, self.brown]
         name_cha_lis = ["MaskDude", "NinjaFrog", "PinkMan", "VirtualGuy"]
         while run:
             # window.fill(theme_color)
-            self.back_ground()
-            self.bg += 1
+            # self.back_ground()
+            # self.bg += 1
             window.blit(self.frame, (120, 170))
             window.blit(self.frame, (780, 170))
             mouse_pos = pg.mouse.get_pos()
@@ -266,7 +268,7 @@ class Menu(Game):
                     pg.quit()
                 if event.type == pg.MOUSEBUTTONDOWN:
                     self.sound.sound_select(lis)
-                    if play_button.is_pointed(mouse_pos):
+                    if done_button.is_pointed(mouse_pos):
                         run = False
                     if back_button.is_pointed(mouse_pos):
                         self.create_new_map()
@@ -343,26 +345,55 @@ class Menu(Game):
             pg.display.update()                 
         
     def options(self):
-        sound_effect_button = Button(img=self.Sound_Effect, pos_center=(360, 200), content='',font=font(small_size), corner_radius=5)
-        background_sound_button = Button(img=self.Background_Sound, pos_center=(360, 400), content='', font=font(small_size), corner_radius=5)
-        sound_effect_button_x = Button(img=self.Sound_Effect_X, pos_center=(360, 200), content='', font=font(small_size), corner_radius=5)
-        background_sound_button_x = Button(img=self.Background_Sound_X, pos_center=(360, 400), content='',font=font(small_size), corner_radius=5)
-        back_to_game_button = Button(img=self.back, pos_center=(930, 70), content='', font=font(small_size), corner_radius=5)
-        but1_button = Button(img=self.but, pos_center=(self.sound.pos1 + 22, 290), content='', font=font(small_size), corner_radius=5)
-        but2_button = Button(img=self.but, pos_center=(self.sound.pos2 + 22, 490), content='', font=font(small_size), corner_radius=5)
+        sound_button = Button(img=self.long_bar, pos_center=(600, 300), content='Sound',font=font(normal_size), corner_radius=5)
+        skin_button = Button(img=self.long_bar, pos_center=(600, 450), content='Skin',font=font(normal_size), corner_radius=5)
+        done_button = Button(img=self.short_bar, pos_center=(600, 600), content="Done", font=font(small_size), corner_radius=10)
+        lis = [sound_button, skin_button, done_button]
+        
+        while self.option:
+            self.back_ground()
+            self.bg += 1
+            mouse_pos = pg.mouse.get_pos()
+            for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pg.quit()
+                        break
+
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        self.sound.sound_select(lis)
+
+                        if sound_button.is_pointed(mouse_pos):
+                            self.option_sound = True
+                            self.sound_menu()
+                        if skin_button.is_pointed(mouse_pos):
+                            self.skin()
+                        if done_button.is_pointed(mouse_pos):
+                            self.option = False
+            
+            for button in lis:
+                button.update_color_line(mouse_pos)
+                button.update(window)
 
 
-        lis = [sound_effect_button, background_sound_button, sound_effect_button_x, background_sound_button_x, back_to_game_button,but1_button, but2_button]
+            pg.display.update()
+    def sound_menu(self):
+        sound_effect_button = Button(img=self.Sound_Effect, pos_center=(360, 250), content='',font=font(small_size), corner_radius=5)
+        background_sound_button = Button(img=self.Background_Sound, pos_center=(360, 450), content='', font=font(small_size), corner_radius=5)
+        sound_effect_button_x = Button(img=self.Sound_Effect_X, pos_center=(360, 250), content='', font=font(small_size), corner_radius=5)
+        background_sound_button_x = Button(img=self.Background_Sound_X, pos_center=(360, 450), content='',font=font(small_size), corner_radius=5)
+        # back_to_game_button = Button(img=self.back, pos_center=(930, 115), content='', font=font(small_size), corner_radius=5)
+        but1_button = Button(img=self.but, pos_center=(self.sound.pos1 + 22, 340), content='', font=font(small_size), corner_radius=5)
+        but2_button = Button(img=self.but, pos_center=(self.sound.pos2 + 22, 540), content='', font=font(small_size), corner_radius=5)
+        done_button = Button(img=self.short_bar, pos_center=(600, 700), content="Done", font=font(small_size), corner_radius=10)
+        lis = [sound_effect_button, background_sound_button, sound_effect_button_x, background_sound_button_x, done_button,but1_button, but2_button]
 
         # window.fill(theme_color)
-        window.blit(self.table, (230, 20))
-        window.blit(self.Bar, (365, 268))
-        window.blit(self.Bar, (365, 468))
+        window.blit(self.table, (230, 70))
+        window.blit(self.Bar, (365, 318))
+        window.blit(self.Bar, (365, 518))
 
-
-
-        while self.option:
-
+        while self.option_sound:
+            
             mouse_pos = pg.mouse.get_pos()
             for event in pg.event.get():
                     if event.type == pg.QUIT:
@@ -387,10 +418,10 @@ class Menu(Game):
                                 but2_button.rect[0] = 366
                             self.sound.op2 += 1
                             self.sound.background_sound(self.sound.op2)
-                        if back_to_game_button.is_pointed(mouse_pos):
-                            self.option = False
-            window.blit(self.temp, (348, 453))
-            window.blit(self.temp, (348, 253))
+                        if done_button.is_pointed(mouse_pos):
+                            self.option_sound = False
+            window.blit(self.temp, (348, 503))
+            window.blit(self.temp, (348, 303))
             self.sound.vol1 = but1_button.drag(mouse_pos, self.sound.vol1)
             self.sound.vol2 = but2_button.drag(mouse_pos, self.sound.vol2)
             self.sound.pos1 = but1_button.rect[0]

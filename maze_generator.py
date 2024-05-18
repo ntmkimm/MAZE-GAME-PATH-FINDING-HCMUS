@@ -27,8 +27,28 @@ class Maze_Generator:
                 current_cell = next_cell
                 stack.append(current_cell)
                 
-        for i in range(10):
-            pos = (random.randrange(self.rows), random.randrange(self.cols))
+        for i in range(1, self.rows - 1):
+            for j in range(1, self.cols - 1):
+                value = random.sample(['top', 'none1', 'right','none2', 'bottom','none3', 'left','none4'], 1)
+                for direction in value:
+                    # if direction == 'none': break
+                    if direction == 'top' and self.grid.grid_cells[i][j].bars['top'] == True:
+                        temp = random.choice([True, False])
+                        self.grid.grid_cells[i][j].bars['top'] = temp
+                        self.grid.grid_cells[i - 1][j].bars['bottom'] = temp
+                    if direction == 'right' and self.grid.grid_cells[i][j].bars['right'] == True:
+                        temp = random.choice([True, False])
+                        self.grid.grid_cells[i][j].bars['right'] = temp
+                        self.grid.grid_cells[i][j + 1].bars['left'] = temp
+                    if direction == 'left' and self.grid.grid_cells[i][j].bars['left'] == True:
+                        temp = random.choice([True, False])
+                        self.grid.grid_cells[i][j].bars['left'] = temp
+                        self.grid.grid_cells[i][j - 1].bars['right'] = temp
+                    if direction == 'bottom' and self.grid.grid_cells[i][j].bars['bottom'] == True:
+                        temp = random.choice([True, False])
+                        self.grid.grid_cells[i][j].bars['bottom'] = temp
+                        self.grid.grid_cells[i + 1][j].bars['top'] = temp
+
     
     def draw(self, window): 
         for i in range(self.rows):

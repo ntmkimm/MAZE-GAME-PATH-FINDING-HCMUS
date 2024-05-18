@@ -107,8 +107,7 @@ class Game():
         pg.display.set_caption("Maze - Path Finding") 
         
         while True:
-            self.back_ground()
-            self.bg += 1
+            window.blit(background, (0, 0))
             self.maze.draw(window)
             self.player.draw(window)
             self.goal.draw(window)
@@ -285,7 +284,7 @@ class Game():
         self.player.draw(window)
     
     def get_hint(self):
-        self.algorithm = Recursive(self.grid.grid_cells, (self.player.y, self.player.x))
+        self.algorithm = BFS(self.grid.grid_cells, (self.player.y, self.player.x))
         
         while self.grid.grid_cells[self.algorithm.y][self.algorithm.x].is_goal == False:
             self.algorithm.find_way()
