@@ -44,6 +44,7 @@ class Menu(Game):
         self.cha3_1 = pg.image.load(os.path.join("pic", "jump3.png"))
         self.cha3_2 = pg.image.load(os.path.join("pic", "fall3.png"))
         self.frame = pg.image.load(os.path.join("pic", "frame.png"))
+        self.frame_option = pg.image.load(os.path.join("pic", "frame_option.png"))
         self.yellow = pg.image.load(os.path.join("pic", "Yellow.png"))
         self.blue = pg.image.load(os.path.join("pic", "Blue.png"))
         self.brown = pg.image.load(os.path.join("pic", "Brown.png"))
@@ -61,7 +62,7 @@ class Menu(Game):
         self.sound.background_sound(0)
         
         self.character = "MaskDude"
-        self.background = self.purple
+        self.background = self.blue
 
     def esc_menu(self):
         back_to_game_button = Button(img=self.long_bar, pos_center=(600, 250), content='Back to Game', font=font(small_size))
@@ -268,6 +269,24 @@ class Menu(Game):
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
+                # if event.type == pg.MOUSEBUTTONDOWN:
+                #     self.sound.sound_select(lis)
+                #     if done_button.is_pointed(mouse_pos):
+                #         run = False
+                #     if back_button.is_pointed(mouse_pos):
+                #         self.create_new_map()
+                #     if top_button1.is_pointed(mouse_pos):
+                #         option1 += 2
+                #     if top_button2.is_pointed(mouse_pos):
+                #         option2 += 2
+                #     if bot_button1.is_pointed(mouse_pos):
+                #         option1 -= 2
+                #     if bot_button2.is_pointed(mouse_pos):
+                #         option2 -= 2
+                #     if random_button.is_pointed(mouse_pos):
+                #         self.character = name_cha_lis[(int)((temp % 8) / 2)]
+                #         self.background = bg_lis[temp % 7]
+                #         run = False
                 if event.type == pg.MOUSEBUTTONDOWN:
                     self.sound.sound_select(lis)
                     if done_button.is_pointed(mouse_pos):
@@ -275,17 +294,16 @@ class Menu(Game):
                     if back_button.is_pointed(mouse_pos):
                         self.create_new_map()
                     if top_button1.is_pointed(mouse_pos):
-                        option1 += 2
+                        option1 += 1
                     if top_button2.is_pointed(mouse_pos):
-                        option2 += 2
+                        option2 += 1
                     if bot_button1.is_pointed(mouse_pos):
-                        option1 -= 2
+                        option1 -= 1
                     if bot_button2.is_pointed(mouse_pos):
-                        option2 -= 2
+                        option2 -= 1
                     if random_button.is_pointed(mouse_pos):
-                        self.character = name_cha_lis[(int)((temp % 8) / 2)]
-                        self.background = bg_lis[temp % 7]
-                        run = False
+                        option1 = temp * 1
+                        option2 = temp * 1
 
             for button in lis:
                 button.update(window)
@@ -348,14 +366,14 @@ class Menu(Game):
             pg.display.update()                 
         
     def options(self):
+        
         sound_button = Button(img=self.long_bar, pos_center=(600, 300), content='Sound',font=font(normal_size), corner_radius=5)
         skin_button = Button(img=self.long_bar, pos_center=(600, 450), content='Skin',font=font(normal_size), corner_radius=5)
         done_button = Button(img=self.short_bar, pos_center=(600, 600), content="Done", font=font(small_size), corner_radius=10)
         lis = [sound_button, skin_button, done_button]
         
         while self.option:
-            self.back_ground()
-            self.bg += 1
+            window.blit(self.frame_option, (200, 50))
             mouse_pos = pg.mouse.get_pos()
             for event in pg.event.get():
                     if event.type == pg.QUIT:
@@ -472,7 +490,7 @@ class Menu(Game):
             # # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
-            menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZE SOLVE", font(title_size, "super_pixel.otf"), pos_center=(600, 100), color=white, color_shader=purple)
+            menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZE SOLVE", font(title_size, "super_pixel.ttf"), pos_center=(600, 100), color=white, color_shader=purple)
             
             window.blit(shader_menu, shader_menu_rect)
             window.blit(menu, menu_rect)
@@ -509,21 +527,20 @@ class Menu(Game):
         password = Input_Button(img=self.input_img, pos_center=(600, 350), content='', font=font(tiny_size), hide=True)
         re_password = Input_Button(img=self.input_img, pos_center=(600, 500), content='', font=font(tiny_size), hide=True)
         
-        note, note_rect = get_text("Already have an account. ", font=font(tiny_size), pos_center=(540, 750), color=black)
+        note, note_rect = get_text("Already have an account. ", font=font(tiny_size), pos_center=(540, 750))
         sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(780, 750), color=red)
         
         sign_up_button = Button(img=self.short_bar, pos_center=(600, 650), content='SIGN UP', font=font(small_size))
 
-        name_text, name_rect = get_text('Username', font=font(32), pos_center=(600, 130), color=black)
-        pass_text, pass_rect = get_text('Password', font=font(32), pos_center=(600, 280), color=black)
-        re_pass_text, re_pass_rect = get_text('Re_password', font=font(32), pos_center=(600, 430), color=black)
+        name_text, name_rect = get_text('Username', font=font(32), pos_center=(600, 130))
+        pass_text, pass_rect = get_text('Password', font=font(32), pos_center=(600, 280))
+        re_pass_text, re_pass_rect = get_text('Re_password', font=font(32), pos_center=(600, 430))
         text_return = ''
         
         while True:
             
             # window.fill(theme_color)
-            self.back_ground()
-            self.bg += 1
+            window.blit(sub_background, (0, 0))
             window.blit(name_text, name_rect)
             window.blit(pass_text, pass_rect)
             window.blit(re_pass_text, re_pass_rect)
@@ -538,7 +555,7 @@ class Menu(Game):
             
             for event in pg.event.get():
                 if sign_in_rect.collidepoint(mouse_pos):
-                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(780, 750), color=dark_blue)
+                    sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(780, 750), color=yellow)
                 else:
                     sign_in, sign_in_rect = get_text('Sign in', font=font(tiny_size), pos_center=(780, 750), color=red)
                     
@@ -578,7 +595,7 @@ class Menu(Game):
                         if re_password.active and len(re_password.input) <= 36:
                             re_password.input += event.unicode
             
-            text_surface, text_surface_rect = get_text(content=text_return, font=font(tiny_size), pos_center=(600, 560), color=black)
+            text_surface, text_surface_rect = get_text(content=text_return, font=font(tiny_size), pos_center=(600, 560))
             window.blit(text_surface, text_surface_rect)
             
             name.draw()
@@ -594,17 +611,16 @@ class Menu(Game):
         password = Input_Button(img=self.input_img, pos_center=(600, 420), content='', font=font(tiny_size), hide=True)
         sign_in_button = Button(img=self.short_bar, pos_center=(600, 580), content='SIGN IN', font=font(small_size))
         
-        note, note_rect = get_text("Don't have an account. ", font=font(tiny_size), pos_center=(540, 680), color=black)
+        note, note_rect = get_text("Don't have an account. ", font=font(tiny_size), pos_center=(540, 680))
         sign_up, sign_up_rect = get_text('Sign up', font=font(tiny_size), pos_center=(760, 680), color=red)
         
-        name_text, name_rect = get_text('Username', font=font(small_size), pos_center=(600, 200), color=black)
-        pass_text, pass_rect = get_text('Password', font=font(small_size), pos_center=(600, 350), color=black)
+        name_text, name_rect = get_text('Username', font=font(small_size), pos_center=(600, 200))
+        pass_text, pass_rect = get_text('Password', font=font(small_size), pos_center=(600, 350))
         text_return = ''
         
         while True:
             # window.fill(theme_color)
-            self.back_ground()
-            self.bg += 1
+            window.blit(sub_background, (0, 0))
             window.blit(name_text, name_rect)
             window.blit(pass_text, pass_rect)
             window.blit(sign_up, sign_up_rect)
@@ -618,7 +634,7 @@ class Menu(Game):
                 
             for event in pg.event.get():
                     if sign_up_rect.collidepoint(mouse_pos):
-                        sign_up, sign_up_rect = get_text('Sign up', font=font(tiny_size), pos_center=(760, 680), color=dark_blue)
+                        sign_up, sign_up_rect = get_text('Sign up', font=font(tiny_size), pos_center=(760, 680), color=yellow)
                     else:
                         sign_up, sign_up_rect = get_text('Sign up', font=font(tiny_size), pos_center=(760, 680), color=red)
                     if event.type == pg.QUIT:
@@ -647,7 +663,7 @@ class Menu(Game):
                             if password.active and len(password.input) <= 36:
                                 password.input += event.unicode
             
-            text_surface, text_surface_rect = get_text(content=text_return, font=font(tiny_size), pos_center=(600, 490), color=black)
+            text_surface, text_surface_rect = get_text(content=text_return, font=font(tiny_size), pos_center=(600, 490))
             window.blit(text_surface, text_surface_rect)
                 
             name.draw()

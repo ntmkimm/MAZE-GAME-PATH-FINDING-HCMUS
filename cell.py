@@ -8,9 +8,9 @@ size_of_maze = 800
 dust = pg.image.load(os.path.join("pic", "dust.png")) 
 # start = pg.image.load()
 checkpoint = pg.image.load(os.path.join("pic", "checkpoint.png")) 
-
+bar = pg.image.load(os.path.join("pic", "wall3.jpg")) 
 class Cell:
-    def __init__(self, y, x, background):
+    def __init__(self, y, x):
         self.x, self.y = x, y # x - index of col, y - index of row
         self.bars = {'top': True, 'right': True, 'bottom': True, 'left': True}
         
@@ -28,10 +28,9 @@ class Cell:
         self.seen = False
         self.visited = False
         self.trace = False
-        self.background = background
         
-        self.bar_color = black
-        self.bar_thick = 2
+        self.bar_color = dark_green
+        self.bar_thick = 5
         
         self.start_color = dark_blue
         self.goal_color = red
@@ -58,29 +57,31 @@ class Cell:
             next.bars['bottom'] = False
             current.bars['top'] = False
     
-    def draw(self, window, TILE):
+    def draw(self, window, TILE, background):
         x, y = self.init_maze_x + self.x * TILE, self.init_maze_y + self.y * TILE
-        
-        if self.seen and self.background != None:
+        block = TILE // 2
+        if self.seen and background != None:
             # pg.draw.rect(window, white, (x, y, TILE, TILE))
-            window.blit(pg.transform.scale(self.background, (TILE, TILE)), (x, y))
+            window.blit(pg.transform.scale(background, (TILE, TILE)), (x, y))
             
-        if self.trace == True:
-            window.blit(pg.transform.scale(checkpoint, (TILE, TILE)), (x, y))
-        elif self.visited == True:
+        if self.visited == True:
             # pg.draw.rect(window, gray, (x, y, TILE, TILE))
             window.blit(pg.transform.scale(dust, (TILE, TILE)), (x, y))
+        
+        if self.trace == True:
+            window.blit(pg.transform.scale(checkpoint, (TILE, TILE)), (x, y))
             
         # if self.is_current:
         #     pg.draw.rect(window, green, (x, y, TILE, TILE))
         if self.is_start:
-            pg.draw.rect(window, dark_blue, (x, y, TILE, TILE))
+            pg.draw.rect(window, white, (x, y, TILE, TILE))
             # window.blit()
         if self.is_goal:
-            pg.draw.rect(window, red, (x, y, TILE, TILE))
+            pg.draw.rect(window, black, (x, y, TILE, TILE))
         
         if self.bars['top']:
             pg.draw.line(window, self.bar_color, (x, y), (x + TILE, y), self.bar_thick)
+            # window.blit(pg.transform.scale(bar, (block, block)), (x, y))
         if self.bars['bottom']:
             pg.draw.line(window, self.bar_color, (x, y + TILE), (x + TILE, y + TILE), self.bar_thick)
         if self.bars['left']:

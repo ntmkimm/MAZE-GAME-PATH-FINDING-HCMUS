@@ -1,1 +1,1 @@
-pg.image.load(os.path.join("pic", "Victory1.png"))
+self.back = pg.transform.scale(self.back, (64, 64))

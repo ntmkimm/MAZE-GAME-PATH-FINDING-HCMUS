@@ -20,7 +20,7 @@ def shader_text(content, font, pos_center, color, color_shader):
     shader_rect = text.get_rect(center=(pos_center[0] + 4, pos_center[1] + 4))
     return text, rect, shader_content, shader_rect
 
-def get_text(content, font, pos_center, color):
+def get_text(content, font, pos_center, color=green):
     text = font.render(content, True, color)
     rect = text.get_rect(center=pos_center)
     return text, rect

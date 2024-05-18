@@ -50,7 +50,7 @@ class Maze_Generator:
                         self.grid.grid_cells[i + 1][j].bars['top'] = temp
 
     
-    def draw(self, window): 
+    def draw(self, window, background): 
         for i in range(self.rows):
             for j in range(self.cols):
-                self.grid.grid_cells[i][j].draw(window, self.TILE)
+                self.grid.grid_cells[i][j].draw(window, self.TILE, background)

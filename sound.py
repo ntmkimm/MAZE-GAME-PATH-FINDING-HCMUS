@@ -19,6 +19,8 @@ class Sound():
         self.sound3.set_volume(0.5)
         self.steps = 0
         self.start = 0
+        self.start1 = 0
+        self.pause = 0
         self.time = 0
 
     def sound_effect(self, mark):

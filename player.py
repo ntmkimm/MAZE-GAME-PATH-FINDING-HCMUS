@@ -13,7 +13,7 @@ class Player(): # sprite make it easy to fit pixel perfect
     
     def __init__(self, grid_cells, init_pos, tile, character):
         # inherit Cell class
-        Cell.__init__(self, init_pos[0], init_pos[1], background=None)
+        Cell.__init__(self, init_pos[0], init_pos[1])
         self.grid_cells = grid_cells
         self.rows = len(self.grid_cells)
         self.cols = self.rows

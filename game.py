@@ -12,14 +12,18 @@ import random
 
 RES = WIDTH, HEIGHT = 1200, 820
 window = pg.display.set_mode(RES)
-background = pg.image.load("background.jpg")
+background = pg.image.load("pic/bg5.jpg")
+background = pg.transform.scale(background, RES)
+
+sub_background = pg.image.load("pic/bg5.jpg")
+sub_background = pg.transform.scale(sub_background, RES)
 
 class Game():
     def __init__(self, size, init_type, game_type, algo, sound, character, background):
         self.rows = size
         self.cols = size
         self.TILE = size_of_maze // size
-        self.grid = Grid(self.rows, self.cols, background)
+        self.grid = Grid(self.rows, self.cols)
         self.maze = Maze_Generator(self.grid) 
         self.game_type = game_type
         self.character = character
@@ -48,8 +52,8 @@ class Game():
         self.player = Player(self.grid.grid_cells, (0, 0), self.TILE, self.character)
         self.goal = Player(self.grid.grid_cells, (self.rows - 1, self.cols - 1), self.TILE, "End")
         while True:
-            window.fill(theme_color)
-            self.maze.draw(window)
+            window.blit(background, (0, 0))
+            self.maze.draw(window, self.background)
             self.player.draw(window)
             self.goal.draw(window)
             if not start_done:
@@ -105,10 +109,13 @@ class Game():
     def run_game(self):
         pg.init()  
         pg.display.set_caption("Maze - Path Finding") 
+        self.sound.start = pg.time.get_ticks()
+        self.sound.steps = 0
+        self.sound.pause = 0
         
         while True:
             window.blit(background, (0, 0))
-            self.maze.draw(window)
+            self.maze.draw(window, self.background)
             self.player.draw(window)
             self.goal.draw(window)
             self.handle_move()
@@ -150,8 +157,8 @@ class Game():
         tim = (int)((pg.time.get_ticks() - start) / 1000)
         pg.mixer.music.pause()
         while tim != 2:
+            window.blit(background)
             tim = (int)((pg.time.get_ticks() - start) / 1000)
-            window.fill(theme_color)
             window.blit(self.bg_vic, (180, 0))
             title, title_rect, shader_title, shader_title_rect = shader_text("YOU WIN", font(title_size),(580, 230), white, black)
             window.blit(shader_title, shader_title_rect)
@@ -176,7 +183,7 @@ class Game():
         self.sound.sound_effect(3)
         pg.time.delay(2300)
         run = True
-        window.fill(theme_color)
+        window.blit(background, (0, 0))
         while run:
             window.blit(self.result1, (350, 0))
             title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.sound.time:.1f}s", font(small_size), (690, 240), white, black)
@@ -210,6 +217,8 @@ class Game():
                 if self.settings_button.is_pointed(mouse_pos):
                     self.pause = True
                     self.esc_menu()
+                    self.sound.pause += pg.time.get_ticks() - self.sound.start1
+                    self.sound.start1 = 0
             if event.type == pg.KEYDOWN:  # Use pygame.KEYDOWN to detect key press
                 if self.game_type == 'player':
                     self.player.x_step = 0
@@ -238,6 +247,8 @@ class Game():
                 if event.key in [pg.K_ESCAPE]:
                     self.pause = True
                     self.command = self.esc_menu() # call from child class
+                    self.sound.pause += pg.time.get_ticks() - self.sound.start1
+                    self.sound.start1 = 0
                     if self.command == 'get hint':
                         self.get_hint()
                     elif self.command == 'switch algo':
@@ -250,8 +261,8 @@ class Game():
             for j in range(self.cols):
                 self.grid.grid_cells[i][j].visited = False
                 
-        DFS_button = Button(img=self.long_bar, pos_center=(600, 200), content="Algo: DFS", font=font(small_size))
-        BFS_button = Button(img=self.long_bar, pos_center=(600, 350), content="Algo: BFS", font=font(small_size))
+        DFS_button = Button(img=self.long_bar, pos_center=(600, 300), content="Algo: DFS", font=font(small_size))
+        BFS_button = Button(img=self.long_bar, pos_center=(600, 450), content="Algo: BFS", font=font(small_size))
         run = True
         while run:
             # mouse_pos
@@ -280,7 +291,7 @@ class Game():
     
     def draw_last_trace(self):
         self.algorithm.trace_back()
-        self.maze.draw(window)
+        self.maze.draw(window, background)
         self.player.draw(window)
     
     def get_hint(self):
