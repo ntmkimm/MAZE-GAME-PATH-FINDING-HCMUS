@@ -1,5 +1,6 @@
 from color import *
 from ui import *
+from sound import *
 
 class Button:
     #auto set text at the center of the box
@@ -73,6 +74,7 @@ class Button:
    
     def update_color_line(self, position):
         if self.is_pointed(position):
+            # self.sound.sound_effect(1)
             self.line_color = self.line_base_color
         else:
             self.line_color = white

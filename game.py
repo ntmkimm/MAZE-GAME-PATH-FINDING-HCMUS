@@ -12,6 +12,7 @@ import random
 
 RES = WIDTH, HEIGHT = 1200, 820
 window = pg.display.set_mode(RES)
+background = pg.image.load("background.jpg")
 
 class Game():
     def __init__(self, size, init_type, game_type, algo, sound, character, background):
@@ -45,16 +46,16 @@ class Game():
         start_done = False
         goal_done = False
         self.player = Player(self.grid.grid_cells, (0, 0), self.TILE, self.character)
-        goal_point = Player(self.grid.grid_cells, (self.rows - 1, self.cols - 1), self.TILE, "End")
+        self.goal = Player(self.grid.grid_cells, (self.rows - 1, self.cols - 1), self.TILE, "End")
         while True:
             window.fill(theme_color)
             self.maze.draw(window)
             self.player.draw(window)
-            goal_point.draw_goal(window)
+            self.goal.draw(window)
             if not start_done:
                 start_done = self.handle_init_choose(self.player)
             elif not goal_done:
-                goal_done = self.handle_init_choose(goal_point)
+                goal_done = self.handle_init_choose(self.goal)
             else: break
             pg.display.update()
 
@@ -99,15 +100,18 @@ class Game():
         self.grid.grid_cells[start[0]][start[1]].is_start = True
         self.grid.grid_cells[goal[0]][goal[1]].is_goal = True
         self.player = Player(self.grid.grid_cells, self.start_pos, self.TILE, self.character)
+        self.goal = Player(self.grid.grid_cells, self.goal_pos, self.TILE, "End")
         
     def run_game(self):
         pg.init()  
         pg.display.set_caption("Maze - Path Finding") 
         
         while True:
-            window.fill(theme_color)
+            self.back_ground()
+            self.bg += 1
             self.maze.draw(window)
             self.player.draw(window)
+            self.goal.draw(window)
             self.handle_move()
             """ Bảo """
             window.blit(pg.transform.scale(self.result, (340, 400)), (830, 70))

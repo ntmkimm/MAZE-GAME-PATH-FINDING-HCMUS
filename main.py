@@ -144,7 +144,7 @@ class Menu(Game):
         lis = [cancel_button, create_new_button, easy_button, normal_button, hard_button, random_button, choose_button, DFS_button, BFS_button]
         
         while True:
-            window.fill(theme_color)
+            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             # mouse_pos
@@ -242,17 +242,17 @@ class Menu(Game):
         bg_lis = [self.yellow, self.gray, self.green, self.blue, self.pink, self.purple, self.brown]
         name_cha_lis = ["MaskDude", "NinjaFrog", "PinkMan", "VirtualGuy"]
         while run:
-            window.fill(theme_color)
+            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             window.blit(self.frame, (120, 170))
             window.blit(self.frame, (780, 170))
             mouse_pos = pg.mouse.get_pos()
             if temp % 40 >= 0 and temp % 40 <= 20:
-                window.blit(cha_lis[(option1 % 8)], (150, 220))
+                window.blit(pg.transform.scale(cha_lis[(option1 % 8)], (92, 92)), (220, 290))
                 temp += 1
             else:
-                window.blit(cha_lis[(option1 % 8) + 1], (150, 220))
+                window.blit(pg.transform.scale(cha_lis[(option1 % 8) + 1], (92, 92)), (220, 290))
                 temp += 1
 
             pg.draw.rect(window, black, (894, 296, 72, 72), 3)
@@ -289,6 +289,7 @@ class Menu(Game):
             pg.display.update()
             
     def back_ground(self):
+        window.blit(background, (0, 0))
         temp = self.bg % 1070
         if self.bg % 100 >= 0 and self.bg % 100 <= 40:
             window.blit(self.star1, (0, 100))
@@ -308,7 +309,7 @@ class Menu(Game):
         
         while True:
             # theme
-            window.fill(theme_color)
+            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             # mouse_pos
@@ -353,7 +354,7 @@ class Menu(Game):
 
         lis = [sound_effect_button, background_sound_button, sound_effect_button_x, background_sound_button_x, back_to_game_button,but1_button, but2_button]
 
-        window.fill(theme_color)
+        # window.fill(theme_color)
         window.blit(self.table, (230, 20))
         window.blit(self.Bar, (365, 268))
         window.blit(self.Bar, (365, 468))
@@ -434,7 +435,7 @@ class Menu(Game):
         lis = [play_button, bot_button, options_button, quit_button]
         while True:
             
-            window.fill(theme_color)
+            # # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZE SOLVE", font(title_size, "super_pixel.otf"), pos_center=(600, 100), color=white, color_shader=purple)
@@ -486,7 +487,7 @@ class Menu(Game):
         
         while True:
             
-            window.fill(theme_color)
+            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             window.blit(name_text, name_rect)
@@ -567,7 +568,7 @@ class Menu(Game):
         text_return = ''
         
         while True:
-            window.fill(theme_color)
+            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             window.blit(name_text, name_rect)

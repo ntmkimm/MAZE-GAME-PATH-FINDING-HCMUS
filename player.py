@@ -4,6 +4,7 @@ import math
 import pygame as pg
 from cell import *
 from color import *
+from ui import *
             
 class Player(): # sprite make it easy to fit pixel perfect
 
@@ -22,7 +23,10 @@ class Player(): # sprite make it easy to fit pixel perfect
         self.x_step = 0
         self.y_step = 0
 
-        self.SPRITES = self.load_sprite_sheeets("MainCharacters", self.character, 32, 32)
+        if self.character == "End":
+            self.SPRITES = load_sprite_sheeets("MainCharacters", self.character, 64, 64, size_maze=self.rows)
+        else:
+            self.SPRITES = load_sprite_sheeets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
     
         self.mask = None
         self.x_direction = 'right'
@@ -74,39 +78,7 @@ class Player(): # sprite make it easy to fit pixel perfect
         self.get_dynamic()
         window.blit(self.sprite, (self.rect.x, self.rect.y))
     
-    def draw_goal(self, window):
-        rect = self.init_maze_x + self.x * self.TILE + 2, self.init_maze_y + self.y * self.TILE + 2, self.TILE - 3, self.TILE - 3
-        pg.draw.rect(window, red, rect)
-        
-    def flip(self, sprites):
-        return [pg.transform.flip(sprite, True, False) for sprite in sprites]
-
-    def load_sprite_sheeets(self, dir1, dir2, width, height):
-        path = os.path.join("assets", dir1, dir2)
-        lst_img = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-        
-        all_sprites = {}
-        
-        if self.rows == 100: size = (8, 8)
-        # if self.rows == 5: size = (8, 8)
-        elif self.rows == 40: size = (16, 16)
-        elif self.rows == 20: size = (32, 32)
-        
-        for f in lst_img:
-            sprite_sheet = pg.image.load(os.path.join(path, f)).convert_alpha()
-
-            sprites = []
-            for i in range(sprite_sheet.get_width() // width):
-                #SRCALPHA is a flag 
-                # surface with 32 * 32 pixel to blit onto the main program
-                surface = pg.Surface((width, height), pg.SRCALPHA, 32)
-                rect = pg.Rect(i * width, 0, width, height)
-                surface.blit(sprite_sheet, (0, 0), rect)
-                
-                sprites.append(pg.transform.scale(surface, size))
-                
-            all_sprites[f.replace(".png", "") + "_right"] = sprites
-            all_sprites[f.replace(".png", "") + "_left"] = self.flip(sprites)
-
-        return all_sprites
+    # def draw_goal(self, window):
+    #     rect = self.init_maze_x + self.x * self.TILE + 2, self.init_maze_y + self.y * self.TILE + 2, self.TILE - 3, self.TILE - 3
+    #     pg.draw.rect(window, red, rect)
         
