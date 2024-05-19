@@ -10,6 +10,17 @@ big_size = 45
 title_size = 150
 pg.init()
 
+bg_yellow = pg.image.load(os.path.join("pic", "Yellow.png"))
+bg_blue = pg.image.load(os.path.join("pic", "Blue.png"))
+bg_brown = pg.image.load(os.path.join("pic", "Brown.png"))
+bg_gray = pg.image.load(os.path.join("pic", "Gray.png"))
+bg_green = pg.image.load(os.path.join("pic", "Green.png"))
+bg_pink = pg.image.load(os.path.join("pic", "pink.png"))
+bg_purple = pg.image.load(os.path.join("pic", "Purple.png"))
+
+bg_lis = [bg_green, bg_pink, bg_purple, bg_blue, bg_gray, bg_yellow, bg_brown]
+goal_color = [green, pink, purple, blue, gray, yellow, brown]
+
 def font(text_size, font='font.ttf'):
     return pg.font.Font("assets/Font/" + font, text_size)
 
@@ -28,15 +39,21 @@ def get_text(content, font, pos_center, color=green):
 def flip(sprites):
         return [pg.transform.flip(sprite, True, False) for sprite in sprites]
 
-def load_sprite_sheeets(dir1, dir2, width, height, size_maze):
+def load_sprite_sheets(dir1, dir2, width, height, size_maze, size=None):
     path = os.path.join("assets", dir1, dir2)
     lst_img = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
     
     all_sprites = {}
-    
+
     if size_maze== 100: size = (8, 8)
     elif size_maze == 40: size = (16, 16)
     elif size_maze == 20: size = (32, 32)
+    
+    # if dir2 == "Disappear": 
+    #     if size_maze== 100: size = (16, 16)
+    #     elif size_maze == 40: size = (32, 32)
+    #     elif size_maze == 20: size = (64, 64)
+    
     
     for f in lst_img:
         sprite_sheet = pg.image.load(os.path.join(path, f)).convert_alpha()

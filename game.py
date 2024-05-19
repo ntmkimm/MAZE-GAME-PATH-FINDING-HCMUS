@@ -67,8 +67,7 @@ class Game():
             else: break
             pg.display.update()
 
-        self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True
-            
+        self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True        
     
     def handle_init_choose(self, character):
         max_x = self.cols - 1
@@ -114,29 +113,18 @@ class Game():
         pg.init()  
         pg.display.set_caption("Maze - Path Finding") 
         self.start_time = pg.time.get_ticks()
-        
-        while True:
-            window.blit(background, (0, 0))
-            self.maze.draw(window, self.background)
-            self.player.draw(window)
-            self.goal.draw(window)
-            self.handle_move()
-            """ Bảo """
-            window.blit(pg.transform.scale(self.result, (340, 400)), (830, 70))
-
-            title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(min_size),(1055, 230), white, black)
-            title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps), font(min_size), (1050, 330),white, black)
-            window.blit(shader_title, shader_title_rect)
-            window.blit(title, title_rect)
-            window.blit(shader_title2, shader_title_rect2)
-            window.blit(title2, title_rect2)
-            # mouse_pos = pg.mouse.get_pos()
-            """"""
+        achieved_goal = False
+        animation  = 0
+        while True and animation < 90:
+            self.draw_game()
+            if not achieved_goal:
+                self.handle_move()
             if self.game_type == 'player':
                 if (self.grid.grid_cells[self.player.y][self.player.x].is_goal == True):
-                    time.sleep(1)
-                    break
-                
+                    if animation == 0:
+                        self.goal.disappear()
+                        achieved_goal = True
+                    animation += 1
             if self.game_type == 'bot':
                 if (self.grid.grid_cells[self.algorithm.y][self.algorithm.x].is_goal == True):
                     self.draw_last_trace()
@@ -149,17 +137,19 @@ class Game():
         if self.game_type == 'player':
             self.victory()
         self.command = None
-        
+        self.in_game = False
         
     def victory(self):
         pg.display.set_caption("Victory")
-        continue_button = Button(img=self.long_bar, pos_center=(600, 700), content="Continue", font=font(small_size))
+        quit_button = Button(img=self.short_bar, pos_center=(800, 700), content="Quit", font=font(small_size))
+        continue_button = Button(img=self.short_bar, pos_center=(400, 700), content="Replay", font=font(small_size))
         run = True
         start = pg.time.get_ticks()
         tim = (int)((pg.time.get_ticks() - start) / 1000)
         pg.mixer.music.pause()
         while tim != 2:
-            window.blit(background)
+            window.blit(background, (0, 0))
+            self.bg += 1
             tim = (int)((pg.time.get_ticks() - start) / 1000)
             window.blit(self.bg_vic, (180, 0))
             title, title_rect, shader_title, shader_title_rect = shader_text("YOU WIN", font(title_size),(580, 230), white, black)
@@ -183,10 +173,9 @@ class Game():
 
         pg.display.update()
         self.sound.sound_effect(3)
-        pg.time.delay(2300)
-        run = True
+        # pg.time.delay(2300)
         window.blit(background, (0, 0))
-        while run:
+        while True:
             window.blit(self.result1, (350, 0))
             title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(small_size), (690, 240), white, black)
             title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps),font(small_size), (650, 390), white,black)
@@ -202,9 +191,17 @@ class Game():
                 if event.type == pg.MOUSEBUTTONDOWN:
                     self.sound.sound_select([continue_button])
                     if continue_button.is_pointed(mouse_pos):
-                        run = False
-            continue_button.update(window)
-            continue_button.update_color_line(mouse_pos)
+                        self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_start = False
+                        self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = False
+                        for pair in self.algorithm.trace:
+                            self.grid.grid_cells[pair[0]][pair[1]].trace = False
+                        self.init_random()
+                        self.run_game()
+                    if quit_button.is_pointed(mouse_pos):
+                        self.all_maps_of_user()
+            for button in [continue_button, quit_button]:
+                button.update(window)
+                button.update_color_line(mouse_pos)
             pg.display.update()
         pg.mixer.music.unpause()
         pg.display.update()
@@ -313,5 +310,17 @@ class Game():
             for j in range(self.cols):
                 self.grid.grid_cells[i][j].trace = False
                 self.grid.grid_cells[i][j].visited = False
-        self.pause = True    
-        # self.draw_last_trace()
+        self.draw_last_trace()
+        
+    def draw_game(self):
+        window.blit(background, (0, 0))
+        self.maze.draw(window, self.background)
+        self.player.draw(window)
+        self.goal.draw(window)
+        window.blit(pg.transform.scale(self.result, (340, 400)), (830, 70))
+        title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(min_size),(1055, 230), white, black)
+        title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps), font(min_size), (1050, 330),white, black)
+        window.blit(shader_title, shader_title_rect)
+        window.blit(title, title_rect)
+        window.blit(shader_title2, shader_title_rect2)
+        window.blit(title2, title_rect2)

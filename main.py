@@ -45,24 +45,16 @@ class Menu(Game):
         self.cha3_2 = pg.image.load(os.path.join("pic", "fall3.png"))
         self.frame = pg.image.load(os.path.join("pic", "frame.png"))
         self.frame_option = pg.image.load(os.path.join("pic", "frame_option.png"))
-        self.yellow = pg.image.load(os.path.join("pic", "Yellow.png"))
-        self.blue = pg.image.load(os.path.join("pic", "Blue.png"))
-        self.brown = pg.image.load(os.path.join("pic", "Brown.png"))
-        self.gray = pg.image.load(os.path.join("pic", "Gray.png"))
-        self.green = pg.image.load(os.path.join("pic", "Green.png"))
-        self.pink = pg.image.load(os.path.join("pic", "pink.png"))
-        self.purple = pg.image.load(os.path.join("pic", "Purple.png"))
         self.result1 = pg.image.load(os.path.join("pic", "result.png"))
         self.game_type = 'player'
         self.input_img = pg.image.load("sign.png")
         self.sound = Sound()
         self.s = 0
         self.bg = 0
-        self.background = self.yellow
         self.sound.background_sound(0)
         
         self.character = "MaskDude"
-        self.background = self.blue
+        self.background = bg_green
 
     def esc_menu(self):
         back_to_game_button = Button(img=self.long_bar, pos_center=(600, 250), content='Back to Game', font=font(small_size))
@@ -78,10 +70,7 @@ class Menu(Game):
         
         while self.pause:
             # mouse_pos     
-            window.blit(background, (0, 0))
-            self.maze.draw(window, self.background)
-            self.player.draw(window)
-            self.goal.draw(window)
+            self.draw_game()
             mouse_pos = pg.mouse.get_pos()
             
             for event in pg.event.get():
@@ -94,7 +83,10 @@ class Menu(Game):
                     
                     if quit_button.is_pointed(mouse_pos):
                         self.pause = False
-                        self.main_menu()
+                        if self.game_type == 'bot':
+                            self.create_new_map()
+                        elif self.game_type == 'player':
+                            self.all_maps_of_user()
                     elif options_button.is_pointed(mouse_pos):
                         # self.pause = False
                         self.option = True
@@ -105,6 +97,7 @@ class Menu(Game):
                     elif algo_button.is_pointed(mouse_pos):
                         if self.game_type == 'player':
                             self.command = 'get hint'
+                            self.pause = False
                             self.get_hint()
                         elif self.game_type == 'bot':
                             self.command = 'switch algo'
@@ -215,6 +208,7 @@ class Menu(Game):
                         if self.algo_mode == 0:      self.algo = 'dfs'
                         elif self.algo_mode == 1:    self.algo = 'bfs'
                         
+                        self.in_game = True
                         Game.__init__(self, self.size, self.init, self.game_type, self.algo, self.sound, self.character, self.background)
                         self.run_game()
                         
@@ -248,7 +242,7 @@ class Menu(Game):
         option2 = 0
         temp = 0
         cha_lis = [self.cha0_1, self.cha1_1, self.cha2_1, self.cha3_1, self.cha0_2, self.cha1_2,  self.cha2_2, self.cha3_2]
-        bg_lis = [self.purple, self.gray, self.green, self.blue, self.pink, self.yellow, self.brown]
+        bg_lis = [bg_green, bg_pink, bg_purple, bg_blue, bg_gray, bg_yellow, bg_brown]
         name_cha_lis = ["MaskDude", "NinjaFrog", "PinkMan", "VirtualGuy"]
         while run:
             # window.fill(theme_color)
@@ -268,6 +262,8 @@ class Menu(Game):
             window.blit(bg_lis[option2 % 7], (898, 300))
 
             self.character = name_cha_lis[(option1 % 4)]
+            if self.in_game:
+                self.player.SPRITES = load_sprite_sheeets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
             self.background = bg_lis[option2 % 7]
 
             for event in pg.event.get():
@@ -278,7 +274,11 @@ class Menu(Game):
                     if done_button.is_pointed(mouse_pos):
                         run = False
                     if back_button.is_pointed(mouse_pos):
-                        self.create_new_map()
+                        if self.in_game:
+                            run = False
+                            break
+                        else:
+                            self.create_new_map()
                     if top_button1.is_pointed(mouse_pos):
                         option1 += 1
                     if top_button2.is_pointed(mouse_pos):
@@ -359,10 +359,7 @@ class Menu(Game):
         lis = [sound_button, skin_button, done_button]
         
         while self.option:
-            window.blit(background, (0, 0))
-            self.maze.draw(window, self.background)
-            self.player.draw(window)
-            self.goal.draw(window)
+            self.draw_game()
             # window.blit(self.frame_option, (200, 50))
             mouse_pos = pg.mouse.get_pos()
             for event in pg.event.get():
@@ -405,11 +402,9 @@ class Menu(Game):
         window.blit(self.Bar, (365, 518))
 
         while self.option_sound:
-            window.blit(background, (0, 0))
-            if not self.in_main_menu:
-                self.maze.draw(window, self.background)
-                self.player.draw(window)
-                self.goal.draw(window)
+            if self.in_game:
+                self.draw_game()
+            else: window.blit(background, (0, 0))
             
             window.blit(self.table, (230, 70))
             
@@ -477,7 +472,7 @@ class Menu(Game):
 
     def main_menu(self):
         pg.display.set_caption("Menu")
-        self.in_main_menu = True
+        self.in_game = False
         play_button = Button(img=self.long_bar, pos_center=(600, 300), content="PLAY", font=font(normal_size))
         bot_button = Button(img=self.long_bar, pos_center=(600, 450), content="BOT", font=font(normal_size))
         options_button = Button(img=self.short_bar, pos_center=(450, 600), content="OPTIONS", font=font(small_size), corner_radius=10)
@@ -508,17 +503,17 @@ class Menu(Game):
                     self.sound.sound_select(lis)
                     if play_button.is_pointed(mouse_pos):
                         self.game_type = 'player'
-                        self.in_main_menu = False
+                       
                         self.all_maps_of_user()
                     if bot_button.is_pointed(mouse_pos):
                         self.game_type = 'bot'
-                        self.in_main_menu = False
+                      
                         self.create_new_map()
                     if options_button.is_pointed(mouse_pos):
                         self.option_sound = True
                         self.sound_menu()
                     if quit_button.is_pointed(mouse_pos):
-                        self.in_main_menu = False
+                       
                         pg.quit()
             pg.display.update()
         

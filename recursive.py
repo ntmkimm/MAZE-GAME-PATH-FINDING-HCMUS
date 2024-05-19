@@ -57,7 +57,9 @@ class Recursive:
     
     def trace_back(self):
         for pair in self.trace:
-            self.grid_cells[pair[0]][pair[1]].trace = True
+            if not self.grid_cells[pair[0]][pair[1]].is_goal \
+                and not self.grid_cells[pair[0]][pair[1]].is_start:
+                self.grid_cells[pair[0]][pair[1]].trace = True
 
             
             

@@ -24,10 +24,11 @@ class Player(): # sprite make it easy to fit pixel perfect
         self.y_step = 0
 
         if self.character == "End":
-            self.SPRITES = load_sprite_sheeets("MainCharacters", self.character, 64, 64, size_maze=self.rows)
+            self.SPRITES = load_sprite_sheets("MainCharacters", self.character, 64, 64, size_maze=self.rows)
+
         else:
-            self.SPRITES = load_sprite_sheeets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
-    
+            self.SPRITES = load_sprite_sheets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
+
         self.mask = None
         self.x_direction = 'right'
         self.y_direction = ''
@@ -72,13 +73,15 @@ class Player(): # sprite make it easy to fit pixel perfect
     def masking(self):
         self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
         self.mask = pg.mask.from_surface(self.sprite)
-    
-    # draw character everytime we update the position of the character
+        
     def draw(self, window):
         self.get_dynamic()
         window.blit(self.sprite, (self.rect.x, self.rect.y))
     
-    # def draw_goal(self, window):
-    #     rect = self.init_maze_x + self.x * self.TILE + 2, self.init_maze_y + self.y * self.TILE + 2, self.TILE - 3, self.TILE - 3
-    #     pg.draw.rect(window, red, rect)
+    def appear(self):
+        self.SPRITES = load_sprite_sheets("MainCharacters", "Appear", 96, 96, size_maze=self.rows)
+            
+    
+    def disappear(self):
+        self.SPRITES = load_sprite_sheets("MainCharacters", "Disappear", 96, 96, size_maze=self.rows)
         
