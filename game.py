@@ -37,6 +37,10 @@ class Game():
         self.pause = False
         self.option = False
         
+        self.start_time = 0
+        self.elapsed_time = 0
+        self.pause_start = 0
+        
         if init_type == 'random': self.init_random()
         elif init_type == 'choose': self.init_choose()
 
@@ -109,9 +113,7 @@ class Game():
     def run_game(self):
         pg.init()  
         pg.display.set_caption("Maze - Path Finding") 
-        self.sound.start = pg.time.get_ticks()
-        self.sound.steps = 0
-        self.sound.pause = 0
+        self.start_time = pg.time.get_ticks()
         
         while True:
             window.blit(background, (0, 0))
@@ -121,9 +123,9 @@ class Game():
             self.handle_move()
             """ Bảo """
             window.blit(pg.transform.scale(self.result, (340, 400)), (830, 70))
-            self.sound.time = (pg.time.get_ticks() - self.sound.start)/1000
-            title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.sound.time:.1f}s", font(min_size),(1055, 230), white, black)
-            title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.sound.steps), font(min_size), (1050, 330),white, black)
+
+            title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(min_size),(1055, 230), white, black)
+            title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps), font(min_size), (1050, 330),white, black)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
             window.blit(shader_title2, shader_title_rect2)
@@ -186,8 +188,8 @@ class Game():
         window.blit(background, (0, 0))
         while run:
             window.blit(self.result1, (350, 0))
-            title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.sound.time:.1f}s", font(small_size), (690, 240), white, black)
-            title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.sound.steps),font(small_size), (650, 390), white,black)
+            title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(small_size), (690, 240), white, black)
+            title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps),font(small_size), (650, 390), white,black)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
             window.blit(shader_title2, shader_title_rect2)
@@ -208,6 +210,9 @@ class Game():
         pg.display.update()
         
     def handle_move(self):
+        if not self.pause and not self.option:
+            current_ticks = pg.time.get_ticks()
+            self.elapsed_time = (current_ticks - self.start_time) / 1000  # Elapsed time in seconds
         mouse_pos = pg.mouse.get_pos()
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -216,9 +221,12 @@ class Game():
                 self.sound.sound_select([self.settings_button])
                 if self.settings_button.is_pointed(mouse_pos):
                     self.pause = True
+                    self.pause_start = pg.time.get_ticks()
                     self.esc_menu()
-                    self.sound.pause += pg.time.get_ticks() - self.sound.start1
-                    self.sound.start1 = 0
+                    print(self.pause)
+                    self.start_time += pg.time.get_ticks() - self.pause_start  
+                        # Adjust start time cause we want to update start time due to pause duration
+                    
             if event.type == pg.KEYDOWN:  # Use pygame.KEYDOWN to detect key press
                 if self.game_type == 'player':
                     self.player.x_step = 0
@@ -227,33 +235,31 @@ class Game():
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['left']:
                         self.sound.sound_effect(1)
                         self.player.move(dx=-1)
-                        self.sound.steps += 1
+                        self.player.steps += 1
                     elif event.key in [pg.K_RIGHT, pg.K_d] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['right']:
                         self.sound.sound_effect(1)
                         self.player.move(dx=1)
-                        self.sound.steps += 1
+                        self.player.steps += 1
                     elif event.key in [pg.K_UP, pg.K_w] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['top']:
                         self.sound.sound_effect(1)
                         self.player.move(dy=-1)
-                        self.sound.steps += 1
+                        self.player.steps += 1
                     elif event.key in [pg.K_DOWN, pg.K_s] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['bottom']:
                         self.sound.sound_effect(1)
                         self.player.move(dy=1)
-                        self.sound.steps += 1
+                        self.player.steps += 1
                         
-                if event.key in [pg.K_ESCAPE]:
+                if event.key in [pg.K_ESCAPE]: 
                     self.pause = True
-                    self.esc_menu() # call from child class
-                    self.sound.pause += pg.time.get_ticks() - self.sound.start1
-                    self.sound.start1 = 0
-                    # if self.command == 'get hint':
-                    #     self.get_hint()
-                    # elif self.command == 'switch algo':
-                    #     self.switch_algo_bool = True
-                    #     self.switch_algo()
+                    self.pause_start = pg.time.get_ticks()
+                    self.esc_menu()
+                    self.start_time += pg.time.get_ticks() - self.pause_start  
+
+                    
+
         self.settings_button.update(window)
         self.settings_button.update_color_line(mouse_pos)
     
@@ -307,5 +313,5 @@ class Game():
             for j in range(self.cols):
                 self.grid.grid_cells[i][j].trace = False
                 self.grid.grid_cells[i][j].visited = False
-                
-        self.draw_last_trace()
+        self.pause = True    
+        # self.draw_last_trace()

@@ -96,6 +96,7 @@ class Menu(Game):
                         self.pause = False
                         self.main_menu()
                     elif options_button.is_pointed(mouse_pos):
+                        # self.pause = False
                         self.option = True
                         self.options()
                     elif back_to_game_button.is_pointed(mouse_pos):
