@@ -77,6 +77,7 @@ class BFS:
         self.node = Node([cur_pos])
         self.result = Linkedlist()
         self.result.add_head(self.node)
+        self.trace = None
 
     def find_way(self):
         # while

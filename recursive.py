@@ -46,6 +46,7 @@ class Recursive:
             self.x -= 1
         else:
             self.trace.pop()
+            # if bool(self.trace) == False: return
             self.y = self.trace[-1][0]
             self.x = self.trace[-1][1]
             while self.grid_cells[self.y][self.x].intersect == False and len(self.trace) > 1:

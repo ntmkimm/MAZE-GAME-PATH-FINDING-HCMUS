@@ -9,7 +9,6 @@ size_of_maze = 800
 dust = pg.image.load(os.path.join("pic", "dust.png")) 
 # start = pg.image.load()
 checkpoint = pg.image.load(os.path.join("pic", "checkpoint.png")) 
-bar = pg.image.load(os.path.join("pic", "wall3.jpg"))
 
 class Cell:
     def __init__(self, y, x):

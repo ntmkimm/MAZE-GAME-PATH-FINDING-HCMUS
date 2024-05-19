@@ -55,16 +55,45 @@ class Game():
         goal_done = False
         self.player = Player(self.grid.grid_cells, (0, 0), self.TILE, self.character)
         self.goal = Player(self.grid.grid_cells, (self.rows - 1, self.cols - 1), self.TILE, "End")
+        
+        flag = False
         while True:
             window.blit(background, (0, 0))
             self.maze.draw(window, self.background)
             self.player.draw(window)
             self.goal.draw(window)
+            
+            box = pg.Rect(825, 680, 360, 80)
+            pg.draw.rect(window, purple, box)
+            pg.draw.line(window, yellow, (box.left, box.top), (box.right, box.top), 5)
+            pg.draw.line(window, yellow, (box.left, box.bottom), (box.right, box.bottom), 5)
+            text_surface, text_surface_rect = get_text(content="Choose Init Places", font=font(tiny_size), pos_center=(1005, 700))
+            window.blit(text_surface, text_surface_rect)
+            text_surface1, text_surface_rect1 = get_text(content="Using Keys To Move", font=font(tiny_size), pos_center=(1005, 720))
+            window.blit(text_surface1, text_surface_rect1)
+            text_surface2, text_surface_rect2 = get_text(content="Press Enter To Choose", font=font(tiny_size), pos_center=(1005, 740))
+            window.blit(text_surface2, text_surface_rect2)
+            if flag:
+                now = pg.time.get_ticks()
+                if now - start <= 1500:
+                    title, title_rect, shader_title, shader_title_rect = shader_text("Choose Again!", font(big_size), (600, 400), white, purple)
+                    window.blit(shader_title, shader_title_rect)
+                    window.blit(title, title_rect)
+                else: flag = False
+                    
             if not start_done:
                 start_done = self.handle_init_choose(self.player)
             elif not goal_done:
                 goal_done = self.handle_init_choose(self.goal)
-            else: break
+            else:
+                if self.check_exist_way(self.start_pos): break
+                else:
+                    flag = True
+                    start = pg.time.get_ticks()
+                    self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = False
+                    self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_start = False
+                    start_done = False
+                    goal_done = False
             pg.display.update()
 
         self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True        
@@ -96,13 +125,43 @@ class Game():
                             self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_start = True
                         else:
                             self.goal_pos = (character.y, character.x)
+                            self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True
                         return True
-                
+
+    def check_exist_way(self, start):
+            solve = BFS(self.grid.grid_cells, start)
+            while solve.result.head is not None and solve.result.tail is not None:
+                solve.find_way()
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    self.grid.grid_cells[i][j].visited = False
+            if solve.trace == [] or solve.trace == None: return False
+            return True
+    
     def init_random(self):
         start, goal = (0, 0), (0, 0)
-        while start == goal:
+        animation = 0
+        box = pg.Rect(825, 680, 360, 80)
+        while animation < 100:
             start = (random.randrange(self.rows), random.randrange(self.cols))
             goal = (random.randrange(self.rows), random.randrange(self.cols))
+            
+            self.goal_pos = goal
+            self.grid.grid_cells[goal[0]][goal[1]].is_goal = True
+
+            if self.check_exist_way(start) == True and start != goal: break
+            else:
+                self.grid.grid_cells[goal[0]][goal[1]].is_goal = False
+                pg.draw.rect(window, purple, box)
+                pg.draw.line(window, yellow, (box.left, box.top), (box.right, box.top), 5)
+                pg.draw.line(window, yellow, (box.left, box.bottom), (box.right, box.bottom), 5)
+                if animation % 2 == 0:
+                    text_surface, text_surface_rect = get_text(content="Choose Again!", font=font(small_size), pos_center=(1005, 720))
+                else:
+                    text_surface, text_surface_rect = get_text(content="Choose Again!", font=font(tiny_size), pos_center=(1005, 720))
+                window.blit(text_surface, text_surface_rect)
+                animation += 1
+            
         self.start_pos, self.goal_pos = start, goal
         self.grid.grid_cells[start[0]][start[1]].is_start = True
         self.grid.grid_cells[goal[0]][goal[1]].is_goal = True
@@ -128,10 +187,12 @@ class Game():
             if self.game_type == 'bot':
                 if (self.grid.grid_cells[self.algorithm.y][self.algorithm.x].is_goal == True):
                     self.draw_last_trace()
-                    pg.display.update()
-                    time.sleep(1)
-                    break
-                self.algorithm.find_way()
+                    if animation == 0:
+                        # self.goal.disappear()
+                        achieved_goal = True
+                    animation += 1
+                if not achieved_goal:
+                    self.algorithm.find_way()
             pg.display.update()
         print("is done")
         if self.game_type == 'player':
@@ -280,8 +341,9 @@ class Game():
     
     def draw_last_trace(self):
         self.algorithm.trace_back()
-        self.maze.draw(window, background)
+        self.maze.draw(window, self.background)
         self.player.draw(window)
+        self.goal.draw(window)
     
     def get_hint(self):
         self.algorithm = BFS(self.grid.grid_cells, (self.player.y, self.player.x))
