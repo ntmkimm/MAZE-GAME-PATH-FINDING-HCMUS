@@ -19,7 +19,7 @@ sub_background = pg.image.load("pic/bg5.jpg")
 sub_background = pg.transform.scale(sub_background, RES)
 
 class Game():
-    def __init__(self, size, init_type, game_type, algo, sound, character, background):
+    def __init__(self, size, init_type, game_type, algo, sound, character):
         self.rows = size
         self.cols = size
         self.TILE = size_of_maze // size
@@ -32,7 +32,7 @@ class Game():
         self.algo = algo
         self.command = None
         self.sound = sound
-        self.settings_button = Button(img=self.set, pos_center=(1000, 570), content='', font=font(small_size))
+        self.settings_button = Button(img=self.set, pos_center=(1000, 670), content='', font=font(small_size))
         
         self.pause = False
         self.option = False
@@ -115,7 +115,7 @@ class Game():
         self.start_time = pg.time.get_ticks()
         achieved_goal = False
         animation  = 0
-        while True and animation < 90:
+        while True and animation < 40:
             self.draw_game()
             if not achieved_goal:
                 self.handle_move()
@@ -141,48 +141,29 @@ class Game():
         
     def victory(self):
         pg.display.set_caption("Victory")
-        quit_button = Button(img=self.short_bar, pos_center=(800, 700), content="Quit", font=font(small_size))
-        continue_button = Button(img=self.short_bar, pos_center=(400, 700), content="Replay", font=font(small_size))
-        run = True
-        start = pg.time.get_ticks()
-        tim = (int)((pg.time.get_ticks() - start) / 1000)
+        quit_button = Button(img=self.short_bar, pos_center=(550, 700), content="Quit", font=font(small_size))
+        continue_button = Button(img=self.short_bar, pos_center=(250, 700), content="Replay", font=font(small_size))
         pg.mixer.music.pause()
-        while tim != 2:
-            window.blit(background, (0, 0))
-            self.bg += 1
-            tim = (int)((pg.time.get_ticks() - start) / 1000)
-            window.blit(self.bg_vic, (180, 0))
-            title, title_rect, shader_title, shader_title_rect = shader_text("YOU WIN", font(title_size),(580, 230), white, black)
+        
+        while True:
+            self.draw_game()
+            
+            title, title_rect, shader_title, shader_title_rect = shader_text("GAME OVER", font(150, font='game_over.ttf'), (400, 130), purple, yellow)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
+            
+            title1, title_rect1, shader_title1, shader_title_rect1 = shader_text("YOU WON!", font(100, font='game_over.ttf'), (400, 230), purple, yellow)
+            window.blit(shader_title1, shader_title_rect1)
+            window.blit(title1, title_rect1)
             mouse_pos = pg.mouse.get_pos()
 
-            if self.s % 2 == 0:
-                window.blit(self.vic, (120, 300))
+            if self.s % 2 == 0 or self.s % 3 == 0 or self.s % 4 == 0 or self.s % 5 == 0:
+                window.blit(pg.transform.scale(self.vic, (580, 280)), (120, 300))
                 self.s += 1
             else:
-                window.blit(self.vic1, (120, 300))
+                window.blit(pg.transform.scale(self.vic1, (580, 280)), (120, 300))
                 self.s += 1
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-
-            pg.time.delay(200)
-            pg.display.update()
-
-        pg.display.update()
-        self.sound.sound_effect(3)
-        # pg.time.delay(2300)
-        window.blit(background, (0, 0))
-        while True:
-            window.blit(self.result1, (350, 0))
-            title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(small_size), (690, 240), white, black)
-            title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps),font(small_size), (650, 390), white,black)
-            window.blit(shader_title, shader_title_rect)
-            window.blit(title, title_rect)
-            window.blit(shader_title2, shader_title_rect2)
-            window.blit(title2, title_rect2)
+            
             mouse_pos = pg.mouse.get_pos()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -204,6 +185,7 @@ class Game():
                 button.update(window)
                 button.update_color_line(mouse_pos)
             pg.display.update()
+            
         pg.mixer.music.unpause()
         pg.display.update()
         
@@ -318,9 +300,9 @@ class Game():
         self.maze.draw(window, self.background)
         self.player.draw(window)
         self.goal.draw(window)
-        window.blit(pg.transform.scale(self.result, (340, 400)), (830, 70))
-        title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(min_size),(1055, 230), white, black)
-        title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps), font(min_size), (1050, 330),white, black)
+        window.blit(pg.transform.scale(self.result, (340, 400)), (830, 170))
+        title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(min_size),(1055, 330), white, black)
+        title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps), font(min_size), (1050, 430),white, black)
         window.blit(shader_title, shader_title_rect)
         window.blit(title, title_rect)
         window.blit(shader_title2, shader_title_rect2)

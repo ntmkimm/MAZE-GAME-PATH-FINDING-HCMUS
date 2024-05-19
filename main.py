@@ -32,7 +32,6 @@ class Menu(Game):
         self.star_fall = pg.image.load(os.path.join("pic", "star_fall.png"))
         self.star = pg.image.load(os.path.join("pic", "star.png"))
         self.star1 = pg.image.load(os.path.join("pic", "star(1).png"))
-        self.bg_vic = pg.image.load(os.path.join("pic", "bg.png"))
         self.top = pg.image.load(os.path.join("pic", "arrow1.png"))
         self.bot = pg.image.load(os.path.join("pic", "arrow2.png"))
         self.cha0_1 = pg.image.load(os.path.join("pic", "jump0.png"))
@@ -56,15 +55,15 @@ class Menu(Game):
         self.character = "MaskDude"
         self.background = bg_green
 
-    def esc_menu(self):
-        back_to_game_button = Button(img=self.long_bar, pos_center=(600, 250), content='Back to Game', font=font(small_size))
-        options_button = Button(img=self.short_bar, pos_center=(450, 550), content='Options', font=font(small_size))
-        quit_button = Button(img=self.short_bar, pos_center=(750, 550), content="Quit", font=font(small_size))
+    def esc_menu(self):        
+        back_to_game_button = Button(img=self.long_bar, pos_center=(600, 550), content='Back to Game', font=font(small_size))
+        options_button = Button(img=self.short_bar, pos_center=(450, 400), content='Options', font=font(small_size))
+        quit_button = Button(img=self.short_bar, pos_center=(750, 400), content="Quit", font=font(small_size))
         
         if self.game_type == 'player':
-            algo_button = Button(img=self.long_bar, pos_center=(600, 400), content='Hint to Goal', font=font(small_size))
+            algo_button = Button(img=self.long_bar, pos_center=(600, 250), content='Hint to Goal', font=font(small_size))
         elif self.game_type == 'bot':
-            algo_button = Button(img=self.long_bar, pos_center=(600, 400), content='Other Algorithm', font=font(small_size))
+            algo_button = Button(img=self.long_bar, pos_center=(600, 250), content='Other Algorithm', font=font(small_size))
         
         lis = [back_to_game_button, options_button, quit_button, algo_button]
         
@@ -209,7 +208,7 @@ class Menu(Game):
                         elif self.algo_mode == 1:    self.algo = 'bfs'
                         
                         self.in_game = True
-                        Game.__init__(self, self.size, self.init, self.game_type, self.algo, self.sound, self.character, self.background)
+                        Game.__init__(self, self.size, self.init, self.game_type, self.algo, self.sound, self.character)
                         self.run_game()
                         
                 if event.type == pg.KEYDOWN and self.game_type == 'player':
@@ -226,16 +225,17 @@ class Menu(Game):
             pg.display.update()
             
     def skin(self):
+        
         pg.display.set_caption("Skin")
         
         top_button1 = Button(img=self.top, pos_center=(270, 90), content="", font=font(small_size), corner_radius=10)
         bot_button1 = Button(img=self.bot, pos_center=(270, 580), content="", font=font(small_size), corner_radius=10)
         top_button2 = Button(img=self.top, pos_center=(930, 90), content="", font=font(small_size), corner_radius=10)
         bot_button2 = Button(img=self.bot, pos_center=(930, 580), content="", font=font(small_size), corner_radius=10)
-        done_button = Button(img=self.short_bar, pos_center=(600, 700), content="Done", font=font(small_size), corner_radius=10)
+        done_button = Button(img=self.short_bar, pos_center=(600, 550), content="Done", font=font(small_size), corner_radius=10)
         random_button = Button(img=self.short_bar, pos_center=(600, 400), content="Random", font=font(small_size),corner_radius=10)
-        back_button = Button(img=self.short_bar, pos_center=(600, 200), content="Back", font=font(small_size), corner_radius=10)
-        lis = [top_button1, bot_button1, done_button, top_button2, bot_button2, back_button, random_button]
+        # back_button = Button(img=self.short_bar, pos_center=(600, 200), content="Back", font=font(small_size), corner_radius=10)
+        lis = [top_button1, bot_button1, done_button, top_button2, bot_button2, random_button]
 
         run = True
         option1 = 0
@@ -263,7 +263,7 @@ class Menu(Game):
 
             self.character = name_cha_lis[(option1 % 4)]
             if self.in_game:
-                self.player.SPRITES = load_sprite_sheeets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
+                self.player.SPRITES = load_sprite_sheets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
             self.background = bg_lis[option2 % 7]
 
             for event in pg.event.get():
@@ -272,8 +272,6 @@ class Menu(Game):
                 if event.type == pg.MOUSEBUTTONDOWN:
                     self.sound.sound_select(lis)
                     if done_button.is_pointed(mouse_pos):
-                        run = False
-                    if back_button.is_pointed(mouse_pos):
                         if self.in_game:
                             run = False
                             break
@@ -352,10 +350,9 @@ class Menu(Game):
             pg.display.update()                 
         
     def options(self):
-        
-        sound_button = Button(img=self.long_bar, pos_center=(600, 300), content='Sound',font=font(normal_size), corner_radius=5)
-        skin_button = Button(img=self.long_bar, pos_center=(600, 450), content='Skin',font=font(normal_size), corner_radius=5)
-        done_button = Button(img=self.short_bar, pos_center=(600, 600), content="Done", font=font(small_size), corner_radius=10)
+        sound_button = Button(img=self.long_bar, pos_center=(600, 250), content='Sound',font=font(normal_size), corner_radius=5)
+        skin_button = Button(img=self.long_bar, pos_center=(600, 400), content='Skin',font=font(normal_size), corner_radius=5)
+        done_button = Button(img=self.short_bar, pos_center=(600, 550), content="Done", font=font(small_size), corner_radius=10)
         lis = [sound_button, skin_button, done_button]
         
         while self.option:
@@ -676,4 +673,4 @@ class Menu(Game):
             
 if __name__ == "__main__":
     menu = Menu()
-    menu.main_menu()
+    menu.create_new_map()
