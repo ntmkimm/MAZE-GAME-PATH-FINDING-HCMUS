@@ -193,8 +193,9 @@ class Game():
                     if continue_button.is_pointed(mouse_pos):
                         self.grid.grid_cells[self.start_pos[0]][self.start_pos[1]].is_start = False
                         self.grid.grid_cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = False
-                        for pair in self.algorithm.trace:
-                            self.grid.grid_cells[pair[0]][pair[1]].trace = False
+                        for i in range(self.rows):
+                            for j in range(self.cols):
+                                self.grid.grid_cells[i][j].trace = False
                         self.init_random()
                         self.run_game()
                     if quit_button.is_pointed(mouse_pos):

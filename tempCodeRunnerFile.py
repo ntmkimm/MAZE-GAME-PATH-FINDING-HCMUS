@@ -1,1 +1,1 @@
-bg_lis = [bg_green, bg_pink, bg_purple, bg_blue, bg_gray, bg_yellow, bg_brown]
+pg.draw.rect(mask, pink, rect)

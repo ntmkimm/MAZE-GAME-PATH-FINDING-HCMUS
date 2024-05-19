@@ -34,23 +34,8 @@ class Button:
         return rounded_img
         
     def update(self, window):
-        # right
-        # pg.draw.line(window, self.line_color, (self.rect.right, self.rect.top + self.corner_radius), (self.rect.right, self.rect.bottom - self.corner_radius), self.line_thick)
-        # # left
-        # pg.draw.line(window, self.line_color, (self.rect.left, self.rect.top + self.corner_radius), (self.rect.left, self.rect.bottom - self.corner_radius), self.line_thick)
-        # # top
-        # pg.draw.line(window, self.line_color, (self.rect.left + self.corner_radius, self.rect.top), (self.rect.right - self.corner_radius, self.rect.top), self.line_thick)
-        # # bottom
-        # pg.draw.line(window, self.line_color, (self.rect.left + self.corner_radius, self.rect.bottom), (self.rect.right - self.corner_radius, self.rect.bottom), self.line_thick)
-        # # dia
-        # pg.draw.line(window, self.line_color, (self.rect.left + self.corner_radius + self.de, self.rect.top - 4),(self.rect.left, self.rect.top + self.corner_radius), self.line_thick)
-        # pg.draw.line(window, self.line_color, (self.rect.right - self.corner_radius - self.de, self.rect.top - 4),(self.rect.right, self.rect.top + self.corner_radius), self.line_thick)
-        # pg.draw.line(window, self.line_color, (self.rect.left, self.rect.bottom - self.corner_radius),(self.rect.left + self.corner_radius + self.de, self.rect.bottom + 4), self.line_thick)
-        # pg.draw.line(window, self.line_color, (self.rect.right, self.rect.bottom - self.corner_radius),(self.rect.right - self.corner_radius - self.de, self.rect.bottom + 4), self.line_thick)
-        # pg.draw.rect(window, self.line_color, self.rect, self.line_thick, border_radius=self.corner_radius)
         self.rounded_img = self.create_rounded_image()
         window.blit(self.rounded_img, self.rect.topleft)
-        # window.blit(self.img, self.rect)
         window.blit(self.shader_text, self.shader_text_rect)
         window.blit(self.text, self.text_rect)
     

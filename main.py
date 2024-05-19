@@ -315,7 +315,7 @@ class Menu(Game):
         new_map_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
         
         lis = [back_button, new_map_button, delete_button]
-        
+
         while True:
             # theme
             # window.fill(theme_color)
@@ -324,11 +324,11 @@ class Menu(Game):
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             # title
-            title, title_rect, shader_title, shader_title_rect = shader_text("Select Map", font(normal_size), (600, 50), white, black)
+            title, title_rect, shader_title, shader_title_rect = shader_text("Select Map", font(small_size), (600, 30), white, black)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
-            # created_map
-            box_of_created_map = pg.Rect(0, 100, 1200, 500)
+            # created_map            
+            box_of_created_map = pg.Rect(0, 70, 1200, 500)
             pg.draw.rect(window, white, box_of_created_map)
             pg.draw.line(window, black, (0, box_of_created_map.top), (1200, box_of_created_map.top), 10)
             pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
@@ -536,7 +536,8 @@ class Menu(Game):
         while True:
             
             # window.fill(theme_color)
-            window.blit(sub_background, (0, 0))
+            self.back_ground()
+            self.bg += 1
             window.blit(name_text, name_rect)
             window.blit(pass_text, pass_rect)
             window.blit(re_pass_text, re_pass_rect)
@@ -603,6 +604,7 @@ class Menu(Game):
                 self.sign_in_menu()
 
     def sign_in_menu(self):
+
         name = Input_Button(img=self.input_img, pos_center=(600, 270), content='', font=font(tiny_size))
         password = Input_Button(img=self.input_img, pos_center=(600, 420), content='', font=font(tiny_size), hide=True)
         sign_in_button = Button(img=self.short_bar, pos_center=(600, 580), content='SIGN IN', font=font(small_size))
@@ -616,7 +618,8 @@ class Menu(Game):
         
         while True:
             # window.fill(theme_color)
-            window.blit(sub_background, (0, 0))
+            self.back_ground()
+            self.bg += 1
             window.blit(name_text, name_rect)
             window.blit(pass_text, pass_rect)
             window.blit(sign_up, sign_up_rect)
@@ -668,9 +671,9 @@ class Menu(Game):
             
             if text_return == 'login successfull':
                 pg.display.update()
-                time.sleep(2)
+                time.sleep(0.1)
                 self.main_menu()
-    
+            
 if __name__ == "__main__":
     menu = Menu()
     menu.main_menu()

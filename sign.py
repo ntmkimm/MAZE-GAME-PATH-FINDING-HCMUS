@@ -60,7 +60,7 @@ def sign_in(name, password):
         return 'unregister'
 
 class Input_Button(Button):
-    def __init__(self, img, pos_center, content, font, line_base_color=dark_blue, hide=False):
+    def __init__(self, img, pos_center, content, font, line_base_color=white, hide=False):
         Button.__init__(self, img, pos_center, content, font, line_base_color)
         self.active = False
         self.hide = hide
