@@ -273,7 +273,7 @@ class Menu(Game):
                 window.blit(pg.transform.scale(cha_lis[(option1 % 4 + 4)], (92, 92)), (220, 290))
                 temp += 1
 
-            self.background = goal_color[option2 % 7]
+            self.background = color[option2 % 7]
 
             pg.draw.rect(window, black, (894, 296, 72, 72), 3)
             window.blit(bg_lis[self.background], (898, 300))
@@ -378,7 +378,7 @@ class Menu(Game):
                         played_game = None
                     if play_button.is_pointed(mouse_pos) and played_game != None:
                         self.in_game = True
-                        Game.__init__(self, None, 'load', 'player', None, self.sound, None, lst_game[i].content)
+                        Game.__init__(self, None, 'load', 'player', None, self.sound, None, played_game.content)
                         self.run_game()
                 
             pg.display.update()                 

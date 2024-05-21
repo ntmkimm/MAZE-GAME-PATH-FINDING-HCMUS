@@ -18,10 +18,13 @@ bg_green = pg.image.load(os.path.join("pic", "Green.png"))
 bg_pink = pg.image.load(os.path.join("pic", "pink.png"))
 bg_purple = pg.image.load(os.path.join("pic", "Purple.png"))
 
-bg_lis = {green : bg_green, pink : bg_pink, 
-        purple : bg_purple, blue : bg_blue, gray : bg_gray, 
-        yellow : bg_yellow, brown : bg_brown}
-goal_color = [green, pink, purple, blue, gray, yellow, brown]
+bg_lis = {'green' : bg_green, 'pink' : bg_pink, 
+        'purple' : bg_purple, 'blue' : bg_blue, 'gray' : bg_gray, 
+        'yellow' : bg_yellow, 'brown' : bg_brown}
+goal_color = {'green' : green, 'pink' : pink, 
+        'purple' : purple, 'blue' : blue, 'gray' : gray, 
+        'yellow' : yellow, 'brown' : brown}
+color = ['green', 'pink', 'purple', 'blue', 'gray', 'yellow', 'brown']
 
 def font(text_size, font='font.ttf'):
     return pg.font.Font("assets/Font/" + font, text_size)

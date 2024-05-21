@@ -1,9 +1,10 @@
 import pickle
+import json
 import os
 
 class File:
     def __init__(self, player_name=''):
-        self.extension = ".save"
+        self.extension = ".json"
         self.root = os.path.join("save_data", player_name)
         self.create_folder_of_player()
     
@@ -11,13 +12,13 @@ class File:
         os.makedirs(self.root, exist_ok=True)
 
     def save(self, data, file_name):
-        if self.is_possible_to_save:
-            file = open(os.path.join(self.root, file_name + self.extension), "wb")
-            pickle.dump(data, file)
+        if self.is_possible_to_save():
+            file = open(os.path.join(self.root, file_name + self.extension), "w")
+            json.dump(data, file)
 
     def load(self, file_name):
-        file = open(os.path.join(self.root, file_name + self.extension), "rb")
-        data = pickle.load(file)
+        file = open(os.path.join(self.root, file_name + self.extension), "r")
+        data = json.load(file)
         return data
 
     def is_exist(self, file_name):

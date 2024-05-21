@@ -66,7 +66,11 @@ class Game():
             self.steps = data["steps"]
             self.start_pos = data["start_pos"]
             self.goal_pos = data["goal_pos"]
-            self.grid.cells = data["grid_cells"]
+            
+            for index in range(len(data["grid_cells"])): 
+                y, x = index // self.rows, index % self.cols
+                self.grid.cells[y][x].bars = data["grid_cells"][str(index)]
+                self.grid.cells[y][x].seen = True
             
             self.player = Player(self.grid.cells, data["cur_pos"], self.TILE, self.character)
             self.goal = Player(self.grid.cells, self.goal_pos, self.TILE, "End")
@@ -286,6 +290,11 @@ class Game():
         pg.mixer.music.unpause()
             
     def save_game(self):
+        grid_cells = {}
+        for y in range(self.rows):
+            for x in range(self.cols):
+                grid_cells[y * self.rows + x] = self.grid.cells[y][x].bars
+                
         data_to_save = {
             "character" : self.character,
             "background" : self.background,
@@ -295,7 +304,7 @@ class Game():
             "start_pos": self.start_pos,
             "goal_pos" : self.goal_pos, 
             "cur_pos" : (self.player.y, self.player.x), 
-            "grid_cells" : self.grid.cells
+            "grid_cells" : grid_cells
             }
         
         self.file_manager.save(data_to_save, self.game_name)

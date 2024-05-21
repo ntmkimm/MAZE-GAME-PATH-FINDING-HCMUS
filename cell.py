@@ -72,9 +72,7 @@ class Cell:
             pg.draw.rect(window, white, (x, y, TILE, TILE))
             # window.blit()
         if self.is_goal:
-            try:
-                pg.draw.rect(window, background, (x, y, TILE, TILE))
-            except: pass
+            pg.draw.rect(window, goal_color[background], (x, y, TILE, TILE))
         
         if self.bars['top']:
             pg.draw.line(window, self.bar_color, (x, y), (x + TILE, y), self.bar_thick)
