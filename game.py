@@ -199,7 +199,7 @@ class Game():
         self.start_time = pg.time.get_ticks()
         achieved_goal = False
         animation  = 0
-        while True and animation < 40:
+        while True and animation < 5:
             self.draw_game()
             if not achieved_goal:
                 self.handle_move()
@@ -230,10 +230,11 @@ class Game():
         quit_button = Button(img=self.short_bar, pos_center=(550, 700), content="Quit", font=font(small_size))
         continue_button = Button(img=self.short_bar, pos_center=(250, 700), content="Replay", font=font(small_size))
         pg.mixer.music.pause()
-        
-        while True:
+        self.sound.sound_effect(3)
+        self.add_time = 0
+        victory = True
+        while victory:
             self.draw_game()
-            
             title, title_rect, shader_title, shader_title_rect = shader_text("GAME OVER", font(150, font='game_over.ttf'), (400, 130), purple, yellow)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
@@ -249,7 +250,7 @@ class Game():
             else:
                 window.blit(pg.transform.scale(self.vic1, (580, 280)), (120, 300))
                 self.s += 1
-            
+                
             mouse_pos = pg.mouse.get_pos()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -263,15 +264,24 @@ class Game():
                         for i in range(self.rows):
                             for j in range(self.cols):
                                 self.grid.cells[i][j].trace = False
+                        victory = False
                         self.init_random()
+                        pg.mixer.music.pause()
+                        self.sound.sound_effect(1)
                         self.run_game()
                     if quit_button.is_pointed(mouse_pos):
+                        victory = False
                         self.save_game()
+                        pg.mixer.music.pause()
+                        self.sound.sound_effect(1)
                         self.all_maps_of_user()
             for button in [continue_button, quit_button]:
                 button.update(window)
                 button.update_color_line(mouse_pos)
             pg.display.update()
+            
+        self.add_time = 0
+        pg.mixer.music.unpause()
             
     def save_game(self):
         data_to_save = {

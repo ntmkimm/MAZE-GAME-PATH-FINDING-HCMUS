@@ -481,10 +481,8 @@ class Menu(Game):
                 if self.sound.op2 % 2 == 0 and button == background_sound_button_x:
                     continue
 
-
                 button.update_color_line(mouse_pos)
                 button.update(window)
-
 
             pg.display.update()
 
