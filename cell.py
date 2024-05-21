@@ -32,9 +32,6 @@ class Cell:
         
         self.bar_color = dark_green
         self.bar_thick = 5
-        
-        self.start_color = dark_blue
-        self.goal_color = red
     
     def check_bars(current, next):
         dx = next.x - current.x
@@ -63,7 +60,7 @@ class Cell:
         
         if self.seen and background != None:
             # pg.draw.rect(window, white, (x, y, TILE, TILE))
-            window.blit(pg.transform.scale(background, (TILE, TILE)), (x, y))
+            window.blit(pg.transform.scale(bg_lis[background], (TILE, TILE)), (x, y))
             
         if self.visited == True:
             # pg.draw.rect(window, gray, (x, y, TILE, TILE))
@@ -77,7 +74,7 @@ class Cell:
             # window.blit()
         if self.is_goal:
             try:
-                pg.draw.rect(window, goal_color[bg_lis.index(background)], (x, y, TILE, TILE))
+                pg.draw.rect(window, background, (x, y, TILE, TILE))
             except: pass
         
         if self.bars['top']:

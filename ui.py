@@ -18,7 +18,9 @@ bg_green = pg.image.load(os.path.join("pic", "Green.png"))
 bg_pink = pg.image.load(os.path.join("pic", "pink.png"))
 bg_purple = pg.image.load(os.path.join("pic", "Purple.png"))
 
-bg_lis = [bg_green, bg_pink, bg_purple, bg_blue, bg_gray, bg_yellow, bg_brown]
+bg_lis = {green : bg_green, pink : bg_pink, 
+        purple : bg_purple, blue : bg_blue, gray : bg_gray, 
+        yellow : bg_yellow, brown : bg_brown}
 goal_color = [green, pink, purple, blue, gray, yellow, brown]
 
 def font(text_size, font='font.ttf'):

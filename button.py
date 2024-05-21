@@ -21,6 +21,8 @@ class Button:
         self.dragging = False
         self.de = 4
         
+        self.active = False
+        
     def create_rounded_image(self):
         # Create a surface with per-pixel alpha
         rounded_img = pg.Surface(self.img.get_size(), pg.SRCALPHA)

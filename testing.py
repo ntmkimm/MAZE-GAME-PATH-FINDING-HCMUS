@@ -63,8 +63,9 @@ def run_game():
     running = True
     while running:
         for event in pg.event.get():
-            if event.type == pg.QUIT:
+            if event.type == pg.MOUSEBUTTONDOWN:
                 running = False
+                break
 
         # Game logic and rendering here...
 

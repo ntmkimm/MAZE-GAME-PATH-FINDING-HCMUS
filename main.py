@@ -1,4 +1,6 @@
 import pygame as pg
+import pandas as pd
+
 from color import *
 from button import *
 from ui import *
@@ -53,7 +55,8 @@ class Menu(Game):
         self.sound.background_sound(0)
         
         self.character = "MaskDude"
-        self.background = bg_green
+        self.background = green
+        self.isname = ''
 
     def esc_menu(self):        
         back_to_game_button = Button(img=self.long_bar, pos_center=(600, 550), content='Back to Game', font=font(small_size))
@@ -85,6 +88,7 @@ class Menu(Game):
                         if self.game_type == 'bot':
                             self.create_new_map()
                         elif self.game_type == 'player':
+                            self.save_game()
                             self.all_maps_of_user()
                     elif options_button.is_pointed(mouse_pos):
                         # self.pause = False
@@ -126,6 +130,7 @@ class Menu(Game):
         create_new_button = Button(img=self.short_bar, pos_center=(300, 700), content="Create", font=font(small_size))
         skin_button = Button(img=self.short_bar, pos_center=(600, 700), content='Skin', font=font(small_size))
         input_name_button = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
+        input_name_button.active = True
         
         easy_button = Button(img=self.long_bar, pos_center=(600, 500), content="Easy: 20x20", font=font(small_size))
         normal_button = Button(img=self.long_bar, pos_center=(600, 500), content="Normal: 40x40", font=font(small_size))
@@ -141,10 +146,10 @@ class Menu(Game):
         init_button = [random_button, choose_button]
         algo_button = [DFS_button, BFS_button]
         
-        type_name, type_name_rect = get_text(content='Type name of new world', font=font(tiny_size), pos_center=(600, 150), color=white)
+        type_name, type_name_rect = get_text(content='Type name of new world', font=font(tiny_size), pos_center=(600, 150), color=green)
         
         lis = [cancel_button, create_new_button, easy_button, normal_button, hard_button, random_button, choose_button, DFS_button, BFS_button, skin_button]
-        
+        text_return = ''
         while True:
             # window.fill(theme_color)
             self.back_ground()
@@ -164,8 +169,11 @@ class Menu(Game):
             # title
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
+            
             if self.game_type == 'player':
                 window.blit(type_name, type_name_rect)
+                text, text_rect = get_text(text_return, font=font(tiny_size), pos_center=(600, 250))
+                window.blit(text, text_rect)
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -208,7 +216,13 @@ class Menu(Game):
                         elif self.algo_mode == 1:    self.algo = 'bfs'
                         
                         self.in_game = True
-                        Game.__init__(self, self.size, self.init, self.game_type, self.algo, self.sound, self.character)
+                        self.game_name = input_name_button.input.strip()
+                        if self.game_name == '':
+                            text_return = "world's name is empty!"
+                            continue
+                        
+                        Game.__init__(self, self.size, self.init, self.game_type, \
+                                      self.algo, self.sound, self.character, self.game_name)
                         self.run_game()
                         
                 if event.type == pg.KEYDOWN and self.game_type == 'player':
@@ -234,7 +248,7 @@ class Menu(Game):
         bot_button2 = Button(img=self.bot, pos_center=(930, 580), content="", font=font(small_size), corner_radius=10)
         done_button = Button(img=self.short_bar, pos_center=(600, 550), content="Done", font=font(small_size), corner_radius=10)
         random_button = Button(img=self.short_bar, pos_center=(600, 400), content="Random", font=font(small_size),corner_radius=10)
-        # back_button = Button(img=self.short_bar, pos_center=(600, 200), content="Back", font=font(small_size), corner_radius=10)
+
         lis = [top_button1, bot_button1, done_button, top_button2, bot_button2, random_button]
 
         run = True
@@ -242,7 +256,7 @@ class Menu(Game):
         option2 = 0
         temp = 0
         cha_lis = [self.cha0_1, self.cha1_1, self.cha2_1, self.cha3_1, self.cha0_2, self.cha1_2,  self.cha2_2, self.cha3_2]
-        bg_lis = [bg_green, bg_pink, bg_purple, bg_blue, bg_gray, bg_yellow, bg_brown]
+
         name_cha_lis = ["MaskDude", "NinjaFrog", "PinkMan", "VirtualGuy"]
         while run:
             # window.fill(theme_color)
@@ -258,13 +272,14 @@ class Menu(Game):
                 window.blit(pg.transform.scale(cha_lis[(option1 % 4 + 4)], (92, 92)), (220, 290))
                 temp += 1
 
+            self.background = goal_color[option2 % 7]
+
             pg.draw.rect(window, black, (894, 296, 72, 72), 3)
-            window.blit(bg_lis[option2 % 7], (898, 300))
+            window.blit(bg_lis[self.background], (898, 300))
 
             self.character = name_cha_lis[(option1 % 4)]
             if self.in_game:
                 self.player.SPRITES = load_sprite_sheets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
-            self.background = bg_lis[option2 % 7]
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -312,7 +327,9 @@ class Menu(Game):
         delete_button = Button(img=self.short_bar, pos_center=(900, 650), content='Delete', font=font(small_size))
         new_map_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
         
-        lis = [back_button, new_map_button, delete_button]
+        game1 = Button(img=self.short_bar, pos_center=(900, 300), content='Game1', font=font(small_size))
+        
+        lis = [back_button, new_map_button, delete_button, game1]
 
         while True:
             # theme
@@ -346,6 +363,10 @@ class Menu(Game):
                         self.main_menu()
                     if new_map_button.is_pointed(mouse_pos):
                         self.create_new_map()
+                    if game1.is_pointed(mouse_pos):
+                        self.in_game = True
+                        Game.__init__(self, None, 'load', 'player', None, self.sound, None, 'game1')
+                        self.run_game()
                 
             pg.display.update()                 
         
@@ -470,6 +491,9 @@ class Menu(Game):
     def main_menu(self):
         pg.display.set_caption("Menu")
         self.in_game = False
+        self.player_name = "kim"
+        self.file_manager = File(self.player_name)
+        
         play_button = Button(img=self.long_bar, pos_center=(600, 300), content="PLAY", font=font(normal_size))
         bot_button = Button(img=self.long_bar, pos_center=(600, 450), content="BOT", font=font(normal_size))
         options_button = Button(img=self.short_bar, pos_center=(450, 600), content="OPTIONS", font=font(small_size), corner_radius=10)
@@ -529,7 +553,7 @@ class Menu(Game):
         pass_text, pass_rect = get_text('Password', font=font(32), pos_center=(600, 280))
         re_pass_text, re_pass_rect = get_text('Re_password', font=font(32), pos_center=(600, 430))
         text_return = ''
-        
+        name.active = True
         while True:
             
             # window.fill(theme_color)
@@ -613,6 +637,7 @@ class Menu(Game):
         pass_text, pass_rect = get_text('Password', font=font(small_size), pos_center=(600, 350))
         text_return = ''
         
+        name.active = True
         while True:
             # window.fill(theme_color)
             self.back_ground()
@@ -667,9 +692,31 @@ class Menu(Game):
             pg.display.update()
             
             if text_return == 'login successfull':
+                self.player_name = name.input
                 pg.display.update()
                 time.sleep(0.1)
                 self.main_menu()
+                
+    def saveleaderboard(self):
+        if self.check == 1:
+            df = pd.read_excel('leaderboard.xlsx')
+            new_data = {
+                'Tên': self.isname,
+                'Map': self.size,
+                'Steps': self.player.steps,
+                'Time': self.elapsed_time 
+            }
+            existing_row = df[(df['Tên'] == new_data['Tên']) & (df['Map'] == new_data['Map'])]
+
+            if not existing_row.empty:
+                if (new_data['Steps'] < existing_row.iloc[0]['Steps']) or \
+                        (new_data['Time'] < existing_row.iloc[0]['Time']):
+                    df.loc[existing_row.index, ['Steps', 'Time']] = new_data['Steps'], new_data['Time']
+            else:
+                new_row_df = new_data
+                df = pd.concat([df, new_row_df], ignore_index=True)
+            df.sort_values(by=['Map', 'Time', 'Steps'], ascending=[False, True, True], inplace=True)
+            df.to_excel('leaderboard.xlsx', index=False)
             
 if __name__ == "__main__":
     menu = Menu()

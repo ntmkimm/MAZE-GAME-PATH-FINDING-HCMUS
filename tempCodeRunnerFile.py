@@ -1,1 +1,1 @@
-pg.draw.rect(mask, pink, rect)
+self.background 

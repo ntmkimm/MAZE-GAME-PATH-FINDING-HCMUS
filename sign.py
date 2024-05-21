@@ -62,7 +62,6 @@ def sign_in(name, password):
 class Input_Button(Button):
     def __init__(self, img, pos_center, content, font, line_base_color=white, hide=False):
         Button.__init__(self, img, pos_center, content, font, line_base_color)
-        self.active = False
         self.hide = hide
         self.line_thick = 10
         self.input = ''
