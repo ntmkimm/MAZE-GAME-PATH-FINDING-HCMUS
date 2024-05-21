@@ -32,8 +32,8 @@ class File:
         return False
     
     def is_possible_to_save(self):
-        amount = len(os.listdir(self.root))
-        if amount > 6:
+        files = os.listdir(self.root)
+        if len(files) > 6:
             return False
         return True
     

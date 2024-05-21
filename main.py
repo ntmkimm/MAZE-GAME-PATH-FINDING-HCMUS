@@ -56,7 +56,7 @@ class Menu(Game):
         self.sound.background_sound(0)
         
         self.character = "MaskDude"
-        self.background = green
+        self.background = 'green'
         self.isname = ''
 
     def esc_menu(self):        
