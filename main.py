@@ -333,7 +333,7 @@ class Menu(Game):
         lst_game = []
         for i, game_name in enumerate(game_names):
             lst_game.append(Button(img=self.game_exist_table, pos_center=(300 + i % 3 * 300, 250 + i // 3 * 200), content=game_name, font=font(small_size)))
-        
+        text_return = ''
         played_game = None
         while True:
             # theme
@@ -349,6 +349,8 @@ class Menu(Game):
             pg.draw.rect(window, white, box_of_created_map)
             pg.draw.line(window, black, (0, box_of_created_map.top), (1200, box_of_created_map.top), 10)
             pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
+            t, t_rect = get_text(text_return, font(tiny_size), (600, 140), black)
+            window.blit(t, t_rect)
             # button
             lis = [play_button, back_button, new_map_button, delete_button] + lst_game
             
@@ -365,7 +367,9 @@ class Menu(Game):
                     if back_button.is_pointed(mouse_pos):
                         self.main_menu()
                     if new_map_button.is_pointed(mouse_pos):
-                        self.create_new_map()
+                        if len(lst_game) < 6:
+                            self.create_new_map()
+                        else: text_return = 'max files is 6'
                     for i in range(len(lst_game)):
                         if lst_game[i].is_pointed(mouse_pos):
                             for game in lst_game: game.active = False
