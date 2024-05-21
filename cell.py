@@ -24,7 +24,6 @@ class Cell:
         self.neighbors = []
         
         self.intersect = False
-        self.cost = 0
         
         self.seen = False
         self.visited = False

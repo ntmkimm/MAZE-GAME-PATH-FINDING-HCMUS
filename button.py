@@ -60,7 +60,7 @@ class Button:
         return False
    
     def update_color_line(self, position):
-        if self.is_pointed(position):
+        if self.is_pointed(position) or self.active:
             # self.sound.sound_effect(1)
             self.line_color = self.line_base_color
         else:

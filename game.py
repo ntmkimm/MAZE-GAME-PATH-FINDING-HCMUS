@@ -266,13 +266,15 @@ class Game():
                                 self.grid.cells[i][j].trace = False
                         victory = False
                         self.init_random()
-                        pg.mixer.music.pause()
+                        self.sound.sound3.stop()
+                        pg.mixer.music.unpause()
                         self.sound.sound_effect(1)
                         self.run_game()
                     if quit_button.is_pointed(mouse_pos):
                         victory = False
                         self.save_game()
-                        pg.mixer.music.pause()
+                        self.sound.sound3.stop()
+                        pg.mixer.music.unpause()
                         self.sound.sound_effect(1)
                         self.all_maps_of_user()
             for button in [continue_button, quit_button]:

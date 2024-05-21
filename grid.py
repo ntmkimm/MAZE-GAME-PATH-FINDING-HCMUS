@@ -1,4 +1,5 @@
 from cell import *
+import json
 
 class Grid:
     def __init__(self, rows, cols):
@@ -9,7 +10,6 @@ class Grid:
         self.find_neighbor()     
     
     def find_neighbor(self):
-            
         for i in range(self.rows):
             for j in range(self.cols):
                 if i != 0: # add neighbor top

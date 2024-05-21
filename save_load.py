@@ -11,8 +11,9 @@ class File:
         os.makedirs(self.root, exist_ok=True)
 
     def save(self, data, file_name):
-        file = open(os.path.join(self.root, file_name + self.extension), "wb")
-        pickle.dump(data, file)
+        if self.is_possible_to_save:
+            file = open(os.path.join(self.root, file_name + self.extension), "wb")
+            pickle.dump(data, file)
 
     def load(self, file_name):
         file = open(os.path.join(self.root, file_name + self.extension), "rb")
@@ -28,4 +29,14 @@ class File:
             os.remove(file)
             return True
         return False
-
+    
+    def is_possible_to_save(self):
+        amount = len(os.listdir(self.root))
+        if amount > 6:
+            return False
+        return True
+    
+    def get_files(self):
+        files = os.listdir(self.root)
+        filenames = [f[:-5] for f in files if f.endswith(self.extension)]
+        return filenames

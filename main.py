@@ -47,6 +47,7 @@ class Menu(Game):
         self.frame = pg.image.load(os.path.join("pic", "frame.png"))
         self.frame_option = pg.image.load(os.path.join("pic", "frame_option.png"))
         self.result1 = pg.image.load(os.path.join("pic", "result.png"))
+        self.game_exist_table = pg.image.load(os.path.join("pic", "game_name.png"))
         self.game_type = 'player'
         self.input_img = pg.image.load("sign.png")
         self.sound = Sound()
@@ -259,7 +260,7 @@ class Menu(Game):
 
         name_cha_lis = ["MaskDude", "NinjaFrog", "PinkMan", "VirtualGuy"]
         while run:
-            # window.fill(theme_color)
+            
             self.back_ground()
             self.bg += 1
             window.blit(self.frame, (120, 170))
@@ -322,32 +323,34 @@ class Menu(Game):
 
     def all_maps_of_user(self):
         pg.display.set_caption("Play")
+        title, title_rect, shader_title, shader_title_rect = shader_text("Select Map", font(small_size), (600, 60), white, black)
+        play_button = Button(img=self.short_bar, pos_center=(190, 720), content="Play", font=font(small_size))
+        new_map_button = Button(img=self.short_bar, pos_center=(460, 720), content="New Map", font=font(small_size))
+        delete_button = Button(img=self.short_bar, pos_center=(730, 720), content='Delete', font=font(small_size))
+        back_button = Button(img=self.short_bar, pos_center=(1000, 720), content='Back', font=font(small_size))
         
-        back_button = Button(img=self.short_bar, pos_center=(900, 750), content='Back', font=font(small_size))
-        delete_button = Button(img=self.short_bar, pos_center=(900, 650), content='Delete', font=font(small_size))
-        new_map_button = Button(img=self.long_bar, pos_center=(400, 700), content="Create New Map", font=font(small_size))
+        game_names = self.file_manager.get_files()
+        lst_game = []
+        for i, game_name in enumerate(game_names):
+            lst_game.append(Button(img=self.game_exist_table, pos_center=(300 + i % 3 * 300, 250 + i // 3 * 200), content=game_name, font=font(small_size)))
         
-        game1 = Button(img=self.short_bar, pos_center=(900, 300), content='Game1', font=font(small_size))
-        
-        lis = [back_button, new_map_button, delete_button, game1]
-
+        played_game = None
         while True:
             # theme
-            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             # title
-            title, title_rect, shader_title, shader_title_rect = shader_text("Select Map", font(small_size), (600, 30), white, black)
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
             # created_map            
-            box_of_created_map = pg.Rect(0, 70, 1200, 500)
+            box_of_created_map = pg.Rect(0, 100, 1200, 500)
             pg.draw.rect(window, white, box_of_created_map)
             pg.draw.line(window, black, (0, box_of_created_map.top), (1200, box_of_created_map.top), 10)
             pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
             # button
+            lis = [play_button, back_button, new_map_button, delete_button] + lst_game
             
             for button in lis:
                 button.update_color_line(mouse_pos)
@@ -363,9 +366,19 @@ class Menu(Game):
                         self.main_menu()
                     if new_map_button.is_pointed(mouse_pos):
                         self.create_new_map()
-                    if game1.is_pointed(mouse_pos):
+                    for i in range(len(lst_game)):
+                        if lst_game[i].is_pointed(mouse_pos):
+                            for game in lst_game: game.active = False
+                            lst_game[i].active = True
+                            played_game = lst_game[i]
+                    if delete_button.is_pointed(mouse_pos):
+                        self.file_manager.delete(played_game.content)
+                        try: lst_game.remove(played_game)
+                        except: pass
+                        played_game = None
+                    if play_button.is_pointed(mouse_pos) and played_game != None:
                         self.in_game = True
-                        Game.__init__(self, None, 'load', 'player', None, self.sound, None, 'game1')
+                        Game.__init__(self, None, 'load', 'player', None, self.sound, None, lst_game[i].content)
                         self.run_game()
                 
             pg.display.update()                 
