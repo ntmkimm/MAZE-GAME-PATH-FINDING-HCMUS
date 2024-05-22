@@ -42,7 +42,6 @@ class Game():
             self.maze = Maze_Generator(self.grid) 
             self.character = character
             self.algo = algo
-
             self.steps = 0
             
             if init_type == 'random': self.init_random()
@@ -63,7 +62,6 @@ class Game():
             self.character = data["character"]
             self.background = data["background"]
             self.add_time = data["elapsed_time"]
-            self.steps = data["steps"]
             self.start_pos = data["start_pos"]
             self.goal_pos = data["goal_pos"]
             
@@ -74,6 +72,7 @@ class Game():
             
             self.player = Player(self.grid.cells, data["cur_pos"], self.TILE, self.character)
             self.goal = Player(self.grid.cells, self.goal_pos, self.TILE, "End")
+            self.steps = data["steps"]
             
             self.grid.cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True
             self.grid.cells[self.start_pos[0]][self.start_pos[1]].is_start = True
@@ -273,6 +272,8 @@ class Game():
                         self.sound.sound3.stop()
                         pg.mixer.music.unpause()
                         self.sound.sound_effect(1)
+                        self.steps = 0
+                        self.elapsed_time = 0
                         self.run_game()
                     if quit_button.is_pointed(mouse_pos):
                         victory = False
@@ -337,17 +338,17 @@ class Game():
                         self.sound.sound_effect(1)
                         self.player.move(dx=-1)
                         self.steps += 1
-                    elif event.key in [pg.K_RIGHT, pg.K_d] \
+                    if event.key in [pg.K_RIGHT, pg.K_d] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['right']:
                         self.sound.sound_effect(1)
                         self.player.move(dx=1)
                         self.steps += 1
-                    elif event.key in [pg.K_UP, pg.K_w] \
+                    if event.key in [pg.K_UP, pg.K_w] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['top']:
                         self.sound.sound_effect(1)
                         self.player.move(dy=-1)
                         self.steps += 1
-                    elif event.key in [pg.K_DOWN, pg.K_s] \
+                    if event.key in [pg.K_DOWN, pg.K_s] \
                     and not self.player.grid_cells[self.player.y][self.player.x].bars['bottom']:
                         self.sound.sound_effect(1)
                         self.player.move(dy=1)
@@ -422,7 +423,7 @@ class Game():
         self.goal.draw(window)
         window.blit(pg.transform.scale(self.result, (340, 400)), (830, 170))
         title, title_rect, shader_title, shader_title_rect = shader_text(f"{self.elapsed_time:.1f}s", font(min_size),(1055, 330), white, black)
-        title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.player.steps), font(min_size), (1050, 430),white, black)
+        title2, title_rect2, shader_title2, shader_title_rect2 = shader_text((str)(self.steps), font(min_size), (1050, 430),white, black)
         window.blit(shader_title, shader_title_rect)
         window.blit(title, title_rect)
         window.blit(shader_title2, shader_title_rect2)

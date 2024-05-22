@@ -34,9 +34,9 @@ class Player(): # sprite make it easy to fit pixel perfect
         self.y_direction = ''
 
         self.animation_count = 0
-        self.steps = 0
-        self.start = 0
-        self.time = 0
+
+        # self.start = 0
+        # self.time = 0
         
     def move(self, dx=0, dy=0):
         if dx < 0:
