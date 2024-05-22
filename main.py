@@ -218,7 +218,7 @@ class Menu(Game):
                         
                         self.in_game = True
                         self.game_name = input_name_button.input.strip()
-                        if self.game_name == '':
+                        if self.game_name == '' and self.game_type == 'player':
                             text_return = "world's name is empty!"
                             continue
                         
