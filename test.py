@@ -7,24 +7,6 @@ dx = (0, 1, 0, -1)
 dy = (-1, 0, 1, 0)
 di = ('top', 'right', 'bottom', 'left')
 
-# def is_node(cell):
-#     if cell.bars['top'] and cell.bars['right'] \
-#     and not cell.bars['left'] and not cell.bars['bottom']:
-#         return True
-#     if cell.bars['top'] and cell.bars['left'] \
-#     and not cell.bars['right'] and not cell.bars['bottom']:
-#         return True
-#     if cell.bars['bottom'] and cell.bars['left'] \
-#     and not cell.bars['right'] and not cell.bars['top']:
-#         return True
-#     if cell.bars['bottom'] and cell.bars['right'] \
-#     and not cell.bars['left'] and not cell.bars['']:
-#     if cell.bars['top'] and cell.bars['bottom'] \
-#     and not cell.bars['left'] and not cell.bars['right']:
-#         return False
-#     if cell.bars['top'] and cell.bars['bottom'] \
-#     and not cell.bars['left'] and not cell.bars['right']:
-
 class BFS:
     def __init__(self, grid_cells, cur_pos):
         self.grid_cells = grid_cells

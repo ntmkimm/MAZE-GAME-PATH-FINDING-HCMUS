@@ -1,6 +1,12 @@
-import pickle
 import json
 import os
+import pandas as pd
+
+def read_leaderboard(mode):
+    file_path = os.path.join('save_data', 'leaderboard' + mode + '.xlsx')
+    df = pd.read_excel(file_path)
+    df.index = range(1, len(df) + 1)
+    print(df)
 
 class File:
     def __init__(self, player_name=''):
@@ -34,3 +40,4 @@ class File:
         files = os.listdir(self.root)
         filenames = [f[:-5] for f in files if f.endswith(self.extension)]
         return filenames
+    
