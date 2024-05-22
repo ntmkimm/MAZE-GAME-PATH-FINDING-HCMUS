@@ -9,6 +9,7 @@ from bfs import *
 
 import time
 import pygame as pg
+import pandas as pd
 import random
 
 RES = WIDTH, HEIGHT = 1200, 820
@@ -234,6 +235,7 @@ class Game():
         continue_button = Button(img=self.short_bar, pos_center=(250, 700), content="Replay", font=font(small_size))
         pg.mixer.music.pause()
         self.sound.sound_effect(3)
+        self.save_leaderboard()
         self.add_time = 0
         victory = True
         while victory:
@@ -428,3 +430,28 @@ class Game():
         window.blit(title, title_rect)
         window.blit(shader_title2, shader_title_rect2)
         window.blit(title2, title_rect2)
+    
+    def save_leaderboard(self):
+        if self.rows == 20: mode = 'easy'
+        elif self.rows == 40: mode = 'medium'
+        elif self.rows == 100: mode = 'hard'
+        
+        df = pd.read_excel(os.path.join('save_data', 'leaderboard' + mode + '.xlsx'))
+        new_data = {
+            'Tên': self.player_name,
+            'Map': self.rows,
+            'Steps': self.steps,
+            'Time': self.elapsed_time
+        }
+        existing_row = df[(df['Tên'] == new_data['Tên']) & (df['Map'] == new_data['Map'])]
+
+        if not existing_row.empty:
+            if (new_data['Steps'] < existing_row.iloc[0]['Steps']) or \
+                    (new_data['Time'] < existing_row.iloc[0]['Time']):
+                df.loc[existing_row.index, ['Steps', 'Time']] = new_data['Steps'], new_data['Time']
+        else:
+            new_row_df = pd.DataFrame([new_data])
+            df = pd.concat([df, new_row_df], ignore_index=True)
+            
+        df.sort_values(by=['Map', 'Time', 'Steps'], ascending=[False, True, True], inplace=True)
+        df.to_excel(os.path.join('save_data', 'leaderboard' + mode + '.xlsx'), index=False)

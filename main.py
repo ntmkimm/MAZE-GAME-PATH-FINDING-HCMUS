@@ -506,7 +506,6 @@ class Menu(Game):
     def main_menu(self):
         pg.display.set_caption("Menu")
         self.in_game = False
-        self.player_name = "kim"
         self.file_manager = File(self.player_name)
         
         play_button = Button(img=self.long_bar, pos_center=(600, 300), content="PLAY", font=font(normal_size))
@@ -549,8 +548,7 @@ class Menu(Game):
                         self.option_sound = True
                         self.sound_menu()
                     if quit_button.is_pointed(mouse_pos):
-                       
-                        pg.quit()
+                        self.sign_in_menu()
             pg.display.update()
         
     def sign_up_menu(self):
@@ -711,28 +709,8 @@ class Menu(Game):
                 pg.display.update()
                 time.sleep(0.1)
                 self.main_menu()
-                
-    def saveleaderboard(self):
-        if self.check == 1:
-            df = pd.read_excel('leaderboard.xlsx')
-            new_data = {
-                'Tên': self.isname,
-                'Map': self.size,
-                'Steps': self.player.steps,
-                'Time': self.elapsed_time 
-            }
-            existing_row = df[(df['Tên'] == new_data['Tên']) & (df['Map'] == new_data['Map'])]
 
-            if not existing_row.empty:
-                if (new_data['Steps'] < existing_row.iloc[0]['Steps']) or \
-                        (new_data['Time'] < existing_row.iloc[0]['Time']):
-                    df.loc[existing_row.index, ['Steps', 'Time']] = new_data['Steps'], new_data['Time']
-            else:
-                new_row_df = new_data
-                df = pd.concat([df, new_row_df], ignore_index=True)
-            df.sort_values(by=['Map', 'Time', 'Steps'], ascending=[False, True, True], inplace=True)
-            df.to_excel('leaderboard.xlsx', index=False)
             
 if __name__ == "__main__":
     menu = Menu()
-    menu.main_menu()
+    menu.sign_in_menu()
