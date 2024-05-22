@@ -503,16 +503,41 @@ class Menu(Game):
 
             pg.display.update()
 
+    def leaderboard_menu(self):
+        done_button = Button(img=self.short_bar, pos_center=(600, 700), content="Done", font=font(small_size), corner_radius=10)
+        easy_board = read_leaderboard('easy')
+        medium_board = read_leaderboard('medium')
+        hard_board = read_leaderboard('hard')
+        df = read_leaderboard('easy')
+        
+        while True:
+            self.back_ground()
+            self.bg += 1
+            mouse_pos = pg.mouse.get_pos()
+            for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pg.quit()
+                        break
+
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        if done_button.is_pointed(mouse_pos):
+                            self.main_menu()
+            done_button.update_color_line(mouse_pos)
+            done_button.update(window)
+
+            pg.display.update()
     def main_menu(self):
         pg.display.set_caption("Menu")
         self.in_game = False
+        self.player_name = 'kim'
         self.file_manager = File(self.player_name)
         
         play_button = Button(img=self.long_bar, pos_center=(600, 300), content="PLAY", font=font(normal_size))
         bot_button = Button(img=self.long_bar, pos_center=(600, 450), content="BOT", font=font(normal_size))
-        options_button = Button(img=self.short_bar, pos_center=(450, 600), content="OPTIONS", font=font(small_size), corner_radius=10)
-        quit_button = Button(img=self.short_bar, pos_center=(750, 600), content="QUIT", font=font(small_size), corner_radius=10)
-        lis = [play_button, bot_button, options_button, quit_button]
+        leaderboard_button = Button(img=self.short_bar, pos_center=(750, 580), content="RANK", font=font(small_size))
+        options_button = Button(img=self.short_bar, pos_center=(450, 580), content="OPTIONS", font=font(small_size), corner_radius=10)
+        quit_button = Button(img=self.short_bar, pos_center=(600, 690), content="QUIT", font=font(small_size), corner_radius=10)
+        lis = [play_button, bot_button, options_button, quit_button, leaderboard_button]
         while True:
             
             # # window.fill(theme_color)
@@ -526,7 +551,7 @@ class Menu(Game):
             mouse_pos = pg.mouse.get_pos()
             # button
             
-            for button in [play_button, bot_button, options_button, quit_button]:
+            for button in lis:
                 button.update_color_line(mouse_pos)
                 button.update(window)
                 
@@ -538,19 +563,19 @@ class Menu(Game):
                     self.sound.sound_select(lis)
                     if play_button.is_pointed(mouse_pos):
                         self.game_type = 'player'
-                       
                         self.all_maps_of_user()
                     if bot_button.is_pointed(mouse_pos):
                         self.game_type = 'bot'
-                      
                         self.create_new_map()
+                    if leaderboard_button.is_pointed(mouse_pos):
+                        self.leaderboard_menu()
                     if options_button.is_pointed(mouse_pos):
                         self.option_sound = True
                         self.sound_menu()
                     if quit_button.is_pointed(mouse_pos):
                         self.sign_in_menu()
             pg.display.update()
-        
+    
     def sign_up_menu(self):
         
         name = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
@@ -713,4 +738,4 @@ class Menu(Game):
             
 if __name__ == "__main__":
     menu = Menu()
-    menu.sign_in_menu()
+    menu.main_menu()
