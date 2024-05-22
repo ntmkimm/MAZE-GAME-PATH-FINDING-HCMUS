@@ -49,7 +49,7 @@ class Menu(Game):
         self.result1 = pg.image.load(os.path.join("pic", "result.png"))
         self.game_exist_table = pg.image.load(os.path.join("pic", "game_name.png"))
         self.game_type = 'player'
-        self.input_img = pg.image.load("sign.png")
+        self.input_img = pg.image.load("pic", "sign.png")
         self.sound = Sound()
         self.s = 0
         self.bg = 0
