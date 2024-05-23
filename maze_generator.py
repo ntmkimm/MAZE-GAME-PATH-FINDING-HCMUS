@@ -1,6 +1,7 @@
 from cell import *
 from grid import *
 from recursive import *
+import random
 
 class Maze_Generator:
     def __init__(self, grid, type=None):

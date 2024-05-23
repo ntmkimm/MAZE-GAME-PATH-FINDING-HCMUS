@@ -3,7 +3,6 @@ from ui import *
 from sound import *
 
 class Button:
-    #auto set text at the center of the box
     def __init__(self, img, pos_center, content, font, line_base_color=yellow, corner_radius=10):
         self.img = img
         self.rect = self.img.get_rect(center=(pos_center[0], pos_center[1]))
@@ -24,13 +23,10 @@ class Button:
         self.active = False
         
     def create_rounded_image(self):
-        # Create a surface with per-pixel alpha
         rounded_img = pg.Surface(self.img.get_size(), pg.SRCALPHA)
-        # Draw a rounded rectangle on the mask
         mask = pg.Surface(self.img.get_size(), pg.SRCALPHA)
         rect = mask.get_rect()
         pg.draw.rect(mask, self.line_color, rect, border_radius=self.corner_radius)
-        # Blit the image onto the rounded surface using the mask
         rounded_img.blit(self.img, (0, 0))
         rounded_img.blit(mask, (0, 0), special_flags=pg.BLEND_RGBA_MIN)
         return rounded_img
@@ -61,7 +57,6 @@ class Button:
    
     def update_color_line(self, position):
         if self.is_pointed(position) or self.active:
-            # self.sound.sound_effect(1)
             self.line_color = self.line_base_color
         else:
             self.line_color = white

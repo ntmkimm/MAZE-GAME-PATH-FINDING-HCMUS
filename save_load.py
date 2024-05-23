@@ -5,7 +5,7 @@ import pandas as pd
 def read_leaderboard(mode):
     file_path = os.path.join('save_data', 'leaderboard' + mode + '.xlsx')
     df = pd.read_excel(file_path)
-    df.index = range(1, len(df) + 1)
+    df.index = range(1, len(df) + 1) # get index from 1 to ->
     return df
 
 class File:

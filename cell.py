@@ -1,5 +1,4 @@
 import pygame as pg
-import random
 from color import *
 import os
 import pygame as pg
@@ -7,7 +6,6 @@ from ui import *
 
 size_of_maze = 800
 dust = pg.image.load(os.path.join("pic", "dust.png")) 
-# start = pg.image.load()
 checkpoint = pg.image.load(os.path.join("pic", "checkpoint.png")) 
 
 class Cell:
@@ -58,11 +56,9 @@ class Cell:
         x, y = self.init_maze_x + self.x * TILE, self.init_maze_y + self.y * TILE
         
         if self.seen and background != None:
-            # pg.draw.rect(window, white, (x, y, TILE, TILE))
             window.blit(pg.transform.scale(bg_lis[background], (TILE, TILE)), (x, y))
             
         if self.visited == True:
-            # pg.draw.rect(window, gray, (x, y, TILE, TILE))
             window.blit(pg.transform.scale(dust, (TILE, TILE)), (x, y))
         
         if self.trace == True:
@@ -70,13 +66,11 @@ class Cell:
             
         if self.is_start:
             pg.draw.rect(window, white, (x, y, TILE, TILE))
-            # window.blit()
         if self.is_goal:
             pg.draw.rect(window, goal_color[background], (x, y, TILE, TILE))
         
         if self.bars['top']:
             pg.draw.line(window, self.bar_color, (x, y), (x + TILE, y), self.bar_thick)
-            # window.blit(pg.transform.scale(bar, (block, block)), (x, y))
         if self.bars['bottom']:
             pg.draw.line(window, self.bar_color, (x, y + TILE), (x + TILE, y + TILE), self.bar_thick)
         if self.bars['left']:

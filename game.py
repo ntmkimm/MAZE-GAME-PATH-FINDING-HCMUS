@@ -7,7 +7,6 @@ from save_load import *
 from recursive import *
 from bfs import *
 
-import time
 import pygame as pg
 import pandas as pd
 import random
@@ -16,9 +15,6 @@ RES = WIDTH, HEIGHT = 1200, 820
 window = pg.display.set_mode(RES)
 background = pg.image.load("pic/bg5.jpg")
 background = pg.transform.scale(background, RES)
-
-sub_background = pg.image.load("pic/bg5.jpg")
-sub_background = pg.transform.scale(sub_background, RES)
 
 class Game():
     def __init__(self, size, init_type, game_type, algo, sound, character, game_name):
@@ -77,7 +73,6 @@ class Game():
             
             self.grid.cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = True
             self.grid.cells[self.start_pos[0]][self.start_pos[1]].is_start = True
-
     
     def init_choose(self):
         start_done = False

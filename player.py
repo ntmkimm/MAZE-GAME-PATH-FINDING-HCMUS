@@ -6,11 +6,8 @@ from cell import *
 from color import *
 from ui import *
             
-class Player(): # sprite make it easy to fit pixel perfect
-
+class Player():
     ANIMATION_DELAY = 3
-    # define our initialization area
-    
     def __init__(self, grid_cells, init_pos, tile, character):
         # inherit Cell class
         Cell.__init__(self, init_pos[0], init_pos[1])
@@ -25,7 +22,6 @@ class Player(): # sprite make it easy to fit pixel perfect
 
         if self.character == "End":
             self.SPRITES = load_sprite_sheets("MainCharacters", self.character, 64, 64, size_maze=self.rows)
-
         else:
             self.SPRITES = load_sprite_sheets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
 
@@ -34,9 +30,6 @@ class Player(): # sprite make it easy to fit pixel perfect
         self.y_direction = ''
 
         self.animation_count = 0
-
-        # self.start = 0
-        # self.time = 0
         
     def move(self, dx=0, dy=0):
         if dx < 0:
@@ -59,7 +52,6 @@ class Player(): # sprite make it easy to fit pixel perfect
         self.rect.y += self.y_step
     
     def get_dynamic(self):
-        #MAKING PLAYER LOOK DYNAMIC
         sprite_sheet = 'idle'
             
         sprite_type = sprite_sheet + "_" + self.x_direction

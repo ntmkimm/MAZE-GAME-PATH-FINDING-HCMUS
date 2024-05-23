@@ -54,12 +54,6 @@ def load_sprite_sheets(dir1, dir2, width, height, size_maze, size=None):
     elif size_maze == 40: size = (16, 16)
     elif size_maze == 20: size = (32, 32)
     
-    # if dir2 == "Disappear": 
-    #     if size_maze== 100: size = (16, 16)
-    #     elif size_maze == 40: size = (32, 32)
-    #     elif size_maze == 20: size = (64, 64)
-    
-    
     for f in lst_img:
         sprite_sheet = pg.image.load(os.path.join(path, f)).convert_alpha()
 

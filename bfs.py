@@ -80,13 +80,11 @@ class BFS:
         self.trace = None
 
     def find_way(self):
-        # while
         if self.result.head is None or self.result.tail is None:
             return
         start = self.result.delete_head()  # frist: start is [(y, x)]
         current_cell = self.grid_cells[start.data[-1][0]][start.data[-1][1]]  # current cell là start[-1] trong code ban đầu
         current_cell.visited = True
-        # print(self.result)
         if current_cell.is_goal:  # if end in start:
             self.y, self.x = current_cell.y, current_cell.x
             self.trace = start.data.copy()
@@ -97,16 +95,14 @@ class BFS:
             #     self.final_list = f_temp
         else:
             # có 4 hướng đi tối đa, nên loops qua 4 vòng lặp
-            for direct in range(4):  # for v in V:
+            for direct in range(4):
                 if not current_cell.bars[di[direct]]:
-                    # dòng trên tương đương if (start[-1], v) in E or (v, start[-1]) in E: (nếu có đường đi)
                     next_cell = self.grid_cells[current_cell.y + dy[direct]][current_cell.x + dx[direct]]
                     if (next_cell.y, next_cell.x) not in start.data and not next_cell.visited:
                         temp = Node(start.data.copy())
                         temp.data.append((next_cell.y, next_cell.x))
                         self.result.add_tail(temp)
                         next_cell.visited = True
-        # time.sleep(0.2)
 
     def trace_back(self):
         for pair in self.trace:

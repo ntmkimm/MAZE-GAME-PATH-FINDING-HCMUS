@@ -18,8 +18,6 @@ pg.init()
 class Menu(Game):
     def __init__(self):
         self.table = pg.image.load(os.path.join("pic", "Table.png"))
-        self.back = pg.image.load(os.path.join("pic", "Back.png"))
-        self.back = pg.transform.scale(self.back, (64, 64))
         self.short_bar = pg.image.load(os.path.join("pic", "short_bar.png"))
         self.long_bar = pg.image.load(os.path.join("pic", "long_bar.png"))
         self.Background_Sound_X = pg.image.load(os.path.join("pic", "Background_Sound_X.png"))
@@ -48,16 +46,17 @@ class Menu(Game):
         self.frame_option = pg.image.load(os.path.join("pic", "frame_option.png"))
         self.result1 = pg.image.load(os.path.join("pic", "result.png"))
         self.game_exist_table = pg.image.load(os.path.join("pic", "game_name.png"))
-        self.game_type = 'player'
         self.input_img = pg.image.load(os.path.join("pic", "sign.png"))
+        # self.board = pg.image.load(os.path.join("pic", "board.png"))
+        
         self.sound = Sound()
         self.s = 0
         self.bg = 0
         self.sound.background_sound(0)
         
+        self.game_type = 'player'
         self.character = "MaskDude"
         self.background = 'green'
-        self.isname = ''
 
     def esc_menu(self):        
         back_to_game_button = Button(img=self.long_bar, pos_center=(600, 550), content='Back to Game', font=font(small_size))
@@ -71,19 +70,15 @@ class Menu(Game):
         
         lis = [back_to_game_button, options_button, quit_button, algo_button]
         
-        while self.pause:
-            # mouse_pos     
+        while self.pause:   
             self.draw_game()
             mouse_pos = pg.mouse.get_pos()
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
-                    # sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    
                     self.sound.sound_select(lis)
-                    
                     if quit_button.is_pointed(mouse_pos):
                         self.pause = False
                         if self.game_type == 'bot':
@@ -92,12 +87,10 @@ class Menu(Game):
                             self.save_game()
                             self.all_maps_of_user()
                     elif options_button.is_pointed(mouse_pos):
-                        # self.pause = False
                         self.option = True
                         self.options()
                     elif back_to_game_button.is_pointed(mouse_pos):
                         self.pause = False
-
                     elif algo_button.is_pointed(mouse_pos):
                         if self.game_type == 'player':
                             self.command = 'get hint'
@@ -126,7 +119,6 @@ class Menu(Game):
         
         title, title_rect, shader_title, shader_title_rect = shader_text("Create New Map", font(big_size), (600, 70), white, black)
         
-        # button
         cancel_button = Button(img=self.short_bar, pos_center=(900, 700), content='Cancel', font=font(small_size))
         create_new_button = Button(img=self.short_bar, pos_center=(300, 700), content="Create", font=font(small_size))
         skin_button = Button(img=self.short_bar, pos_center=(600, 700), content='Skin', font=font(small_size))
@@ -152,10 +144,8 @@ class Menu(Game):
         lis = [cancel_button, create_new_button, easy_button, normal_button, hard_button, random_button, choose_button, DFS_button, BFS_button, skin_button]
         text_return = ''
         while True:
-            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
-            # mouse_pos
             mouse_pos = pg.mouse.get_pos()
             
             if self.game_type == 'player':
@@ -167,7 +157,6 @@ class Menu(Game):
                 button.update_color_line(mouse_pos)
                 button.update(window)
             
-            # title
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
             
@@ -231,7 +220,7 @@ class Menu(Game):
                         if input_name_button.active:
                             input_name_button.input = input_name_button.input[:-1]
                     else:
-                        if input_name_button.active and len(input_name_button.input) <= 36:
+                        if input_name_button.active and len(input_name_button.input) <= 7:
                             input_name_button.input += event.unicode
             
             if self.game_type == 'player':
@@ -240,7 +229,6 @@ class Menu(Game):
             pg.display.update()
             
     def skin(self):
-        
         pg.display.set_caption("Skin")
         
         top_button1 = Button(img=self.top, pos_center=(270, 90), content="", font=font(small_size), corner_radius=10)
@@ -336,22 +324,19 @@ class Menu(Game):
         text_return = ''
         played_game = None
         while True:
-            # theme
             self.back_ground()
             self.bg += 1
-            # mouse_pos
             mouse_pos = pg.mouse.get_pos()
-            # title
+            
             window.blit(shader_title, shader_title_rect)
             window.blit(title, title_rect)
-            # created_map            
             box_of_created_map = pg.Rect(0, 100, 1200, 500)
             pg.draw.rect(window, white, box_of_created_map)
             pg.draw.line(window, black, (0, box_of_created_map.top), (1200, box_of_created_map.top), 10)
             pg.draw.line(window, black, (0, box_of_created_map.bottom), (1200, box_of_created_map.bottom), 10)
             t, t_rect = get_text(text_return, font(tiny_size), (600, 140), black)
             window.blit(t, t_rect)
-            # button
+            
             lis = [play_button, back_button, new_map_button, delete_button] + lst_game
             
             for button in lis:
@@ -395,16 +380,13 @@ class Menu(Game):
         
         while self.option:
             self.draw_game()
-            # window.blit(self.frame_option, (200, 50))
             mouse_pos = pg.mouse.get_pos()
             for event in pg.event.get():
                     if event.type == pg.QUIT:
                         pg.quit()
                         break
-
                     if event.type == pg.MOUSEBUTTONDOWN:
                         self.sound.sound_select(lis)
-
                         if sound_button.is_pointed(mouse_pos):
                             self.option_sound = True
                             self.sound_menu()
@@ -412,13 +394,10 @@ class Menu(Game):
                             self.skin()
                         if done_button.is_pointed(mouse_pos):
                             self.option = False
-                            # self.esc_menu()
             
             for button in lis:
                 button.update_color_line(mouse_pos)
                 button.update(window)
-
-
             pg.display.update()
             
     def sound_menu(self):
@@ -508,24 +487,38 @@ class Menu(Game):
         easy_board = read_leaderboard('easy')
         medium_board = read_leaderboard('medium')
         hard_board = read_leaderboard('hard')
-        df = read_leaderboard('easy')
         
         while True:
             self.back_ground()
             self.bg += 1
+
+            for i, row in easy_board.iterrows():
+                info = row['Tên'] + '    ' + str(row['Time']) + '    ' + str(row['Steps'])
+                t, r = get_text(content=info, font=font(tiny_size), pos_center=(300, 300 + i * 50))
+                window.blit(t, r)
+            
+            for i, row in medium_board.iterrows():
+                info = row['Tên'] + '    ' + str(row['Time']) + '    ' + str(row['Steps'])
+                t1, r1 = get_text(content=info, font=font(tiny_size), pos_center=(300, 300 + i * 50))
+                window.blit(t1, r1)
+                
+            for i, row in hard_board.iterrows():
+                info = row['Tên'] + '    ' + str(row['Time']) + '    ' + str(row['Steps'])
+                t2, r2 = get_text(content=info, font=font(tiny_size), pos_center=(300, 300 + i * 50))
+                window.blit(t2, r2)
+
             mouse_pos = pg.mouse.get_pos()
             for event in pg.event.get():
                     if event.type == pg.QUIT:
                         pg.quit()
                         break
-
                     if event.type == pg.MOUSEBUTTONDOWN:
                         if done_button.is_pointed(mouse_pos):
                             self.main_menu()
             done_button.update_color_line(mouse_pos)
             done_button.update(window)
-
             pg.display.update()
+            
     def main_menu(self):
         pg.display.set_caption("Menu")
         self.in_game = False
@@ -539,17 +532,13 @@ class Menu(Game):
         quit_button = Button(img=self.short_bar, pos_center=(600, 690), content="QUIT", font=font(small_size), corner_radius=10)
         lis = [play_button, bot_button, options_button, quit_button, leaderboard_button]
         while True:
-            
-            # # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             menu, menu_rect, shader_menu, shader_menu_rect = shader_text("MAZE SOLVE", font(title_size, "super_pixel.ttf"), pos_center=(600, 100), color=white, color_shader=purple)
             
             window.blit(shader_menu, shader_menu_rect)
             window.blit(menu, menu_rect)
-            # mouse_pos
             mouse_pos = pg.mouse.get_pos()
-            # button
             
             for button in lis:
                 button.update_color_line(mouse_pos)
@@ -593,8 +582,6 @@ class Menu(Game):
         text_return = ''
         name.active = True
         while True:
-            
-            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             window.blit(name_text, name_rect)
@@ -677,7 +664,6 @@ class Menu(Game):
         
         name.active = True
         while True:
-            # window.fill(theme_color)
             self.back_ground()
             self.bg += 1
             window.blit(name_text, name_rect)
