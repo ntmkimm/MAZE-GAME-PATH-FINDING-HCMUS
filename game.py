@@ -448,5 +448,5 @@ class Game():
             new_row_df = pd.DataFrame([new_data])
             df = pd.concat([df, new_row_df], ignore_index=True)
             
-        df.sort_values(by=['Map', 'Time', 'Steps'], ascending=[False, True, True], inplace=True)
+        df.sort_values(by=['Map', 'Steps', 'Time'], ascending=[False, True, True], inplace=True)
         df.to_excel(os.path.join('save_data', 'leaderboard' + mode + '.xlsx'), index=False)

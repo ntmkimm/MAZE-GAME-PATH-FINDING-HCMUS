@@ -17,7 +17,6 @@ class Cell:
         self.init_maze_y = 10
         
         self.is_start = False
-        self.is_current = False
         self.is_goal = False
         self.neighbors = []
         
