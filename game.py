@@ -276,7 +276,8 @@ class Game():
                         victory = False
                         self.save_game()
                         self.sound.sound3.stop()
-                        pg.mixer.music.unpause()
+                        if self.sound.background_sound(self.sound.op2):
+                            pg.mixer.music.unpause()
                         self.sound.sound_effect(1)
                         self.all_maps_of_user()
             for button in [continue_button, quit_button]:

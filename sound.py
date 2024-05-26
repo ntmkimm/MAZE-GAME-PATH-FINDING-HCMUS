@@ -41,7 +41,9 @@ class Sound():
             pg.mixer.music.load(os.path.join("sound", "Background_Sound.mp3"))
             pg.mixer.music.set_volume(self.vol2)
             pg.mixer.music.play(-1)
+            return True
         if mark % 2 == 1:
             pg.mixer.music.pause()
         else:
             pg.mixer.music.unpause()
+            return True
