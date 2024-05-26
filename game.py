@@ -164,9 +164,7 @@ class Game():
     
     def init_random(self):
         start, goal = (0, 0), (0, 0)
-        animation = 0
-        box = pg.Rect(825, 680, 360, 80)
-        while animation < 100:
+        while True:
             start = (random.randrange(self.rows), random.randrange(self.cols))
             goal = (random.randrange(self.rows), random.randrange(self.cols))
             
@@ -176,15 +174,6 @@ class Game():
             if self.check_exist_way(start) == True and start != goal: break
             else:
                 self.grid.cells[goal[0]][goal[1]].is_goal = False
-                pg.draw.rect(window, purple, box)
-                pg.draw.line(window, yellow, (box.left, box.top), (box.right, box.top), 5)
-                pg.draw.line(window, yellow, (box.left, box.bottom), (box.right, box.bottom), 5)
-                if animation % 2 == 0:
-                    text_surface, text_surface_rect = get_text(content="Choose Again!", font=font(small_size), pos_center=(1005, 720))
-                else:
-                    text_surface, text_surface_rect = get_text(content="Choose Again!", font=font(tiny_size), pos_center=(1005, 720))
-                window.blit(text_surface, text_surface_rect)
-                animation += 1
             
         self.start_pos, self.goal_pos = start, goal
         self.grid.cells[start[0]][start[1]].is_start = True
