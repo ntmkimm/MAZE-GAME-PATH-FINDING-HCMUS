@@ -27,7 +27,7 @@ class Cell:
         self.trace = False
         
         self.bar_color = dark_green
-        self.bar_thick = 5
+        self.bar_thick = 3
     
     def check_bars(current, next):
         dx = next.x - current.x
