@@ -25,7 +25,6 @@ class Player():
         else:
             self.SPRITES = load_sprite_sheets("MainCharacters", self.character, 32, 32, size_maze=self.rows)
 
-        self.mask = None
         self.x_direction = 'right'
         self.y_direction = ''
 
@@ -60,11 +59,6 @@ class Player():
 
         self.sprite = sprites[index]
         self.animation_count += 1    
-        self.masking()
-    
-    def masking(self):
-        self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
-        self.mask = pg.mask.from_surface(self.sprite)
         
     def draw(self, window):
         self.get_dynamic()
