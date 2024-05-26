@@ -16,9 +16,17 @@ class File:
     
     def create_folder_of_player(self):
         os.makedirs(self.root, exist_ok=True)
-
+    
     def save(self, data, file_name):
-        file = open(os.path.join(self.root, file_name + self.extension), "w")
+        file = os.path.join(self.root, file_name + self.extension)
+        if os.path.exists(file):
+            num = 1
+            base_name = file_name
+            while os.path.exists(file):
+                file_name = f"{base_name}({num})"
+                file = os.path.join(self.root, file_name + self.extension)
+                num += 1
+        file = open(file, "w")
         json.dump(data, file)
 
     def load(self, file_name):
