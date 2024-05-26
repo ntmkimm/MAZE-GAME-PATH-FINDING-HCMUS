@@ -483,29 +483,28 @@ class Menu(Game):
             pg.display.update()
 
     def leaderboard_menu(self):
-        done_button = Button(img=self.short_bar, pos_center=(600, 700), content="Done", font=font(small_size), corner_radius=10)
+        done_button = Button(img=self.short_bar, pos_center=(750, 700), content="Done", font=font(small_size), corner_radius=10)
+        arrow_button = Button(img=self.bot, pos_center=(450, 700), content="", font=font(small_size), corner_radius=10)
+        board_frame = pg.image.load(os.path.join("pic", "rank.png"))
         easy_board = read_leaderboard('easy')
         medium_board = read_leaderboard('medium')
         hard_board = read_leaderboard('hard')
-        
+        board = [easy_board, medium_board, hard_board]
+        content = ['EASY', 'MEDIUM', 'HARD']
+        mode = 0
         while True:
             self.back_ground()
             self.bg += 1
-
-            for i, row in easy_board.iterrows():
-                info = row['Tên'] + '    ' + str(row['Time']) + '    ' + str(row['Steps'])
-                t, r = get_text(content=info, font=font(tiny_size), pos_center=(300, 300 + i * 50))
+            window.blit(board_frame, (360, 100))
+            t, r = get_text(content=content[mode], font=font(small_size), pos_center=(600, 160), color=black)
+            window.blit(t, r)
+            t, r = get_text(content="Rank   Name    Time    Steps", font=font(tiny_size), pos_center=(600, 250), color=black)
+            window.blit(t, r)
+            display = board[mode]
+            for i, row in display.iterrows():
+                info = '  ' + str(i) + '    ' + row['Tên'] + '    ' + str(row['Time']) + '    ' + str(row['Steps'])
+                t, r = get_text(content=info, font=font(tiny_size), pos_center=(580, 250 + i * 50), color=black)
                 window.blit(t, r)
-            
-            for i, row in medium_board.iterrows():
-                info = row['Tên'] + '    ' + str(row['Time']) + '    ' + str(row['Steps'])
-                t1, r1 = get_text(content=info, font=font(tiny_size), pos_center=(300, 300 + i * 50))
-                window.blit(t1, r1)
-                
-            for i, row in hard_board.iterrows():
-                info = row['Tên'] + '    ' + str(row['Time']) + '    ' + str(row['Steps'])
-                t2, r2 = get_text(content=info, font=font(tiny_size), pos_center=(300, 300 + i * 50))
-                window.blit(t2, r2)
 
             mouse_pos = pg.mouse.get_pos()
             for event in pg.event.get():
@@ -515,8 +514,11 @@ class Menu(Game):
                     if event.type == pg.MOUSEBUTTONDOWN:
                         if done_button.is_pointed(mouse_pos):
                             self.main_menu()
-            done_button.update_color_line(mouse_pos)
-            done_button.update(window)
+                        if arrow_button.is_pointed(mouse_pos):
+                            mode = (mode + 1) % 3
+            for button in [done_button, arrow_button]:
+                button.update_color_line(mouse_pos)
+                button.update(window)
             pg.display.update()
             
     def main_menu(self):
@@ -724,4 +726,4 @@ class Menu(Game):
             
 if __name__ == "__main__":
     menu = Menu()
-    menu.main_menu()
+    menu.leaderboard_menu()
