@@ -370,8 +370,8 @@ class Menu(Game):
                         Game.__init__(self, None, 'load', 'player', None, self.sound, None, played_game.content)
                         self.run_game()
                 
-            pg.display.update()                 
-        
+            pg.display.update()
+
     def options(self):
         sound_button = Button(img=self.long_bar, pos_center=(600, 250), content='Sound',font=font(normal_size), corner_radius=5)
         skin_button = Button(img=self.long_bar, pos_center=(600, 400), content='Skin',font=font(normal_size), corner_radius=5)
@@ -482,6 +482,8 @@ class Menu(Game):
 
             pg.display.update()
 
+    def format_row(self,ranked, name, time, steps):
+        return f"{ranked:<5}{name:<10}{time:<10}{steps:<10}"
     def leaderboard_menu(self):
         done_button = Button(img=self.short_bar, pos_center=(750, 700), content="Done", font=font(small_size), corner_radius=10)
         arrow_button = Button(img=self.bot, pos_center=(450, 700), content="", font=font(small_size), corner_radius=10)
@@ -496,14 +498,15 @@ class Menu(Game):
             self.back_ground()
             self.bg += 1
             window.blit(board_frame, (360, 100))
+            header = self.format_row("Rank", "Name", "Time", "Steps")
             t, r = get_text(content=content[mode], font=font(small_size), pos_center=(600, 160), color=black)
             window.blit(t, r)
-            t, r = get_text(content="Rank   Name    Time    Steps", font=font(tiny_size), pos_center=(600, 250), color=black)
+            t, r = get_text(content=header, font=font(14), pos_center=(630, 250), color=black)
             window.blit(t, r)
             display = board[mode]
             for i, row in display.iterrows():
-                info = '  ' + str(i) + '    ' + row['Tên'] + '    ' + str(row['Time']) + '    ' + str(row['Steps'])
-                t, r = get_text(content=info, font=font(tiny_size), pos_center=(580, 250 + i * 50), color=black)
+                info = self.format_row(str(i), row['Tên'], str(row['Time']), str(row['Steps']))
+                t, r = get_text(content=info, font=font(14), pos_center=(640, 250 + i * 50), color=black)
                 window.blit(t, r)
 
             mouse_pos = pg.mouse.get_pos()
@@ -567,7 +570,6 @@ class Menu(Game):
             pg.display.update()
     
     def sign_up_menu(self):
-        
         name = Input_Button(img=self.input_img, pos_center=(600, 200), content='', font=font(tiny_size))
         password = Input_Button(img=self.input_img, pos_center=(600, 350), content='', font=font(tiny_size), hide=True)
         re_password = Input_Button(img=self.input_img, pos_center=(600, 500), content='', font=font(tiny_size), hide=True)
@@ -651,7 +653,6 @@ class Menu(Game):
                 self.sign_in_menu()
 
     def sign_in_menu(self):
-
         name = Input_Button(img=self.input_img, pos_center=(600, 270), content='', font=font(tiny_size))
         password = Input_Button(img=self.input_img, pos_center=(600, 420), content='', font=font(tiny_size), hide=True)
         sign_in_button = Button(img=self.short_bar, pos_center=(600, 580), content='SIGN IN', font=font(small_size))
