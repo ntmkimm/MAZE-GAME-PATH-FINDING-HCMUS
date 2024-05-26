@@ -70,10 +70,6 @@ class Player():
         self.get_dynamic()
         window.blit(self.sprite, (self.rect.x, self.rect.y))
     
-    def appear(self):
-        self.SPRITES = load_sprite_sheets("MainCharacters", "Appear", 96, 96, size_maze=self.rows)
-            
-    
     def disappear(self):
         self.SPRITES = load_sprite_sheets("MainCharacters", "Disappear", 96, 96, size_maze=self.rows)
         

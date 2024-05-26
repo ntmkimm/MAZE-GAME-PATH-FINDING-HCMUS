@@ -524,7 +524,6 @@ class Menu(Game):
     def main_menu(self):
         pg.display.set_caption("Menu")
         self.in_game = False
-        self.player_name = 'kim'
         self.file_manager = File(self.player_name)
         
         play_button = Button(img=self.long_bar, pos_center=(600, 300), content="PLAY", font=font(normal_size))
