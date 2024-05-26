@@ -350,7 +350,17 @@ class Game():
                         self.sound.sound_effect(1)
                         self.player.move(dy=1)
                         self.steps += 1
-                        
+                elif self.game_type == 'bot':
+                    if event.key == pg.K_h:
+                        for i in range(self.rows):
+                            for j in range(self.cols):
+                                self.grid.cells[i][j].visited = False
+                        if self.algo == 'bfs':
+                            self.algo = 'dfs'
+                            self.algorithm = Recursive(self.grid.cells, self.start_pos)
+                        elif self.algo == 'dfs':
+                            self.algo = 'bfs'
+                            self.algorithm = BFS(self.grid.cells, self.start_pos)
                 if event.key in [pg.K_ESCAPE]: 
                     self.pause = True
                     self.pause_start = pg.time.get_ticks()
@@ -425,6 +435,19 @@ class Game():
         window.blit(title, title_rect)
         window.blit(shader_title2, shader_title_rect2)
         window.blit(title2, title_rect2)
+        
+        if self.game_type == 'bot':
+            if self.algo == 'bfs':
+                algo_type = 'BFS'
+            elif self.algo == 'dfs':
+                algo_type = 'DFS'
+                
+            algo, algo_r, shade_algo, shade_r = shader_text("Algorithm : " + algo_type, font(tiny_size), (1000, 80), white, black)
+            window.blit(shade_algo, shade_r)
+            window.blit(algo, algo_r)
+            algo, algo_r, shade_algo, shade_r = shader_text("Press H to switch", font(tiny_size), (1000, 130), white, black)
+            window.blit(shade_algo, shade_r)
+            window.blit(algo, algo_r)
     
     def save_leaderboard(self):
         if self.rows == 20: mode = 'easy'

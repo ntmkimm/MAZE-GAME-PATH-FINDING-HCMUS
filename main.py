@@ -361,7 +361,8 @@ class Menu(Game):
                             lst_game[i].active = True
                             played_game = lst_game[i]
                     if delete_button.is_pointed(mouse_pos):
-                        self.file_manager.delete(played_game.content)
+                        if played_game != None:
+                            self.file_manager.delete(played_game.content)
                         try: lst_game.remove(played_game)
                         except: pass
                         played_game = None
