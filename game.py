@@ -219,8 +219,8 @@ class Game():
                     self.algorithm.find_way()
             pg.display.update()
         print("is done")
-        if self.game_type == 'player':
-            self.victory()
+        # if self.game_type == 'player':
+        self.victory()
         self.command = None
         self.in_game = False
         
@@ -230,7 +230,8 @@ class Game():
         continue_button = Button(img=self.short_bar, pos_center=(250, 700), content="Replay", font=font(small_size))
         pg.mixer.music.pause()
         self.sound.sound_effect(3)
-        self.save_leaderboard()
+        if self.game_type == 'player':
+            self.save_leaderboard()
         self.add_time = 0
         victory = True
         while victory:
@@ -264,6 +265,7 @@ class Game():
                         for i in range(self.rows):
                             for j in range(self.cols):
                                 self.grid.cells[i][j].trace = False
+                                self.grid.cells[i][j].visited = False
                         victory = False
                         self.init_random()
                         self.sound.sound3.stop()
@@ -271,15 +273,23 @@ class Game():
                         self.sound.sound_effect(1)
                         self.steps = 0
                         self.elapsed_time = 0
+                        if self.game_type == 'bot':
+                            if self.algo == 'dfs':
+                                self.algorithm = Recursive(self.grid.cells, self.start_pos) 
+                            elif self.algo == 'bfs':
+                                self.algorithm = BFS(self.grid.cells, self.start_pos)
                         self.run_game()
                     if quit_button.is_pointed(mouse_pos):
                         victory = False
-                        self.save_game()
                         self.sound.sound3.stop()
                         if self.sound.background_sound(self.sound.op2):
                             pg.mixer.music.unpause()
                         self.sound.sound_effect(1)
-                        self.all_maps_of_user()
+                        if self.game_type == 'player':
+                            self.save_game()
+                            self.all_maps_of_user()
+                        elif self.game_type == 'bot':
+                            self.create_new_map()
             for button in [continue_button, quit_button]:
                 button.update(window)
                 button.update_color_line(mouse_pos)
