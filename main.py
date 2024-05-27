@@ -210,6 +210,7 @@ class Menu(Game):
                         if self.game_name == '' and self.game_type == 'player':
                             text_return = "world's name is empty!"
                             continue
+                        self.game_name = self.file_manager.get_distinct(self.game_name)
                         
                         Game.__init__(self, self.size, self.init, self.game_type, \
                                       self.algo, self.sound, self.character, self.game_name)
@@ -635,7 +636,7 @@ class Menu(Game):
                         if re_password.active:
                             re_password.input = re_password.input[:-1]
                     else:
-                        if name.active and len(name.input) < 8:
+                        if name.active and len(name.input) <= 7:
                             name.input += event.unicode
                         if password.active and len(password.input) <= 36:
                             password.input += event.unicode
