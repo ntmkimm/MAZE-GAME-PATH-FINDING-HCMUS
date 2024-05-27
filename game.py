@@ -110,7 +110,14 @@ class Game():
             elif not goal_done:
                 goal_done = self.handle_init_choose(self.goal)
             else:
-                if self.check_exist_way(self.start_pos): break
+                if self.start_pos == self.goal_pos:
+                    flag = True
+                    start = pg.time.get_ticks()
+                    self.grid.cells[self.goal_pos[0]][self.goal_pos[1]].is_goal = False
+                    self.grid.cells[self.start_pos[0]][self.start_pos[1]].is_start = False
+                    start_done = False
+                    goal_done = False
+                elif self.check_exist_way(self.start_pos): break
                 else:
                     flag = True
                     start = pg.time.get_ticks()
@@ -324,9 +331,8 @@ class Game():
                     self.pause_start = pg.time.get_ticks()
                     self.esc_menu()
                     self.start_time += pg.time.get_ticks() - self.pause_start  
-                        # Adjust start time cause we want to update start time due to pause duration
                     
-            if event.type == pg.KEYDOWN:  # Use pygame.KEYDOWN to detect key press
+            if event.type == pg.KEYDOWN: 
                 if self.game_type == 'player':
                     self.player.x_step = 0
                     self.player.y_step = 0

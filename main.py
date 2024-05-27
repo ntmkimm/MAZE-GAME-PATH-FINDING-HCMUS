@@ -706,7 +706,7 @@ class Menu(Game):
                             if password.active:
                                 password.input = password.input[:-1]
                         else:
-                            if name.active and len(name.input) <= 36:
+                            if name.active and len(name.input) <= 8:
                                 name.input += event.unicode
                             if password.active and len(password.input) <= 36:
                                 password.input += event.unicode
