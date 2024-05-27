@@ -220,9 +220,9 @@ class Menu(Game):
                     if event.key == pg.K_BACKSPACE:
                         if input_name_button.active:
                             input_name_button.input = input_name_button.input[:-1]
-                    else:
+                    elif event.key not in [pg.K_RETURN, pg.K_ESCAPE, pg.K_DELETE, pg.K_TAB]:
                         if input_name_button.active and len(input_name_button.input) <= 7:
-                            input_name_button.input += event.unicode
+                           input_name_button.input += event.unicode
             
             if self.game_type == 'player':
                 input_name_button.draw()
@@ -635,7 +635,7 @@ class Menu(Game):
                             password.input = password.input[:-1]
                         if re_password.active:
                             re_password.input = re_password.input[:-1]
-                    else:
+                    elif event.key not in [pg.K_RETURN, pg.K_ESCAPE, pg.K_DELETE, pg.K_TAB]:
                         if name.active and len(name.input) <= 7:
                             name.input += event.unicode
                         if password.active and len(password.input) <= 36:
@@ -706,7 +706,7 @@ class Menu(Game):
                                 name.input = name.input[:-1]
                             if password.active:
                                 password.input = password.input[:-1]
-                        else:
+                        elif event.key not in [pg.K_RETURN, pg.K_ESCAPE, pg.K_DELETE, pg.K_TAB]:
                             if name.active and len(name.input) < 8:
                                 name.input += event.unicode
                             if password.active and len(password.input) <= 36:
