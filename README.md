@@ -1,7 +1,7 @@
 ## CÀI ĐẶT
 Clone repository này về máy của bạn:
 ```bash
-[git clone https://github.com/mkim-wp/Maze-Game_Path-Finding](https://github.com/ntmkimm/MAZE-GAME-PATH-FINDING-HCMUS.git)
+git clone https://github.com/ntmkimm/MAZE-GAME-PATH-FINDING-HCMUS.git
 ```
 Sử dụng miniconda để đóng gói các thư viện đã dùng.
 ```bash
