@@ -12,8 +12,7 @@ conda install pandas
 conda install openpyxl
 ```
 ## KHỞI CHẠY
-Để chạy được đồ án game này bạn chạy file main.py của thư mục Maze-Game_Path-Finding.
-Đảm bảo bạn đang ở thư mục Maze-Game_Path-Finding.
 ```bash
+cd ./MAZE-GAME-PATH-FINDING-HCMUS
 python main.py
 ```
